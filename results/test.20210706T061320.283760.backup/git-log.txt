@@ -1,0 +1,2614 @@
+commit d2504220d6a02d8be91b1571e95d78744c218309
+Merge: 186abe9 2784b45
+Author: Yasuhiro Fujita <muupan@gmail.com>
+Date:   Wed Jun 23 12:32:16 2021 +0900
+
+    Merge pull request #150 from pfnet/update-reviewer-list
+    
+    Update the auto-assigned reviewer list
+
+commit 2784b451c113eab5303a9513d94b8f5c8a2adaaa
+Author: Yasuhiro Fujita <muupan@gmail.com>
+Date:   Wed Jun 23 12:15:32 2021 +0900
+
+    Update the auto-assigned reviewer list
+
+commit 186abe92798ce792511bedaa5482aefd923b195a
+Merge: 70f3da9 e7833e3
+Author: Yasuhiro Fujita <muupan@gmail.com>
+Date:   Wed Jun 23 11:44:37 2021 +0900
+
+    Merge pull request #56 from shu65/add_shm_option
+    
+    add use_shared_memory option
+
+commit 70f3da9163c047fa6981047e74836f1e138694e0
+Merge: e113a88 b840cd9
+Author: Avinash Ummadisingu <6052050+ummavi@users.noreply.github.com>
+Date:   Wed Jun 9 23:20:16 2021 +0900
+
+    Merge pull request #121 from tkelestemur/master
+    
+    add episode length statistics to evaluator
+
+commit b840cd9aa77fcbc03e2fa274c104a6e34d024e8b
+Merge: 0a41d39 e113a88
+Author: Tarik Kelestemur <kelestemur.t@northeastern.edu>
+Date:   Wed Jun 9 10:01:54 2021 -0400
+
+    Merge branch 'pfnet:master' into master
+
+commit e113a889f592eddd1cda627ee657b14b08903da8
+Merge: 44bf2e4 864aa3c
+Author: Mario Ynocente Castro <ycmario@gmail.com>
+Date:   Wed Jun 9 17:16:46 2021 +0900
+
+    Merge pull request #148 from pfnet/ummavi-patch-1
+    
+    Remove six dependency in pre-trained models
+
+commit 864aa3ce96669f84c561af492a3f83f63634dab6
+Author: Avinash Ummadisingu <6052050+ummavi@users.noreply.github.com>
+Date:   Wed Jun 9 15:11:12 2021 +0900
+
+    Apply updated isort to match CI
+
+commit 0f5b89921d6d454acbfee6538c98a3731404828d
+Author: Avinash Ummadisingu <6052050+ummavi@users.noreply.github.com>
+Date:   Wed Jun 9 15:04:09 2021 +0900
+
+    Update pretrained_models.py
+    
+    Make import style consistent and apply isort
+
+commit 451117b7d782733dc4586177c8be602beb7997e0
+Author: Avinash Ummadisingu <6052050+ummavi@users.noreply.github.com>
+Date:   Wed Jun 9 13:30:24 2021 +0900
+
+    Remove six dependency in pretrained models
+    
+    Addresses #147
+
+commit 0a41d391af205c3eb9988b9c32672081aadde2a7
+Merge: 87c52fd e856a7c
+Author: Tarik Kelestemur <tkelestemur@gmail.com>
+Date:   Tue Jun 8 23:24:10 2021 -0400
+
+    Merge pull request #3 from ummavi/master
+    
+    Update evaluator.py
+
+commit e856a7cca30fcc3871024cdf7522d066006a5f0c
+Author: Avinash Ummadisingu <6052050+ummavi@users.noreply.github.com>
+Date:   Wed Jun 9 12:19:30 2021 +0900
+
+    Update evaluator.py
+    
+    Change variable name to avoid an E741: "ambiguous variable name 'l'"
+
+commit 87c52fdd78638739bfb789cf618aced8eb36912b
+Merge: b56e4ed 44bf2e4
+Author: Tarik Kelestemur <kelestemur.t@northeastern.edu>
+Date:   Fri Jun 4 18:16:08 2021 -0400
+
+    Merge branch 'pfnet:master' into master
+
+commit b56e4edddc988f8cb515f94702b39a7779b26875
+Author: Tarik Kelestemur <tkelestemur@gmail.com>
+Date:   Fri Jun 4 01:08:33 2021 -0400
+
+    apply black
+
+commit 700fa5ec53cc68e8ad16c82f385cb96d32ffabf6
+Merge: 784997e bd6db04
+Author: Tarik Kelestemur <kelestemur.t@northeastern.edu>
+Date:   Thu May 20 11:58:27 2021 -0400
+
+    Merge pull request #1 from Chachay/feature/stat-length
+    
+    Feature/stat length
+
+commit 44bf2e483f5a2f30be7fd062545de306247699a1
+Merge: 7ff643b 6b5ac98
+Author: Mario Ynocente Castro <ycmario@gmail.com>
+Date:   Sun May 16 11:57:33 2021 +0900
+
+    Merge pull request #142 from pfnet/fix-normalize-action-space-comment
+    
+    Fix NormalizeActionSpace's comment
+
+commit bd6db044e98dbf897bb4f84dff020a84e0a9a488
+Author: Chachay <git@chachay.org>
+Date:   Fri May 14 22:50:13 2021 +0200
+
+    Update other tests
+
+commit 8785d2df6cadcc4c9eb49d9fcb9adc27dbc6ee98
+Author: Chachay <git@chachay.org>
+Date:   Fri May 14 22:31:02 2021 +0200
+
+    Update tests for batch_run_evaluation_episodes
+
+commit 29dd6f6e54713cc46094befb8256a926091847d7
+Author: Chachay <git@chachay.org>
+Date:   Fri May 14 22:12:26 2021 +0200
+
+    Update tests of run_evaluation_episodes
+
+commit 68028449c081f38c4426e42321781698d5c37ed3
+Merge: 784997e 7ff643b
+Author: Chachay <git@chachay.org>
+Date:   Fri May 14 19:05:02 2021 +0200
+
+    Merge remote-tracking branch 'upstream/master'
+
+commit 6b5ac981e1ad99c64d32a0dfff8b93570e592445
+Author: Yasuhiro Fujita <muupan@gmail.com>
+Date:   Fri May 14 23:12:02 2021 +0900
+
+    Fix comment
+
+commit 7ff643ba025f881013aef14ab14ce9ece4a91c09
+Merge: 9502411 38618ae
+Author: Avinash Ummadisingu <6052050+ummavi@users.noreply.github.com>
+Date:   Wed Apr 28 11:56:32 2021 +0900
+
+    Merge pull request #133 from lerrytang/master
+    
+    fix IndexError due to empty stack
+
+commit 95024114c47bb31e39ef455faa6e857a95089acc
+Merge: 0639d2f 6411382
+Author: Avinash Ummadisingu <6052050+ummavi@users.noreply.github.com>
+Date:   Tue Apr 27 14:21:13 2021 +0900
+
+    Merge pull request #137 from prabhatnagarajan/blog_links
+    
+    Adds links to blog posts in the README
+
+commit 6411382c19be031cb0085520e28750367f897e6f
+Author: Prabhat <prabhat.nagarajan@gmail.com>
+Date:   Tue Apr 27 13:19:15 2021 +0900
+
+    Removes the word
+
+commit 13d0260dd80af8c72910723e38a19523064ed252
+Author: Prabhat <prabhat.nagarajan@gmail.com>
+Date:   Fri Apr 16 17:40:49 2021 +0900
+
+    Adds blog posts
+
+commit 0639d2f4d0317a01e85978fa5c0c60a04f0cff33
+Author: Prabhat Nagarajan <prabhat.nagarajan@gmail.com>
+Date:   Wed Apr 14 13:37:13 2021 +0900
+
+    Adds link to paper (#135)
+
+commit cc62ee384fdf28e4e1da4a6a40240964cef0cd5d
+Merge: 277e621 a589df5
+Author: Avinash Ummadisingu <6052050+ummavi@users.noreply.github.com>
+Date:   Wed Apr 14 11:27:53 2021 +0900
+
+    Merge pull request #130 from prabhatnagarajan/pretrained_pfrl
+    
+    Changes reference from chainer to pfrl for pretrained models
+
+commit 277e62172a85e7d1039ce02ebe261bec982c60cc
+Author: Prabhat Nagarajan <prabhat.nagarajan@gmail.com>
+Date:   Thu Apr 8 16:11:37 2021 +0900
+
+    Updates BibTeX to JMLR (#134)
+
+commit 38618ae428c45b2fbd2350d9c888f3a5c109773f
+Author: Yujin <lerrytang@gmail.com>
+Date:   Sat Apr 3 12:18:12 2021 +0000
+
+    fix IndexError due empty stack
+
+commit e7833e3098465c0252ce984b252d13547e43a996
+Author: Shuji Suzuki <dolphinripple@gmail.com>
+Date:   Tue Mar 30 15:55:59 2021 +0900
+
+    fix docstring of train_agent_async()
+
+commit a589df55147e0f239cd11c5cf7e78241afda0c36
+Author: Prabhat <prabhat.nagarajan@gmail.com>
+Date:   Tue Mar 9 22:03:45 2021 +0900
+
+    Changes reference from chainer to pfrl
+
+commit 67bd517375bf35cd44421e964c518456d4b6f089
+Merge: 5e49276 a3f5ddb
+Author: Avinash Ummadisingu <6052050+ummavi@users.noreply.github.com>
+Date:   Tue Mar 9 11:40:07 2021 +0900
+
+    Merge pull request #112 from muupan/eval-during-episode
+    
+    Evaluation during training episodes
+
+commit 5e49276fdb22d1e7ecfb3a8b9ce688cf38fd5978
+Merge: 284ed1f b5f6907
+Author: Yasuhiro Fujita <muupan@gmail.com>
+Date:   Wed Mar 3 21:18:02 2021 +0900
+
+    Merge pull request #129 from tarokiritani/use_tuple_for_multiple_inputs
+    
+    Fix an error related to collation and RNN
+
+commit b5f6907b2b50358b2bd7513d192331f03fbf79c5
+Author: Taro Kiritani <tonggutailang@gmail.com>
+Date:   Wed Mar 3 19:26:15 2021 +0900
+
+    Update test_batch_states.py
+    
+    test_gpu() now correctly uses a GPU.
+
+commit a3f5ddb93eeea71a9941a48978350ddbf1b2d6a9
+Author: muupan <muupan@gmail.com>
+Date:   Wed Mar 3 16:10:07 2021 +0900
+
+    Add a warning message about eval_during_episode=True
+
+commit 0054b653a62530e84ca8a7795cb208a4b58eeb3d
+Merge: a97428c 284ed1f
+Author: Yasuhiro Fujita <muupan@gmail.com>
+Date:   Wed Mar 3 15:28:19 2021 +0900
+
+    Merge branch 'master' into eval-during-episode
+
+commit 671b6d61c86eb53c012212e54c04bf616a3d6e2f
+Author: Taro Kiritani <tonggutailang@gmail.com>
+Date:   Wed Feb 24 13:11:47 2021 +0900
+
+    Update pfrl/utils/batch_states.py
+    
+    The input feature type is checked better way.
+    
+    Co-authored-by: Yasuhiro Fujita <muupan@gmail.com>
+
+commit 63611232e9e3c6e9234bcf48b1460d6543394e57
+Author: Taro Kiritani <tonggutailang@gmail.com>
+Date:   Wed Feb 24 12:31:47 2021 +0900
+
+    Update test_batch_states.py
+    
+    Omitted skipping.
+
+commit 0878ace7710df9b552321c58c4e5780aaf563aa0
+Author: Taro Kiritani <taro.kiritani@exwzd.com>
+Date:   Tue Feb 9 10:31:22 2021 +0900
+
+    Fix an error related to collation and RNN
+    
+    Recurrent policies expect data collated in a tuple.
+
+commit 284ed1f43b32654a2ec1569b16a0f6b9acbd5e79
+Merge: 260279f 43c2fd4
+Author: Yasuhiro Fujita <muupan@gmail.com>
+Date:   Wed Feb 3 11:45:05 2021 +0900
+
+    Merge pull request #122 from keisuke-nakata/call-evaluation_hooks-in-evaluator
+    
+    call evaluation_hooks in Evaluator
+
+commit 260279fede253b0a656717a423e86f901fe1f56d
+Author: Prabhat Nagarajan <prabhat.nagarajan@gmail.com>
+Date:   Thu Jan 28 14:01:36 2021 +0900
+
+    Adds mypy to contributing md (#125)
+
+commit 58e8a85c5b3c5e45b1d8468a0133083ad6eb91be
+Merge: 0f77d09 a785e8d
+Author: Avinash Ummadisingu <6052050+ummavi@users.noreply.github.com>
+Date:   Thu Jan 28 13:55:40 2021 +0900
+
+    Merge pull request #119 from prabhatnagarajan/pretrained_readme
+    
+    Adds pretrained models column to README
+
+commit 43c2fd46602e2d0ef97f36239779da593995ba1c
+Author: NAKATA Keisuke <keisuke.nakata.919@gmail.com>
+Date:   Tue Jan 19 15:41:39 2021 +0900
+
+    fix lint
+
+commit 4372f12fc7b47e365f9c35744729971dba2ddc55
+Author: NAKATA Keisuke <keisuke.nakata.919@gmail.com>
+Date:   Tue Jan 19 15:31:28 2021 +0900
+
+    fix evaluation_hooks test for train_agent_batch_with_evaluation
+
+commit 3f2edb786a1ceba81eedda00b194caa1485cb50d
+Author: NAKATA Keisuke <keisuke.nakata.919@gmail.com>
+Date:   Tue Jan 19 15:30:49 2021 +0900
+
+    add evaluation_hooks test for train_agent_async
+
+commit 028cdcaac10f50c3ec8e4aa4d01c9eba3b8acdd8
+Author: NAKATA Keisuke <keisuke.nakata.919@gmail.com>
+Date:   Tue Jan 19 15:30:01 2021 +0900
+
+    pass evaluation_hooks to AsyncEvaluator in train_agent_async
+
+commit f1448bf8d4ea9e77d2ada457a626cc16e5e2ac6f
+Author: NAKATA Keisuke <keisuke.nakata.919@gmail.com>
+Date:   Tue Jan 19 14:49:28 2021 +0900
+
+    test unsupported_evaluation_hook in test_train_agent
+
+commit 372fb8b6ced3c00d6fda27258f665a73e70e4f53
+Author: NAKATA Keisuke <keisuke.nakata.919@gmail.com>
+Date:   Tue Jan 19 14:48:37 2021 +0900
+
+    add evaluation_hooks test for test_evaluator
+
+commit 49486fadc6803d10c13e13b32891028f4d6eba39
+Author: NAKATA Keisuke <keisuke.nakata.919@gmail.com>
+Date:   Tue Jan 19 11:28:47 2021 +0900
+
+    fix test_evaluation_hooks.py
+
+commit b2ea17e9a7f5f23afc37fa7557ec2eea08fdf33e
+Author: NAKATA Keisuke <keisuke.nakata.919@gmail.com>
+Date:   Tue Jan 19 11:20:46 2021 +0900
+
+    fix lint
+
+commit 1e5015f201d254fa1b99a05bd0906a0043c23b06
+Author: NAKATA Keisuke <keisuke.nakata.919@gmail.com>
+Date:   Mon Jan 18 20:24:28 2021 +0900
+
+    typo
+
+commit 1fd0fe36118e7b9f458f6d0ededbcab695ad7c73
+Author: NAKATA Keisuke <keisuke.nakata.919@gmail.com>
+Date:   Mon Jan 18 20:08:33 2021 +0900
+
+    call evaluation_hooks in Evaluator
+
+commit 0f77d09c45004b2373e73da43733b8261bd397b0
+Merge: 056cb30 4ada630
+Author: Yasuhiro Fujita <muupan@gmail.com>
+Date:   Wed Jan 27 22:36:51 2021 +0900
+
+    Merge pull request #127 from muupan/mypy-0800
+    
+    Switch to mypy>=0.800
+
+commit 4ada630f9f19c59aefd064333fd09429ce7cbbbc
+Author: muupan <muupan@gmail.com>
+Date:   Wed Jan 27 20:15:18 2021 +0900
+
+    Switch to mypy>=0.800
+
+commit a785e8d1a5a902bf1aba76874c45d320fc43b76f
+Author: Prabhat Nagarajan <prabhat.nagarajan@gmail.com>
+Date:   Wed Jan 27 15:37:31 2021 +0900
+
+    Update README.md
+
+commit 1020af769f97fd7458d973476d8697d0372521fb
+Author: Prabhat Nagarajan <prabhat.nagarajan@gmail.com>
+Date:   Wed Jan 27 15:10:56 2021 +0900
+
+    Update README.md
+
+commit 056cb30ab85e78728ed7dac706feb77ce1dbabf4
+Merge: 03a17d6 ba7b3dc
+Author: Mario Ynocente Castro <ycmario@gmail.com>
+Date:   Wed Jan 27 12:08:45 2021 +0900
+
+    Merge pull request #75 from Chachay/Chachay-patch-1
+    
+    Add use_tensorboard option to batch training
+
+commit 784997e8157183dd7d67bcd27c296c8aee4cbc65
+Author: Tarik Kelestemur <tkelestemur@gmail.com>
+Date:   Tue Jan 12 16:10:15 2021 -0500
+
+    add episode length statistics to evaluator
+
+commit 048a83971e53d707efb7e7f9c8456cb217f298a4
+Author: Prabhat <prabhat.nagarajan@gmail.com>
+Date:   Thu Jan 7 23:05:27 2021 +0900
+
+    Adds pretrained models column to README
+
+commit 03a17d69fe32f2137a7adaff4d3e49dd269b2d56
+Merge: 1745d84 5e08a09
+Author: Avinash Ummadisingu <6052050+ummavi@users.noreply.github.com>
+Date:   Wed Jan 6 09:43:43 2021 +0900
+
+    Merge pull request #116 from muupan/update-black
+    
+    Use latest black
+
+commit 1745d84a53aa66ba367c1c454c09b5964fe66e20
+Author: Yasuhiro Fujita <muupan@gmail.com>
+Date:   Wed Jan 6 01:35:06 2021 +0900
+
+    Add type hints to prioritized collections (#111)
+    
+    * Add type hints to prioritized collections
+    
+    * Specify pos as a Number
+
+commit 5e08a098d62fbe79da058e28f9af7c6c1d237b9c
+Author: muupan <muupan@gmail.com>
+Date:   Sat Dec 19 21:40:48 2020 +0900
+
+    Apply black
+
+commit 4f1d633470d6871cf5e8fe2940f8d4a6173da6d6
+Author: muupan <muupan@gmail.com>
+Date:   Sat Dec 19 21:40:21 2020 +0900
+
+    Use latest black
+
+commit 62a26ca1ef5dec0ad937ab0fedce04659036d9d3
+Merge: 51c0127 b2f46c0
+Author: Yasuhiro Fujita <muupan@gmail.com>
+Date:   Thu Dec 17 17:58:39 2020 +0900
+
+    Merge pull request #115 from keisukefukuda/fix-generate-exp-id
+    
+    Add parameter to generate_exp_id()
+
+commit b2f46c0dc5ad14e5361bdbed1a501ec0fe98b60b
+Author: Keisuke Fukuda <kfukuda@preferred.jp>
+Date:   Thu Dec 17 06:42:08 2020 +0000
+
+    fix
+
+commit 51c01278c3fb5e03e8a107391f1c45b085531dc1
+Merge: b2b2260 e472822
+Author: Yasuhiro Fujita <muupan@gmail.com>
+Date:   Thu Dec 17 13:56:53 2020 +0900
+
+    Merge pull request #114 from pfnet/muupan-patch-1
+    
+    Update the version to v0.2.1
+
+commit e472822d8fb9028a19b714dc0a56708d54c6fded
+Author: Yasuhiro Fujita <muupan@gmail.com>
+Date:   Thu Dec 17 13:44:27 2020 +0900
+
+    Update setup.py
+
+commit b2b22603be10ec062dda37db2271d5fb4ece5177
+Merge: 556bbd3 8741da5
+Author: Yasuhiro Fujita <muupan@gmail.com>
+Date:   Thu Dec 17 13:37:29 2020 +0900
+
+    Merge pull request #113 from pfnet/install_filelock
+    
+    Install filelock
+
+commit 8741da5e9546f60d8d7b6a6dbd6f644f384341a2
+Author: Tianqi Xu <tianqi@preferred.jp>
+Date:   Thu Dec 17 04:24:05 2020 +0000
+
+    Install filelock
+    
+    This PR adds installation of filelock, which is imported but not listed
+    in the setup.py.
+
+commit a97428c6ebf251bf14723d11b6b29511c908aa8c
+Author: muupan <muupan@gmail.com>
+Date:   Thu Dec 17 11:17:15 2020 +0900
+
+    Add eval_during_episode
+
+commit 556bbd33804800b2611337d8cb9d049875e099cb
+Merge: 4fd36f2 43f2b16
+Author: Yasuhiro Fujita <muupan@gmail.com>
+Date:   Thu Dec 17 10:33:12 2020 +0900
+
+    Merge pull request #110 from muupan/remove-sumtree
+    
+    Remove deprecated SumTree
+
+commit 43f2b16cc2954d4b7cfeb0de9cb8d4c39cc26c6d
+Author: muupan <muupan@gmail.com>
+Date:   Wed Dec 16 23:05:57 2020 +0900
+
+    Remove SumTree
+
+commit 4fd36f2967e5a251e589ca40cae164535cd71130
+Merge: 4e45b8d 73bc39c
+Author: Yasuhiro Fujita <muupan@gmail.com>
+Date:   Wed Dec 16 21:05:36 2020 +0900
+
+    Merge pull request #109 from pfnet/muupan-patch-1
+    
+    Update the version in setup.py to 0.2.0
+
+commit 73bc39cc51c34cc258eb6cbd498c5513c666cafe
+Author: Yasuhiro Fujita <muupan@gmail.com>
+Date:   Wed Dec 16 20:19:35 2020 +0900
+
+    Update setup.py
+
+commit 4e45b8d0b4f59eb69caffa6dab0707c12284bfd1
+Merge: 322fa45 719dfce
+Author: Yasuhiro Fujita <muupan@gmail.com>
+Date:   Wed Dec 16 20:08:44 2020 +0900
+
+    Merge pull request #33 from prabhatnagarajan/pretrained_models
+    
+    Pretrained models
+
+commit 719dfcea3f92dcc80982af52e64f5186f15490b4
+Author: Prabhat <prabhat.nagarajan@gmail.com>
+Date:   Wed Dec 16 12:29:47 2020 +0900
+
+    Moves fork reference to the docstrings
+
+commit d273d1ee280595905e8026896ea68469c9c5fefb
+Author: Prabhat Nagarajan <prabhat.nagarajan@gmail.com>
+Date:   Wed Dec 16 12:14:13 2020 +0900
+
+    Update pfrl/utils/pretrained_models.py
+    
+    Co-authored-by: Yasuhiro Fujita <muupan@gmail.com>
+
+commit be0cf2969d905b48a2a2cc8b015c1367719c41df
+Author: Prabhat Nagarajan <prabhat.nagarajan@gmail.com>
+Date:   Wed Dec 16 12:14:00 2020 +0900
+
+    Update pfrl/utils/pretrained_models.py
+    
+    Co-authored-by: Yasuhiro Fujita <muupan@gmail.com>
+
+commit 322fa45350c5f8bf477f586a4b463ae83d6b3f9f
+Merge: 7026ca8 55e35e1
+Author: Yasuhiro Fujita <muupan@gmail.com>
+Date:   Mon Dec 14 16:07:52 2020 +0900
+
+    Merge pull request #89 from g-votte/async-tb-fix2
+    
+    Fix the hang in `train_agent_async` with Tensorboard
+
+commit 55e35e1ed4c579040ce68482bbe1c3bfbb18eb32
+Merge: d05ffba 7026ca8
+Author: Yasuhiro Fujita <muupan@gmail.com>
+Date:   Mon Dec 14 15:34:42 2020 +0900
+
+    Merge branch 'master' into async-tb-fix2
+
+commit 7026ca8b73dd15232156b5849deb5e49ef2ec90c
+Merge: cc22878 f57b3d2
+Author: Avinash Ummadisingu <6052050+ummavi@users.noreply.github.com>
+Date:   Sat Dec 12 22:31:37 2020 +0900
+
+    Merge pull request #98 from prabhatnagarajan/env_stats_tb
+    
+    Adds env_stats to record_tb_stats
+
+commit 6555e3dcf160f8130bec91df8daa2d8358f53d02
+Author: Prabhat <prabhat.nagarajan@gmail.com>
+Date:   Fri Dec 11 16:06:31 2020 +0900
+
+    Amends command
+
+commit 570e467783d161ca1d3435c9087e406db1944ffc
+Author: Prabhat <prabhat.nagarajan@gmail.com>
+Date:   Fri Dec 11 14:30:47 2020 +0900
+
+    Applies isort
+
+commit 09c43e3e62bba0aba0bc49d716c7eda61dee8562
+Author: Prabhat <prabhat.nagarajan@gmail.com>
+Date:   Fri Dec 11 01:07:31 2020 +0900
+
+    Applies black
+
+commit f7ecb959523def48496b6498c136ae66d753ae06
+Merge: f3b08b2 cc22878
+Author: Prabhat <prabhat.nagarajan@gmail.com>
+Date:   Fri Dec 11 00:31:42 2020 +0900
+
+    Merge branch 'master' into pretrained_models
+
+commit d05ffba8bb4f0a2886f00412fc05a82fc6d5daf8
+Merge: e956064 cc22878
+Author: Shotaro Sano <s.g.votte@gmail.com>
+Date:   Thu Nov 26 19:49:10 2020 +0900
+
+    Merge branch 'master' into async-tb-fix2
+
+commit f57b3d27e4e101158f8d1048df3b9722bbede41c
+Merge: 79a512e cc22878
+Author: Prabhat <prabhat.nagarajan@gmail.com>
+Date:   Thu Nov 26 14:44:43 2020 +0900
+
+    Merge branch 'master' into env_stats_tb
+
+commit cc228780fb64c32b83fbaa662d3246b9eed475de
+Author: Avinash Ummadisingu <6052050+ummavi@users.noreply.github.com>
+Date:   Thu Nov 26 14:43:03 2020 +0900
+
+    Fixes flake errors  (#104)
+    
+    * Addresses E741s
+    
+    * Addresses E402s
+
+commit 79a512e65edf2779507a8d3926cc1141455eb92a
+Author: Prabhat <prabhat.nagarajan@gmail.com>
+Date:   Tue Nov 24 14:56:29 2020 +0900
+
+    Adds env_stats to record_tb_stats
+
+commit e956064a0e5c05255afa311b35efe7ce0fac3abb
+Merge: f23631f 62d7f13
+Author: Shotaro Sano <s.g.votte@gmail.com>
+Date:   Tue Nov 24 12:55:03 2020 +0900
+
+    Merge branch 'master' into async-tb-fix2
+
+commit 62d7f13b854f1879211a386fd870a7db982cc8ec
+Merge: 4e977c2 ea8a4c7
+Author: Yasuhiro Fujita <muupan@gmail.com>
+Date:   Mon Nov 16 11:38:44 2020 +0900
+
+    Merge pull request #93 from prabhatnagarajan/doc_update
+    
+    Updates install rst
+
+commit ea8a4c73a1bc9c9660a654fd5c0e3aa9aec2c0a9
+Author: Prabhat <prabhat.nagarajan@gmail.com>
+Date:   Mon Nov 16 00:17:30 2020 +0900
+
+    Updates install rst
+
+commit f3b08b2adc37b50ddeed5b46ee3acb0b1df837c3
+Merge: 561cbfb 4e977c2
+Author: Prabhat <prabhat.nagarajan@gmail.com>
+Date:   Fri Nov 13 16:26:51 2020 +0900
+
+    Merge branch 'master' into pretrained_models
+
+commit 4e977c21c0c2d1c3853bc6ed37d4f8aec1b20c43
+Merge: 7b2d734 2c184ec
+Author: Yasuhiro Fujita <muupan@gmail.com>
+Date:   Thu Nov 12 18:01:39 2020 +0900
+
+    Merge pull request #90 from prabhatnagarajan/isort_doc
+    
+    Adds isort to Contributing.md
+
+commit 7b2d7348dada19e1e4481ca05b1001198ae5d9fd
+Merge: 3fcca52 2b7b0f7
+Author: Yasuhiro Fujita <muupan@gmail.com>
+Date:   Thu Nov 12 17:56:37 2020 +0900
+
+    Merge pull request #80 from prabhatnagarajan/eval_stats_collector
+    
+    Eval stats collector
+
+commit 3fcca52b29c5b849776407ab6f90c6a12de812e3
+Merge: b9d2ee4 1652078
+Author: Yasuhiro Fujita <muupan@gmail.com>
+Date:   Tue Nov 10 21:14:22 2020 +0900
+
+    Merge pull request #86 from belldandyxtq/actor_learner_hook
+    
+    Add `step_hooks` and `optimizer_step_hooks` to actor-learner
+
+commit 165207892f393f9ca08a356370bd8c4c87914096
+Author: Tianqi Xu <tianqi@preferred.jp>
+Date:   Tue Nov 10 11:32:53 2020 +0000
+
+    fix style
+
+commit 4f4f598217882db7769d4c2eb136f97c79aed584
+Author: Tianqi Xu <tianqi@preferred.jp>
+Date:   Tue Nov 10 11:13:10 2020 +0000
+
+    fix style
+
+commit ba52704df4f3503936a8fd4b7018c17fd987b4da
+Author: Tianqi Xu <tianqi@preferred.jp>
+Date:   Tue Nov 10 09:28:06 2020 +0000
+
+    fix type info
+
+commit 3cd51aed8f524618e8a841ea38feaf6a8e28da3f
+Author: Tianqi Xu <tianqi@preferred.jp>
+Date:   Tue Nov 10 09:21:38 2020 +0000
+
+    refine type info
+
+commit 94c1d68623c9fb2a604beea0837cde358b9a5015
+Author: Tianqi Xu <tianqi@preferred.jp>
+Date:   Tue Nov 10 09:14:33 2020 +0000
+
+    use mock from unittest
+
+commit b9d2ee4a2aedd727833dd2aea77d3903ae88050b
+Merge: 9be4726 317589b
+Author: Yasuhiro Fujita <muupan@gmail.com>
+Date:   Tue Nov 10 15:07:27 2020 +0900
+
+    Merge pull request #46 from keisuke-nakata/optuna-integration2
+    
+    Optuna integration & example script (2)
+
+commit 317589b5d27c2c2600ce377d344c3664e00b65bb
+Author: NAKATA Keisuke <keisuke.nakata.919@gmail.com>
+Date:   Tue Nov 10 14:45:42 2020 +0900
+
+    add note for unsupported feature
+
+commit 9ae4d6a9bca86c6f8c953752fe5798968d19f05f
+Author: NAKATA Keisuke <keisuke.nakata.919@gmail.com>
+Date:   Tue Nov 10 14:44:22 2020 +0900
+
+    hyper_param -> hyperparam
+
+commit 91e585eb8a9e449a6fb89c19e5c9577c78a623cc
+Author: NAKATA Keisuke <keisuke.nakata.919@gmail.com>
+Date:   Tue Nov 10 13:58:36 2020 +0900
+
+    revert train_agent_async.py
+
+commit a790802856a448b78920a39745c3446d79f4f8d3
+Author: keisuke-nakata <keisuke.nakata.919@gmail.com>
+Date:   Tue Nov 10 13:44:39 2020 +0900
+
+    Update examples/optuna/README.md
+    
+    Co-authored-by: Yasuhiro Fujita <muupan@gmail.com>
+
+commit fb6d110d7b7d500f42cb47ae988e1a65f03ab21e
+Author: keisuke-nakata <keisuke.nakata.919@gmail.com>
+Date:   Tue Nov 10 13:43:43 2020 +0900
+
+    Update examples/optuna/optuna_dqn_obs1d.py
+    
+    Co-authored-by: Yasuhiro Fujita <muupan@gmail.com>
+
+commit ecddbf4b2ed76f98ce8c162a77c6c9c7537f0375
+Author: keisuke-nakata <keisuke.nakata.919@gmail.com>
+Date:   Tue Nov 10 13:43:17 2020 +0900
+
+    Update examples/optuna/optuna_dqn_obs1d.py
+    
+    Co-authored-by: Yasuhiro Fujita <muupan@gmail.com>
+
+commit 6d3af591ee2c3e2dbbcab7d19b029479c6f9fa23
+Author: keisuke-nakata <keisuke.nakata.919@gmail.com>
+Date:   Tue Nov 10 13:43:07 2020 +0900
+
+    Update examples/optuna/optuna_dqn_obs1d.py
+    
+    Co-authored-by: Yasuhiro Fujita <muupan@gmail.com>
+
+commit bdc4010ab5fc00a8aa67c5e52cdceee53030cdee
+Author: keisuke-nakata <keisuke.nakata.919@gmail.com>
+Date:   Tue Nov 10 13:42:56 2020 +0900
+
+    Update examples/optuna/README.md
+    
+    Co-authored-by: Yasuhiro Fujita <muupan@gmail.com>
+
+commit c0dd76bb187cad289698fc6fa12cfea3b94f0157
+Author: keisuke-nakata <keisuke.nakata.919@gmail.com>
+Date:   Tue Nov 10 13:42:12 2020 +0900
+
+    Update examples/optuna/optuna_dqn_obs1d.py
+    
+    Co-authored-by: Yasuhiro Fujita <muupan@gmail.com>
+
+commit cf476ba8924f315432681c97fe14efc0dd091ff8
+Author: keisuke-nakata <keisuke.nakata.919@gmail.com>
+Date:   Tue Nov 10 13:41:55 2020 +0900
+
+    Update examples/optuna/README.md
+    
+    Co-authored-by: Yasuhiro Fujita <muupan@gmail.com>
+
+commit a8bb8c8da7b0af613dbd3005699af9e296ac6597
+Author: keisuke-nakata <keisuke.nakata.919@gmail.com>
+Date:   Tue Nov 10 13:40:37 2020 +0900
+
+    Update examples/optuna/README.md
+    
+    Co-authored-by: Yasuhiro Fujita <muupan@gmail.com>
+
+commit 0f3f47deecd27d43547eb9e4d9aeea8142db2d19
+Merge: 83110ac 9be4726
+Author: Tianqi Xu <tianqi@preferred.jp>
+Date:   Fri Nov 6 04:31:04 2020 +0000
+
+    Merge branch 'master' into actor_learner_hook
+
+commit 2c184ec9651ef7b689b3956663c3535f550934c1
+Author: Prabhat <prabhat.nagarajan@gmail.com>
+Date:   Fri Nov 6 01:14:46 2020 +0900
+
+    Adds isort to contributing md
+
+commit 561cbfb32b2538072cb8097714f6a4e6484a35d2
+Author: Prabhat <prabhat.nagarajan@gmail.com>
+Date:   Fri Nov 6 01:13:06 2020 +0900
+
+    Applies isort
+
+commit 1a3ed196e84586b60c39c9b97de08e9f196f9b41
+Merge: 806a545 9be4726
+Author: Prabhat <prabhat.nagarajan@gmail.com>
+Date:   Fri Nov 6 01:12:44 2020 +0900
+
+    Merge branch 'master' into pretrained_models
+
+commit 2b7b0f7cc3e727c0c2d868234218e2189ebbdb22
+Merge: fe82aba 9be4726
+Author: Prabhat <prabhat.nagarajan@gmail.com>
+Date:   Thu Nov 5 20:52:38 2020 +0900
+
+    Merge branch 'master' into eval_stats_collector
+
+commit f23631fff77fea6e06fcdf529e1358244eaba9d7
+Author: Shotaro Sano <s.g.votte@gmail.com>
+Date:   Sat Oct 31 18:54:13 2020 +0900
+
+    Fix the deadlock when recording Tensorboard data in async evaluation
+
+commit 5223b4d5c2f4d339286b5a723a3cc1b2bd90e971
+Author: NAKATA Keisuke <keisuke.nakata.919@gmail.com>
+Date:   Wed Nov 4 11:59:12 2020 +0900
+
+    isort
+
+commit a5f7007d0349b9c0b493d77f817a521e277f489d
+Merge: 2190fc8 9be4726
+Author: NAKATA Keisuke <keisuke.nakata.919@gmail.com>
+Date:   Wed Nov 4 11:53:42 2020 +0900
+
+    Merge commit '9be4726d327b7ce32d9008c40119c98c93febad5' into optuna-integration2
+    
+    # Conflicts:
+    #       pfrl/experiments/__init__.py
+    #       setup.cfg
+
+commit 9be4726d327b7ce32d9008c40119c98c93febad5
+Merge: 4c30c1d 8b46df7
+Author: Avinash Ummadisingu <6052050+ummavi@users.noreply.github.com>
+Date:   Wed Nov 4 11:14:03 2020 +0900
+
+    Merge pull request #82 from pfnet/isort
+    
+    Adopt isort to format import sentences
+
+commit 2190fc866b5024e88d42abde71a9a5290c1f880d
+Author: NAKATA Keisuke <keisuke.nakata.919@gmail.com>
+Date:   Sun Nov 1 22:46:25 2020 +0900
+
+    black
+
+commit aee97802542986459e48059e555a8001dfab6128
+Author: NAKATA Keisuke <keisuke.nakata.919@gmail.com>
+Date:   Sun Nov 1 22:42:38 2020 +0900
+
+    fix variable name
+
+commit bc90923b28ebb383e921c92a2b774be1f9e48f37
+Author: NAKATA Keisuke <keisuke.nakata.919@gmail.com>
+Date:   Sun Nov 1 22:33:32 2020 +0900
+
+    unify return-value of train_agent_async
+
+commit 6a4d33f50f66fbb767555cebc94d424e1c7ef991
+Author: NAKATA Keisuke <keisuke.nakata.919@gmail.com>
+Date:   Sun Nov 1 22:21:19 2020 +0900
+
+    return evaluation stats only & unsupport async mode
+
+commit 4f5127a995890eeca15715f2833f5bb9d966cd8c
+Author: NAKATA Keisuke <keisuke.nakata.919@gmail.com>
+Date:   Sun Nov 1 17:20:33 2020 +0900
+
+    black
+
+commit abfc9d8834a4aad8f9d961cb3072d7c91d6a0220
+Author: NAKATA Keisuke <keisuke.nakata.919@gmail.com>
+Date:   Sun Nov 1 17:01:24 2020 +0900
+
+    make optuna optional
+
+commit b8a65312f260fa36745e28ac3ebe9b6429110da8
+Author: NAKATA Keisuke <keisuke.nakata.919@gmail.com>
+Date:   Sun Nov 1 16:32:57 2020 +0900
+
+    revert change
+
+commit a781e387cae27d6d2f40167163abc4cbe3a39384
+Merge: fd1a42d 4c30c1d
+Author: NAKATA Keisuke <keisuke.nakata.919@gmail.com>
+Date:   Sun Nov 1 16:24:12 2020 +0900
+
+    Merge commit '4c30c1d73f0941a2b649b62937eec346bb55a95e' into optuna-integration2
+
+commit 83110ac0f2d06435ece32e8ec5c0f5aabf0b7944
+Author: Tianqi Xu <tianqi@preferred.jp>
+Date:   Fri Oct 30 06:42:27 2020 +0000
+
+    add step_hooks and optimizer_step_hooks to actor-learner
+    
+    Step_hooks can be registered by users to perform operations like lr decay
+    after each step.
+    However, in the current actor-learner implementation, the step_hooks are called
+    from the actor side, while variables like lr are on the learner side.
+    Such difference disables the lr decay by step_hooks.
+    
+    This PR adds hooks to the learner side to re-enable the step_hooks
+    related to learner.
+    Since we can specify both steps and n_updates for the learner, we add
+    two hooks to handle both of them respectively.
+    1. A `step_hooks` that takes the `effective_timesteps` as args and
+       performs the same way as the original `step_hooks`.
+    2. A `optimizer_step_hooks` takes the `optimizer_step` instead of the
+       `effective_timesteps` as args.
+
+commit 4c30c1d73f0941a2b649b62937eec346bb55a95e
+Author: Mario Ynocente Castro <ycmario@gmail.com>
+Date:   Thu Oct 29 19:01:19 2020 +0900
+
+    Set stats type (#83)
+
+commit fe82aba5cf8bd294f103a3e6230d1443536c057f
+Merge: 88ce4cb 8ad2cd0
+Author: Prabhat <prabhat.nagarajan@gmail.com>
+Date:   Thu Oct 29 01:36:45 2020 +0900
+
+    Merge branch 'master' into eval_stats_collector
+
+commit 8ad2cd0ae250c3a6bf55766c056ba2c4177621dc
+Merge: 2217e2c 867c1bb
+Author: Avinash Ummadisingu <6052050+ummavi@users.noreply.github.com>
+Date:   Wed Oct 21 10:57:33 2020 +0900
+
+    Merge pull request #55 from shu65/support_ddp_in_save_load
+    
+    Save and load a module trained with DataParallel or DistributedDataParallel
+
+commit 2217e2cd01cc3e379f3a05d8d23187a0e5a5733d
+Merge: e485a30 70caf99
+Author: Yasuhiro Fujita <muupan@gmail.com>
+Date:   Wed Oct 14 12:22:39 2020 +0900
+
+    Merge pull request #81 from pfnet/detach-greedy-actions
+    
+    Detach greedy_actions before calling cpu()
+
+commit 8b46df7b7e6c816eb7908fa2c571405eca65a35a
+Author: muupan <muupan@gmail.com>
+Date:   Wed Oct 14 12:19:54 2020 +0900
+
+    Fix errors related to import order
+
+commit d6985b4e5991d32066fb4db458757406081ed927
+Author: muupan <muupan@gmail.com>
+Date:   Wed Oct 14 11:52:57 2020 +0900
+
+    Apply isort in CI
+
+commit 70caf994c7e096656863e47d586c8073080df7d0
+Author: muupan <muupan@gmail.com>
+Date:   Wed Oct 14 11:47:52 2020 +0900
+
+    Fix StateQFunctionActor as well
+
+commit 1799246ae7f75b480f815bb270b15b85d7258f8b
+Author: muupan <muupan@gmail.com>
+Date:   Wed Oct 14 11:34:50 2020 +0900
+
+    Apply isort to pfrl, tests, and examples
+
+commit 3fbc9be54f8700633f31c2ccb528189e7052948e
+Author: muupan <muupan@gmail.com>
+Date:   Wed Oct 14 11:30:47 2020 +0900
+
+    Add black-compatible isort config
+
+commit 6f22bb76907e9aca494e31045a9ddb36e0d0fe2e
+Author: muupan <muupan@gmail.com>
+Date:   Wed Oct 14 11:14:37 2020 +0900
+
+    Detach greedy_actions before calling cpu()
+
+commit 88ce4cb3ac95023fec194ed0de308659ad43c34e
+Author: Prabhat <prabhat.nagarajan@gmail.com>
+Date:   Tue Oct 13 23:58:07 2020 +0900
+
+    Fixes tests
+
+commit 53eaa8a8ca9bdd61c36022b41db528c565975628
+Author: Prabhat <prabhat.nagarajan@gmail.com>
+Date:   Tue Oct 13 23:31:40 2020 +0900
+
+    Applies black
+
+commit 867c1bbc2bb258326ec1483208e325b7c422dfdb
+Author: Shuji Suzuki <dolphinripple@gmail.com>
+Date:   Tue Oct 13 10:39:42 2020 +0900
+
+    fix black errors
+
+commit 3326b59ca4c0ef4c5956bec6ad4e302b742dba5d
+Merge: bf2bf31 e485a30
+Author: Prabhat <prabhat.nagarajan@gmail.com>
+Date:   Wed Oct 7 13:49:07 2020 +0900
+
+    Merge branch 'master' into eval_stats_collector
+
+commit e485a305d9237ff70b9c53c48cf172c3bfbaf2db
+Merge: 2a13d95 bebe8b0
+Author: Avinash Ummadisingu <6052050+ummavi@users.noreply.github.com>
+Date:   Wed Oct 7 11:21:55 2020 +0900
+
+    Merge pull request #71 from prabhatnagarajan/write_header
+    
+    Makes common write_header function
+
+commit 806a545e232e15cc22c2a524f101efd146af36a5
+Author: Prabhat <prabhat.nagarajan@gmail.com>
+Date:   Wed Sep 23 13:46:58 2020 +0900
+
+    Adds filelock requirement for pfrl
+
+commit ba7b3dc11c81f8814ec89349eb91495db302eb93
+Author: Chachay <Chachay@users.noreply.github.com>
+Date:   Tue Sep 22 09:27:50 2020 +0200
+
+    Add use_tensorboard option to batch training
+
+commit bf2bf318e92bdd23e6186849269577e310a3e654
+Author: Prabhat <prabhat.nagarajan@gmail.com>
+Date:   Fri Sep 11 16:23:42 2020 +0900
+
+    Fixes getattr error
+
+commit aee1f9876659d30820b044b7ef80cedd1b1c8cc3
+Author: Prabhat <prabhat.nagarajan@gmail.com>
+Date:   Thu Sep 10 01:58:00 2020 +0900
+
+    Adds env stats to async evaluator
+
+commit 9e61942e86589dab7a15bd380f16e62245cc338b
+Author: Prabhat <prabhat.nagarajan@gmail.com>
+Date:   Thu Sep 10 01:19:56 2020 +0900
+
+    Passes env to write_header and clears stats before eval
+
+commit 5dd75d0742c2d903d9e20f11e44d421c4973ac32
+Merge: 9fea408 bebe8b0
+Author: Prabhat <prabhat.nagarajan@gmail.com>
+Date:   Wed Sep 9 17:12:48 2020 +0900
+
+    Merges with write_header and fixes conflicts
+
+commit bebe8b0994da142f73f895725067d22427193581
+Author: Prabhat <prabhat.nagarajan@gmail.com>
+Date:   Wed Sep 9 17:08:59 2020 +0900
+
+    Applies black
+
+commit f742c43b0961b94a6d364cdec1928e1f39744e6a
+Author: Prabhat <prabhat.nagarajan@gmail.com>
+Date:   Wed Sep 9 17:08:25 2020 +0900
+
+    moves basic columns to main function
+
+commit 3fc46660d61fe1f890740fe46b2581aca1fa86d8
+Author: Prabhat <prabhat.nagarajan@gmail.com>
+Date:   Wed Sep 9 15:56:25 2020 +0900
+
+    Makes common write_header function that can be used by Async and normal Evaluators
+
+commit 9fea40812899491302174fa63ce79b217c203a5f
+Author: Prabhat <prabhat.nagarajan@gmail.com>
+Date:   Wed Sep 9 15:49:29 2020 +0900
+
+    Implements custom values for evaluator
+
+commit 2a13d9576b9ccbf851fce37cd8eace14903a47f0
+Author: Prabhat Nagarajan <prabhat.nagarajan@gmail.com>
+Date:   Wed Sep 9 12:06:10 2020 +0900
+
+    Updates the supported Python version in the README (#70)
+    
+    * Updates the supported Python version in the README
+    
+    * Update README.md
+    
+    * Updates Python version in README to 3.7.7
+    
+    * Update README.md
+
+commit 220f08513d9a1e65b9f60ccbc7b74f65f7e278f6
+Merge: e64f766 4738769
+Author: Yasuhiro Fujita <muupan@gmail.com>
+Date:   Wed Sep 9 10:11:25 2020 +0900
+
+    Merge pull request #32 from keisuke-nakata/log-agerage_q-for-categorical-dqns
+    
+    calculate scalar q_values to log average_q statistics in categorical dqn algorithms
+
+commit 89992168024600e1522dce4920b5425d3405e8aa
+Merge: 1678fd8 e64f766
+Author: Prabhat <prabhat.nagarajan@gmail.com>
+Date:   Tue Sep 8 19:16:48 2020 +0900
+
+    Merge branch 'master' into pretrained_models
+
+commit 1678fd83d030770c6ec3757815207de218ce04b3
+Author: Prabhat <prabhat.nagarajan@gmail.com>
+Date:   Tue Sep 8 18:34:34 2020 +0900
+
+    Adds filelock requirement to DQN
+
+commit e64f766e5924dbfb08e809cfeae88597e2056513
+Merge: 8d99b0f 755e2a0
+Author: Avinash Ummadisingu <6052050+ummavi@users.noreply.github.com>
+Date:   Tue Sep 8 14:41:09 2020 +0900
+
+    Merge pull request #17 from pfnet/dqn-type-hint
+    
+    Add type hints to DQN and its dependencies
+
+commit 755e2a084b83469765e96953d38859ef36e050ba
+Author: muupan <muupan@gmail.com>
+Date:   Tue Sep 8 13:45:01 2020 +0900
+
+    black
+
+commit a97d05223cf36770bf2db2ec55c20e9cdd00793a
+Merge: edcad2d 8d99b0f
+Author: muupan <muupan@gmail.com>
+Date:   Tue Sep 8 13:42:36 2020 +0900
+
+    Merge branch 'master' into dqn-type-hint
+
+commit 8d99b0fb596b4e45e588078a26e7231e0afe998e
+Merge: 1287e66 b054051
+Author: Prabhat Nagarajan <prabhat.nagarajan@gmail.com>
+Date:   Tue Sep 8 13:06:01 2020 +0900
+
+    Merge pull request #66 from pfnet/muupan-patch-1
+    
+    Activate auto assign only when a PR is opened
+
+commit 1287e66cfb912ec17a66f36522eeb09eaa8b95f3
+Merge: 653f858 b0596c6
+Author: Mario Ynocente Castro <ycmario@gmail.com>
+Date:   Mon Sep 7 17:31:33 2020 +0900
+
+    Merge pull request #49 from prabhatnagarajan/doc_update
+    
+    Adds more examples to documentation
+
+commit b0596c68d4fdd04b6cdb2e6dbb9811eb06294745
+Author: Prabhat Nagarajan <prabhat.nagarajan@gmail.com>
+Date:   Mon Sep 7 17:00:22 2020 +0900
+
+    Update examples/README.md
+    
+    Co-authored-by: Mario Ynocente Castro <ycmario@gmail.com>
+
+commit b0540510f856e09b2eb03c289d69741bb3b9293e
+Author: Yasuhiro Fujita <muupan@gmail.com>
+Date:   Fri Sep 4 16:29:02 2020 +0900
+
+    Update auto_assign.yml
+    
+    Activate auto assign only when a PR is opened
+
+commit 653f858410a37d12c2bc204c92dbccec4726b714
+Merge: eaa5e70 fe013e4
+Author: Prabhat Nagarajan <prabhat.nagarajan@gmail.com>
+Date:   Fri Sep 4 16:24:17 2020 +0900
+
+    Merge pull request #64 from prabhatnagarajan/tanh_replace
+    
+    Replace nn.functional.tanh with torch.tanh
+
+commit fe013e4400e0d9bc5c572687bbeff90dda371def
+Author: Prabhat <prabhat.nagarajan@gmail.com>
+Date:   Fri Sep 4 16:04:16 2020 +0900
+
+    Removes unused import
+
+commit 08e23a40970131a28d4adc88f7f34db40bc6676d
+Author: Prabhat <prabhat.nagarajan@gmail.com>
+Date:   Fri Sep 4 14:15:50 2020 +0900
+
+    Replaces nn.functional.tanh with torch.tanh
+
+commit e6c9b017ac72c0c5f5ddaac370453e4008181ea4
+Merge: 2868ccf eaa5e70
+Author: Prabhat <prabhat.nagarajan@gmail.com>
+Date:   Fri Sep 4 14:11:55 2020 +0900
+
+    resolves merge conflicts
+
+commit 7703a7f5bc9e9adc96396f3dabcec1bab4344c62
+Author: Prabhat <prabhat.nagarajan@gmail.com>
+Date:   Fri Sep 4 14:10:24 2020 +0900
+
+    Adds outputting of demo scores to a file
+
+commit fd1a42d0370e6c1e8e3de3d662e55873685cb2d7
+Author: keisuke-nakata <keisuke.nakata.919@gmail.com>
+Date:   Fri Sep 4 13:52:25 2020 +0900
+
+    Update examples/optuna/README.md
+    
+    Co-authored-by: Yasuhiro Fujita <muupan@gmail.com>
+
+commit f9a0473e39bdc1df73d989a776822f0b6ae9e5d8
+Author: keisuke-nakata <keisuke.nakata.919@gmail.com>
+Date:   Fri Sep 4 13:52:05 2020 +0900
+
+    Update examples/optuna/README.md
+    
+    Co-authored-by: Yasuhiro Fujita <muupan@gmail.com>
+
+commit eaa5e70bdbd63b2eba34b37c67ef04c3d6c092c6
+Merge: 0292261 4226465
+Author: Prabhat Nagarajan <prabhat.nagarajan@gmail.com>
+Date:   Fri Sep 4 13:12:39 2020 +0900
+
+    Merge pull request #58 from prabhatnagarajan/trpo_doc_fix
+    
+    Fixes typo in TRPO docstring
+
+commit 42264659f48039ca61d7a5e21afd8f02154b199c
+Author: Prabhat Nagarajan <prabhat.nagarajan@gmail.com>
+Date:   Fri Sep 4 11:51:12 2020 +0900
+
+    Update pfrl/agents/trpo.py
+    
+    Co-authored-by: Mario Ynocente Castro <ycmario@gmail.com>
+
+commit 02922618be9514546fbb6f5b132c8159113566e1
+Merge: 2ff0a2a 1d60165
+Author: Yasuhiro Fujita <muupan@gmail.com>
+Date:   Fri Sep 4 10:53:41 2020 +0900
+
+    Merge pull request #62 from pfnet/pull_request_target
+    
+    Enable auto review assignment for PRs from forks
+
+commit 1d601651dd79d8bf2dd6ced83c0747504f5d7fbf
+Author: Yasuhiro Fujita <muupan@gmail.com>
+Date:   Fri Sep 4 10:37:46 2020 +0900
+
+    Update auto_assign.yml
+    
+    Use pull_request_target so that it applies to PRs from forks
+
+commit e3f5b476599b854dee2ff2b2cf9c5e86039ce9b2
+Author: Prabhat <prabhat.nagarajan@gmail.com>
+Date:   Fri Sep 4 01:54:42 2020 +0900
+
+    Fixes typo in TRPO docstring
+
+commit 2868ccf4247fa43f21430e98221255f47628cb03
+Author: Prabhat <prabhat.nagarajan@gmail.com>
+Date:   Fri Sep 4 01:52:44 2020 +0900
+
+    Fixes typo in TRPO documentation
+
+commit 05f6719703f3f14d5632460f317c0311ca6ed065
+Author: Shuji Suzuki <dolphinripple@gmail.com>
+Date:   Thu Sep 3 10:49:27 2020 +0900
+
+    add shm option
+
+commit a3033cfb8a39a2ab994cf625c3b4ca701cf0c4ec
+Author: Shuji Suzuki <dolphinripple@gmail.com>
+Date:   Thu Sep 3 09:17:15 2020 +0900
+
+    fix flake8 errors
+
+commit 3a24a2eba27cc217385591cdeaa181bda24e8e19
+Author: Shuji Suzuki <dolphinripple@gmail.com>
+Date:   Thu Sep 3 09:05:41 2020 +0900
+
+    add support dp and ddp in agent.save and agent.load
+
+commit 0bcbf0182a5a26172d746be820e65a551971518e
+Author: Prabhat <prabhat.nagarajan@gmail.com>
+Date:   Tue Sep 1 16:53:47 2020 +0900
+
+    Updates description
+
+commit 8f079fbeebfc88260aa58fa39ea6b2c8abe21fa7
+Author: Prabhat <prabhat.nagarajan@gmail.com>
+Date:   Tue Sep 1 16:51:25 2020 +0900
+
+    Adds more examples to documentation
+
+commit 3917f81b2b13a159be6d552b20a199f096bc57be
+Author: NAKATA Keisuke <keisuke.nakata.919@gmail.com>
+Date:   Wed Aug 19 16:24:04 2020 +0900
+
+    fix readme
+
+commit 45c951e406295084c961aa495eb510d4aa4e8820
+Author: keisuke-nakata <keisuke.nakata.919@gmail.com>
+Date:   Wed Aug 19 12:02:15 2020 +0900
+
+    Update examples/optuna/README.md
+    
+    Co-authored-by: Yasuhiro Fujita <muupan@gmail.com>
+
+commit a44b0677353137be47a7beb4ed69f3d413800d3a
+Author: keisuke-nakata <keisuke.nakata.919@gmail.com>
+Date:   Wed Aug 19 12:01:27 2020 +0900
+
+    Update examples/optuna/README.md
+    
+    Co-authored-by: Yasuhiro Fujita <muupan@gmail.com>
+
+commit bd126442a5b9f488f925ea88afe9f612dc82ada0
+Author: keisuke-nakata <keisuke.nakata.919@gmail.com>
+Date:   Wed Aug 19 12:01:13 2020 +0900
+
+    Update examples/optuna/README.md
+    
+    Co-authored-by: Yasuhiro Fujita <muupan@gmail.com>
+
+commit 2ff0a2a2692a63cb99665059868af12576d79256
+Merge: e0c6b37 e171afa
+Author: Prabhat Nagarajan <prabhat.nagarajan@gmail.com>
+Date:   Fri Aug 14 17:31:37 2020 +0900
+
+    Merge pull request #43 from pfnet/enable-auto-assign
+    
+    Enable auto assignment of PR reviewers
+
+commit e171afadd74166ad09f99dc0acbe2661a4ff311d
+Author: muupan <muupan@gmail.com>
+Date:   Sat Aug 8 21:29:39 2020 +0900
+
+    Enable auto assign
+
+commit e0c6b37159ff84606356e9ce3577f2bc9fc310b4
+Merge: 5aff882 db3fe8c
+Author: Prabhat Nagarajan <prabhat.nagarajan@gmail.com>
+Date:   Fri Aug 7 15:28:15 2020 +0900
+
+    Merge pull request #41 from pfnet/muupan-patch-1
+    
+    Indicate that recurrent is not supported by DDPG
+
+commit db3fe8c25761308b6b085b8fb56c03a9309129ff
+Author: Yasuhiro Fujita <muupan@gmail.com>
+Date:   Fri Aug 7 15:13:54 2020 +0900
+
+    Indicate that recurrent is not supported by DDPG
+
+commit 5aff882fce594ec46c4c0a45ae4dad71650693ee
+Merge: e96ce53 90e6d1c
+Author: Yasuhiro Fujita <muupan@gmail.com>
+Date:   Wed Aug 5 13:44:58 2020 +0900
+
+    Merge pull request #39 from prabhatnagarajan/pfrl_logo_fix
+    
+    Adjusts the logo to fix aspect ratio
+
+commit e96ce53515d370b8552623f7d4ae040d2548d0a2
+Merge: d764e8b 8aa0e97
+Author: Prabhat Nagarajan <prabhat.nagarajan@gmail.com>
+Date:   Wed Aug 5 12:50:02 2020 +0900
+
+    Merge pull request #37 from marioyc/fix-paper-link
+    
+    Link Rainbow paper in training scripts
+
+commit 90e6d1cbfc86aac3a5daad70e0bcd61e94824c9b
+Author: Prabhat <prabhat.nagarajan@gmail.com>
+Date:   Wed Aug 5 12:10:30 2020 +0900
+
+    Adjusts height to 150
+
+commit c8b6ab6c26ac3283a6f82ae4c753877dfd8494b2
+Author: Prabhat <prabhat.nagarajan@gmail.com>
+Date:   Wed Aug 5 11:53:34 2020 +0900
+
+    adjusts height
+
+commit 98e862cd9f8f89cc655848fa4e9c7c3cf3810bd3
+Author: Prabhat <prabhat.nagarajan@gmail.com>
+Date:   Wed Aug 5 11:51:40 2020 +0900
+
+    Removes height/width params
+
+commit d764e8ba85be4985bcea52b1d6d937f28a2294c7
+Merge: 91abe8a 6a37661
+Author: Prabhat Nagarajan <prabhat.nagarajan@gmail.com>
+Date:   Wed Aug 5 11:43:58 2020 +0900
+
+    Merge pull request #35 from prabhatnagarajan/pfrl_logo
+    
+    Add PFRL Logo to Readme
+
+commit 8aa0e976ecc489b508357b88d0764f36b812bb45
+Author: marioyc <ycmario@gmail.com>
+Date:   Tue Aug 4 20:04:20 2020 +0900
+
+    link Rainbow paper
+
+commit 91abe8ab7e5e7f14028029f8ff40f19ba237583b
+Merge: fdc4d3b 3363fbf
+Author: Yasuhiro Fujita <muupan@gmail.com>
+Date:   Tue Aug 4 10:58:48 2020 +0900
+
+    Merge pull request #36 from gorogoroyasu/gorogoroyasu-patch-1
+    
+    [Fix Examples] function call was duplicated
+
+commit 3363fbfa09198841d30c1953073a1611e5ebae0d
+Author: Yasuaki Hamano <hamano@fusic.co.jp>
+Date:   Tue Aug 4 08:25:01 2020 +0900
+
+    function call utils.set_random_seed was duplicated
+
+commit 6a37661a8acf314f3b8408a615f6695d7c067da0
+Author: Prabhat <prabhat.nagarajan@gmail.com>
+Date:   Mon Aug 3 12:39:55 2020 +0900
+
+    Another config modification
+
+commit f64d3ca8754bce075ec5c0e2f2b2d6bbe077ea49
+Author: Prabhat <prabhat.nagarajan@gmail.com>
+Date:   Mon Aug 3 12:30:27 2020 +0900
+
+    Changes config
+
+commit 94e31354565fdb7b1c4c63718936449135d628ba
+Author: Prabhat <prabhat.nagarajan@gmail.com>
+Date:   Mon Aug 3 10:45:33 2020 +0900
+
+    Modifies configuration
+
+commit dbb13fa5c0a95a8b870a236a3a14aaccf0c297e8
+Author: Prabhat <prabhat.nagarajan@gmail.com>
+Date:   Mon Aug 3 10:44:00 2020 +0900
+
+    Modifies configuration
+
+commit 8309a78745c9f79df8661ed53f716351effb4b6b
+Author: Prabhat <prabhat.nagarajan@gmail.com>
+Date:   Mon Aug 3 10:32:38 2020 +0900
+
+    Switches back to width 400
+
+commit d235f13ab3b0dfe0a257b23b11b6ce039904f684
+Author: Prabhat <prabhat.nagarajan@gmail.com>
+Date:   Mon Aug 3 10:25:15 2020 +0900
+
+    Crops PFRL png
+
+commit 3c8ee7a97b252204d13f821c2cea6afb2651a122
+Author: Prabhat <prabhat.nagarajan@gmail.com>
+Date:   Mon Aug 3 10:21:22 2020 +0900
+
+    Modifies structure
+
+commit c3d0190c35d729c86672707b88770e812f609091
+Merge: d58731b fdc4d3b
+Author: Prabhat <prabhat.nagarajan@gmail.com>
+Date:   Fri Jul 31 18:10:19 2020 +0900
+
+    Merge branch 'master' into pfrl_logo
+
+commit fdc4d3be952341a8d1e3778f66b3f4defb769fcb
+Merge: d420891 6deb3d6
+Author: Prabhat Nagarajan <prabhat.nagarajan@gmail.com>
+Date:   Fri Jul 31 18:09:33 2020 +0900
+
+    Merge pull request #34 from prabhatnagarajan/pfrl_logo_img
+    
+    Adds PFRL logo to assets
+
+commit 6deb3d67fbbcfea5a38c51aef839ff4a1a25349a
+Author: Prabhat <prabhat.nagarajan@gmail.com>
+Date:   Fri Jul 31 16:16:03 2020 +0900
+
+    Adds PFRL logo to assets
+
+commit d58731bbe27f08b228776a6e242cb136a9887f81
+Author: Prabhat <prabhat.nagarajan@gmail.com>
+Date:   Fri Jul 31 16:13:27 2020 +0900
+
+    Adds link to PFRL logo
+
+commit 8d7f7542f0d04c94fbe9d998ef0c4c8ffe582305
+Merge: 9caf054 d420891
+Author: Prabhat <prabhat.nagarajan@gmail.com>
+Date:   Fri Jul 31 15:24:44 2020 +0900
+
+    Merge branch 'master' into pretrained_models
+
+commit 4738769d070ee682ec2ed2f814a6e1efca67aa47
+Author: NAKATA Keisuke <keisuke.nakata.919@gmail.com>
+Date:   Thu Jul 30 16:47:42 2020 +0900
+
+    calculate scalar q_values to log average_q statistics in categorical dqn algorithms.
+
+commit d4208915733399bf58b22f3cfdecfc5d27cff6d1
+Author: Tianqi Xu <tianqi@preferred.jp>
+Date:   Wed Jul 22 09:57:45 2020 +0900
+
+    Make update_counter multiprocess safe (#30)
+
+commit 611b7a7e98ccb37b73da5d81be4f7335d1ae612f
+Author: NAKATA Keisuke <keisuke.nakata.919@gmail.com>
+Date:   Tue Jul 21 10:46:49 2020 +0900
+
+    update readme
+
+commit 9caf054d6b87c575989267f7ce9e183fafb3d77e
+Merge: 67ce265 d396f65
+Author: Prabhat <prabhat.nagarajan@gmail.com>
+Date:   Mon Jul 20 02:00:58 2020 +0900
+
+    Merge branch 'pretrained_models' of https://github.com/pfnet/pfrl into pretrained_models
+
+commit d396f65d93181e5be286d31332fcc236dc7e4851
+Author: Prabhat <prabhat.nagarajan@gmail.com>
+Date:   Sun Jul 19 20:32:24 2020 +0900
+
+    Applies black
+
+commit 2e6427acb32d682fe48829ec5747faca3567cbde
+Author: Prabhat <prabhat.nagarajan@gmail.com>
+Date:   Sat Jul 18 01:32:57 2020 +0900
+
+    Addresses flakes
+
+commit c3e6aa79caf4bbc0fa8fd684961863f154a7d341
+Author: Prabhat <prabhat.nagarajan@gmail.com>
+Date:   Fri Jul 17 17:52:40 2020 +0900
+
+    Applies black
+
+commit 3ae2f88e4153fedfc53416cc64fd5cef5d40d894
+Author: Prabhat <prabhat.nagarajan@gmail.com>
+Date:   Fri Jul 17 14:52:11 2020 +0900
+
+    Uses posixpath
+
+commit b9b2fe34109344c069f683b30e942604175781bf
+Author: Prabhat <prabhat.nagarajan@gmail.com>
+Date:   Fri Jul 17 13:47:58 2020 +0900
+
+    Adds SAC tests
+
+commit 3d815c9f3577888c252708f2dbc0c0ffd8b145f8
+Author: Prabhat <prabhat.nagarajan@gmail.com>
+Date:   Fri Jul 17 13:35:43 2020 +0900
+
+    Adds TD3 tests
+
+commit b188403bf935d9c96ea8c963271d7dc4f15c155a
+Author: Prabhat <prabhat.nagarajan@gmail.com>
+Date:   Fri Jul 17 13:15:44 2020 +0900
+
+    Adds PPO pretrained test
+
+commit 10192cde691ea28570b0e815655d0fe4ac850e64
+Author: Prabhat <prabhat.nagarajan@gmail.com>
+Date:   Fri Jul 17 12:44:02 2020 +0900
+
+    Adds other models to download script, adds TRPO test
+
+commit 24aa5689934e0827f33cd6b9321301a03cba11d7
+Author: Prabhat <prabhat.nagarajan@gmail.com>
+Date:   Fri Jul 17 12:12:31 2020 +0900
+
+    Adds DDPG tests and applies black
+
+commit 28e5defaaeb8de0fd5d1195459a69a1eede07f0d
+Author: Prabhat <prabhat.nagarajan@gmail.com>
+Date:   Thu Jul 16 16:49:32 2020 +0900
+
+    Adds Rainbow test
+
+commit d79be511ab1eb321dc25457892bd6bf6393d6163
+Author: NAKATA Keisuke <keisuke.nakata.919@gmail.com>
+Date:   Thu Jul 16 13:37:27 2020 +0900
+
+    typo
+
+commit b213e5d698ef0dcdbbcd541abfa6d527350fede0
+Author: NAKATA Keisuke <keisuke.nakata.919@gmail.com>
+Date:   Thu Jul 16 12:59:11 2020 +0900
+
+    add logger to callback
+
+commit d40b7067f04355e04539505be840434cd18d772d
+Author: NAKATA Keisuke <keisuke.nakata.919@gmail.com>
+Date:   Thu Jul 16 12:58:48 2020 +0900
+
+    fix not to pass eval_interval to train_agent_batch
+
+commit 7588799b28d51f83d517b49b54489554aa2a2e95
+Author: Prabhat <prabhat.nagarajan@gmail.com>
+Date:   Wed Jul 15 20:22:41 2020 +0900
+
+    Adds numpy import
+
+commit 5441f9829be9d6ee4ef7e811479cd3e49e7b48fb
+Author: Prabhat <prabhat.nagarajan@gmail.com>
+Date:   Wed Jul 15 20:07:26 2020 +0900
+
+    Adds DQN and IQN tests
+
+commit 58a482886d754b81a4369acff43974a1caeabef8
+Author: NAKATA Keisuke <keisuke.nakata.919@gmail.com>
+Date:   Wed Jul 15 19:22:56 2020 +0900
+
+    support evaluation_hooks in train_agent_batch. (and add tests for it)
+
+commit 80434b9431b152c30d470075b672b1ff735b4940
+Author: NAKATA Keisuke <keisuke.nakata.919@gmail.com>
+Date:   Wed Jul 15 19:22:10 2020 +0900
+
+    remove unused argument
+
+commit ae7fe6b89dea31f333d69c12f29cfcaebf301537
+Author: Prabhat <prabhat.nagarajan@gmail.com>
+Date:   Wed Jul 15 19:15:40 2020 +0900
+
+    Applies black
+
+commit 1eeb028b34ab2a0b9468e230d712520674f66b9c
+Author: Prabhat <prabhat.nagarajan@gmail.com>
+Date:   Wed Jul 15 19:09:47 2020 +0900
+
+    Adds obs and action size
+
+commit 7b4ef54a3a3501c82d74be708d5bc856f7f87ec3
+Author: Prabhat <prabhat.nagarajan@gmail.com>
+Date:   Wed Jul 15 18:50:24 2020 +0900
+
+    Removes some of the zips from the tests
+
+commit 504e194f41145aa8fc6bf11b1cee12fad0e4cc5a
+Author: Prabhat <prabhat.nagarajan@gmail.com>
+Date:   Wed Jul 15 18:48:20 2020 +0900
+
+    Applies black
+
+commit bbab734e447d1131f84898200c5da788678fc91e
+Author: Prabhat <prabhat.nagarajan@gmail.com>
+Date:   Wed Jul 15 18:43:46 2020 +0900
+
+    Adds A3C tests
+
+commit d54f4800a9c0b4d7f1403906af61cd41a2720bd8
+Author: NAKATA Keisuke <keisuke.nakata.919@gmail.com>
+Date:   Wed Jul 15 18:39:05 2020 +0900
+
+    add test for train_agent with evaluation_hooks
+
+commit d757d6b4e81c654de918612941b9531bc39b3c27
+Author: NAKATA Keisuke <keisuke.nakata.919@gmail.com>
+Date:   Wed Jul 15 18:12:20 2020 +0900
+
+    add test for evaluation_hooks
+
+commit ecbb30a59adf859a37db8588f6aabf96a338f6b2
+Author: NAKATA Keisuke <keisuke.nakata.919@gmail.com>
+Date:   Wed Jul 15 17:52:37 2020 +0900
+
+    black again
+
+commit 1671d133a72caa279ecfcee65ced7f93d4e96c6b
+Author: NAKATA Keisuke <keisuke.nakata.919@gmail.com>
+Date:   Wed Jul 15 17:41:46 2020 +0900
+
+    fix & add examples_tests
+
+commit a9b9dfd205e60d77bf71dd483677aafbce784604
+Author: NAKATA Keisuke <keisuke.nakata.919@gmail.com>
+Date:   Wed Jul 15 17:41:10 2020 +0900
+
+    black
+
+commit af88525db3c4b991a33aa62f45f06164343b5e33
+Author: NAKATA Keisuke <keisuke.nakata.919@gmail.com>
+Date:   Wed Jul 15 17:22:43 2020 +0900
+
+    default from arugment
+
+commit ae27f45b89edb60d055f3c11e7016230998d5362
+Author: NAKATA Keisuke <keisuke.nakata.919@gmail.com>
+Date:   Wed Jul 15 16:40:22 2020 +0900
+
+    pruner & training step budget
+
+commit 27c884004a5fb0713e9084b138d7f9568aa5e241
+Author: Prabhat <prabhat.nagarajan@gmail.com>
+Date:   Wed Jul 15 01:05:41 2020 +0900
+
+    Removes marker
+
+commit d01003b4e072505618e82ca19dc30815af23e7d9
+Author: NAKATA Keisuke <keisuke.nakata.919@gmail.com>
+Date:   Wed Jul 15 00:49:49 2020 +0900
+
+    revert unintended modification
+
+commit f7ebeff8e81982f38dacfeb44586aaadace1f1ac
+Author: NAKATA Keisuke <keisuke.nakata.919@gmail.com>
+Date:   Wed Jul 15 00:45:59 2020 +0900
+
+    unify to suggest_int/suggest_float
+
+commit c7cfbc163afd55e4f3abb200b7defbc125253315
+Author: NAKATA Keisuke <keisuke.nakata.919@gmail.com>
+Date:   Wed Jul 15 00:36:18 2020 +0900
+
+    more evaluations
+
+commit 7c775088923a1752d86560728f59c04d0113bcc8
+Merge: 8e9b5db 67ce265
+Author: NAKATA Keisuke <keisuke.nakata.919@gmail.com>
+Date:   Wed Jul 15 00:29:25 2020 +0900
+
+    Merge commit '67ce2650ad6ce56a61b927a26947d18308704703' into optuna-integration2
+    
+    # Conflicts:
+    #       setup.cfg
+
+commit c496c0724e912af576624711bbaefaa7c444a648
+Author: Prabhat <prabhat.nagarajan@gmail.com>
+Date:   Wed Jul 15 00:19:47 2020 +0900
+
+    Adds Gcloud for model downloads
+
+commit 67ce2650ad6ce56a61b927a26947d18308704703
+Merge: ec7e55e 720454d
+Author: Mario Ynocente Castro <ycmario@gmail.com>
+Date:   Tue Jul 14 11:41:04 2020 +0900
+
+    Merge pull request #14 from pfnet/slime-clean
+    
+    Add a Slime Volleyball example
+
+commit 8e9b5db01a619eff3b20172ba56d7180e669c370
+Author: NAKATA Keisuke <keisuke.nakata.919@gmail.com>
+Date:   Mon Jul 13 12:17:21 2020 +0900
+
+    replace image
+
+commit 00650c1ff0295b51020eb51a3a7832c7b220361e
+Author: Prabhat <prabhat.nagarajan@gmail.com>
+Date:   Fri Jul 10 22:20:59 2020 +0900
+
+    modifies path
+
+commit 2ab5f2a8dee0834a1ace39fab76ecfedb1a8c397
+Author: NAKATA Keisuke <keisuke.nakata.919@gmail.com>
+Date:   Fri Jul 10 16:21:09 2020 +0900
+
+    Replay start size cannot exceed replay buffer capacity
+
+commit 29e8c4293577844bfd86593647fdd1f60914c27c
+Author: NAKATA Keisuke <keisuke.nakata.919@gmail.com>
+Date:   Fri Jul 10 15:55:35 2020 +0900
+
+    fix wrong script path
+
+commit f8220f5b7865e258361e6d89067e62bb29cd2653
+Author: NAKATA Keisuke <keisuke.nakata.919@gmail.com>
+Date:   Fri Jul 10 15:53:51 2020 +0900
+
+    black
+
+commit d05b64a5f49b96fd359bc8f202db8311d693e74c
+Author: NAKATA Keisuke <keisuke.nakata.919@gmail.com>
+Date:   Fri Jul 10 15:45:45 2020 +0900
+
+    fix doc
+
+commit c5468c01e11d2b40b5e27cd40cb7d0178f8636d5
+Author: NAKATA Keisuke <keisuke.nakata.919@gmail.com>
+Date:   Fri Jul 10 15:39:18 2020 +0900
+
+    rename test script
+
+commit 9cbc8be74a0a551e2a2ef9b147e990529b7e79ff
+Author: NAKATA Keisuke <keisuke.nakata.919@gmail.com>
+Date:   Fri Jul 10 15:38:52 2020 +0900
+
+    add env for example_test script
+
+commit 62a0f3a6e3921f4e81036589d7df9f523e1e8c98
+Author: NAKATA Keisuke <keisuke.nakata.919@gmail.com>
+Date:   Fri Jul 10 15:38:30 2020 +0900
+
+    rename file
+
+commit c9f602d930761dafc71b487f93be4e1606c6731e
+Author: NAKATA Keisuke <keisuke.nakata.919@gmail.com>
+Date:   Fri Jul 10 15:31:44 2020 +0900
+
+    add --env args for CI and supported spaces checks
+
+commit bd34dc29c8c0382f0be9ea2958918b2aa968455e
+Author: NAKATA Keisuke <keisuke.nakata.919@gmail.com>
+Date:   Fri Jul 10 12:51:26 2020 +0900
+
+    fix suggesting decay_step works with small args.steps
+
+commit 12ce1d0637d4400078eff3e2d9874f0e254d256b
+Author: NAKATA Keisuke <keisuke.nakata.919@gmail.com>
+Date:   Fri Jul 10 12:43:11 2020 +0900
+
+    fix lint
+
+commit bf840d6bfd528a6e309ba6ebf6963711ca6d3e29
+Author: NAKATA Keisuke <keisuke.nakata.919@gmail.com>
+Date:   Fri Jul 10 12:41:47 2020 +0900
+
+    add missing hyphen
+
+commit 165eb5b54264a9b9e2ea74e43c50e39653253f9e
+Author: NAKATA Keisuke <keisuke.nakata.919@gmail.com>
+Date:   Fri Jul 10 12:37:35 2020 +0900
+
+    add example test
+
+commit 720454d417f342bd83f6e18854ee2dcd9aa88efa
+Merge: 99b6f5d ec7e55e
+Author: muupan <muupan@gmail.com>
+Date:   Fri Jul 10 00:30:40 2020 +0900
+
+    Merge branch 'master' into slime-clean
+
+commit 99b6f5dd5d40b8b8ca644ffd905217dfdfa97707
+Author: muupan <muupan@gmail.com>
+Date:   Fri Jul 10 00:30:06 2020 +0900
+
+    Update the results after action space fix
+
+commit 50744f892c1a1d5050f6be3740d05efde1a87b0e
+Author: NAKATA Keisuke <keisuke.nakata.919@gmail.com>
+Date:   Thu Jul 9 23:38:47 2020 +0900
+
+    c=int(loguniform)
+
+commit 905ed89cafa5153c79d1c45c2f7b4b707b254601
+Author: NAKATA Keisuke <keisuke.nakata.919@gmail.com>
+Date:   Thu Jul 9 20:48:39 2020 +0900
+
+    ignore missing imports for optuna
+
+commit c4f232aa7311b5c5b0521e374dd28d96a4bb8103
+Author: NAKATA Keisuke <keisuke.nakata.919@gmail.com>
+Date:   Thu Jul 9 20:41:40 2020 +0900
+
+    add optuna to setup.py
+
+commit 3fa1013e375add08300ae45c908baa8f0d3f1d27
+Author: Prabhat <prabhat.nagarajan@gmail.com>
+Date:   Thu Jul 9 18:20:53 2020 +0900
+
+    Removes exception throw
+
+commit fe742918dd8478417987c8549ceaa9281e579441
+Author: NAKATA Keisuke <keisuke.nakata.919@gmail.com>
+Date:   Thu Jul 9 18:07:09 2020 +0900
+
+    add readme
+
+commit cc2ee3aa0e2c9c054e973198c9b0bcd9d236c802
+Author: Prabhat <prabhat.nagarajan@gmail.com>
+Date:   Thu Jul 9 15:16:25 2020 +0900
+
+    Adds pretrained-type option for a3c
+
+commit e2c53cc8d54c407ce366c01e4aad34ac91650341
+Author: NAKATA Keisuke <keisuke.nakata.919@gmail.com>
+Date:   Thu Jul 9 15:04:22 2020 +0900
+
+    add optuna requirements
+
+commit 974e4ec96c780af98a247abbd079f3d6c200cb7a
+Author: NAKATA Keisuke <keisuke.nakata.919@gmail.com>
+Date:   Thu Jul 9 14:40:49 2020 +0900
+
+    adam_eps should be derived from loguniform
+
+commit 6abba17553a2f2ef34e77df51d582840aafa9760
+Author: NAKATA Keisuke <keisuke.nakata.919@gmail.com>
+Date:   Thu Jul 9 14:40:25 2020 +0900
+
+    fix train_agent_async to pass tests
+
+commit 8a6f5029701baa30ac75c840c623d6eb0eb53823
+Author: NAKATA Keisuke <keisuke.nakata.919@gmail.com>
+Date:   Thu Jul 9 14:39:50 2020 +0900
+
+    black
+
+commit 0d347e34347e3e154efc71ac9062f469ab0373b0
+Author: Prabhat <prabhat.nagarajan@gmail.com>
+Date:   Thu Jul 9 14:21:06 2020 +0900
+
+    Updates readmes with --load-pretrained example command
+
+commit 61b279e10891ea4d752991eaa13825b8474c7935
+Author: Prabhat <prabhat.nagarajan@gmail.com>
+Date:   Thu Jul 9 14:06:59 2020 +0900
+
+    Removes the 'Currently unsupported' caveat
+
+commit fb55db25f89e90542194ff2aeecde001997596fb
+Merge: 24510e1 ec7e55e
+Author: Prabhat <prabhat.nagarajan@gmail.com>
+Date:   Thu Jul 9 14:05:53 2020 +0900
+
+    Merge branch 'master' into pretrained_models
+
+commit 24510e187dfa23936f2a458c8ece13800a0ab080
+Author: Prabhat <prabhat.nagarajan@gmail.com>
+Date:   Thu Jul 9 13:58:06 2020 +0900
+
+    Adds env variable
+
+commit ec7e55e8735ecf06a2ef6d7260e135bd5d3f7e3d
+Merge: bebb7c8 8cc30e2
+Author: Yasuhiro Fujita <muupan@gmail.com>
+Date:   Thu Jul 9 01:49:28 2020 +0900
+
+    Merge pull request #27 from pfnet/remove-compatibility-variables
+    
+    Remove variables previously used for backward compatibility
+
+commit 467208121ce6895ad3769c0beb1707c1d087c4f0
+Author: NAKATA Keisuke <keisuke.nakata.919@gmail.com>
+Date:   Thu Jul 9 01:25:45 2020 +0900
+
+    black
+
+commit 8cc30e296e418614cb52c5088e0c8550dca029f3
+Author: marioyc <ycmario@gmail.com>
+Date:   Thu Jul 9 01:13:13 2020 +0900
+
+    remove variables previously used for backward compatibility
+
+commit 02ac59e9e52f61a492fdb0ad4ff9722810f6a910
+Author: muupan <muupan@gmail.com>
+Date:   Thu Jul 9 00:56:23 2020 +0900
+
+    Fix action space size
+
+commit 83440fbc94f0ea50ef257377c63c233fc3759caf
+Author: NAKATA Keisuke <keisuke.nakata.919@gmail.com>
+Date:   Wed Jul 8 23:24:22 2020 +0900
+
+    remove redundant setups
+
+commit 2aa4ba1c6eb6763ec20a574b3bb3c69d51da9aa4
+Author: NAKATA Keisuke <keisuke.nakata.919@gmail.com>
+Date:   Wed Jul 8 23:24:03 2020 +0900
+
+    refine hyper param
+
+commit f3140d66ffd6553638e7ea73ada8f9219e2a8918
+Author: NAKATA Keisuke <keisuke.nakata.919@gmail.com>
+Date:   Wed Jul 8 22:58:51 2020 +0900
+
+    reconsider hyper parameters
+
+commit 39571d24f4d45400cb5cd9f88c3263eb96d79bb2
+Merge: 2154ff3 bebb7c8
+Author: NAKATA Keisuke <keisuke.nakata.919@gmail.com>
+Date:   Wed Jul 8 21:59:22 2020 +0900
+
+    Merge commit 'bebb7c83d95de70216f9be58e07c60c9bea0daf8' into optuna-integration2
+    
+    # Conflicts:
+    #       pfrl/experiments/evaluator.py
+
+commit 2154ff399cb303d4fe80567c6bd81979cfeddb6b
+Author: NAKATA Keisuke <keisuke.nakata.919@gmail.com>
+Date:   Wed Jul 8 21:57:43 2020 +0900
+
+    wait small amount of time in order to avoid missing a queue item
+
+commit bebb7c83d95de70216f9be58e07c60c9bea0daf8
+Merge: 9f51e5f a0a66f3
+Author: Yasuhiro Fujita <muupan@gmail.com>
+Date:   Wed Jul 8 21:26:58 2020 +0900
+
+    Merge pull request #12 from pfnet/tensorboard-writer
+    
+    Adds optional logging of evaluator to tensorboard
+
+commit a0a66f31097d6a929318d0ef0296035e33e41fd9
+Author: Avinash Ummadisingu <avinash.umm@gmail.com>
+Date:   Wed Jul 8 20:57:31 2020 +0900
+
+    Switch to recommended eval and agent tags
+
+commit 45490028f6a679c7dffe8365918b15d750100284
+Author: Avinash Ummadisingu <avinash.umm@gmail.com>
+Date:   Wed Jul 8 20:28:01 2020 +0900
+
+    Change 'eval' tag to 'agent'
+
+commit e5198ff3df2d29baf28963451dd36fb071c5dbf9
+Author: Avinash Ummadisingu <avinash.umm@gmail.com>
+Date:   Wed Jul 8 16:30:00 2020 +0900
+
+    Refactor initialization of tb_writer
+
+commit bbd829ee8f6b1532130fd34d6c1a093521f13442
+Author: NAKATA Keisuke <keisuke.nakata.919@gmail.com>
+Date:   Wed Jul 8 16:23:25 2020 +0900
+
+    fix lint again...
+
+commit adc8664ba940edbe5e8b7d0f924e067c83123e48
+Author: NAKATA Keisuke <keisuke.nakata.919@gmail.com>
+Date:   Wed Jul 8 16:16:07 2020 +0900
+
+    more tolerance...
+
+commit c261d26a595579d96f1f3a8d0f1b3bab22c4644c
+Author: NAKATA Keisuke <keisuke.nakata.919@gmail.com>
+Date:   Wed Jul 8 16:11:58 2020 +0900
+
+    black
+
+commit c82b826b45805ad076bf1a96ed938b6dcaf96f54
+Author: NAKATA Keisuke <keisuke.nakata.919@gmail.com>
+Date:   Wed Jul 8 16:05:53 2020 +0900
+
+    fix cpu tests (fast)
+
+commit f91128ac9eccabbb0ff301df1977d6afad945ec3
+Author: NAKATA Keisuke <keisuke.nakata.919@gmail.com>
+Date:   Wed Jul 8 12:37:25 2020 +0900
+
+    evaluator may be called before `agent.get_statistics()`.
+
+commit 87add3a7af1bf698004ebebe084507d2148d4bc7
+Author: NAKATA Keisuke <keisuke.nakata.919@gmail.com>
+Date:   Wed Jul 8 12:31:40 2020 +0900
+
+    follow black style
+
+commit 5b36dd2fcc2b31c64733133fdff53dd65a833ef5
+Author: NAKATA Keisuke <keisuke.nakata.919@gmail.com>
+Date:   Tue Jul 7 18:26:00 2020 +0900
+
+    update script
+
+commit af9b7ec126d76dff6b671ae826bcbcc60aec0c95
+Author: NAKATA Keisuke <keisuke.nakata.919@gmail.com>
+Date:   Tue Jul 7 18:25:15 2020 +0900
+
+    return statistics from training
+
+commit 9ddb854d748a97751a63675fa01d24bff5a1ece1
+Author: NAKATA Keisuke <keisuke.nakata.919@gmail.com>
+Date:   Tue Jul 7 16:04:56 2020 +0900
+
+    minor fix doc
+
+commit 7689f6f3848274b3174c6d7a5d584f21cabd7e07
+Author: NAKATA Keisuke <keisuke.nakata.919@gmail.com>
+Date:   Tue Jun 30 09:56:36 2020 +0900
+
+    copy from examples/gym/train_dqn_gym.py
+
+commit 9f51e5ffc4c6add0fad1d8279f23d84ec82b4f4f
+Merge: d1ccb6d 4d8a2be
+Author: Yasuhiro Fujita <muupan@gmail.com>
+Date:   Wed Jul 8 12:25:58 2020 +0900
+
+    Merge pull request #25 from pfnet/iqn_results
+    
+    IQN Benchmark results
+
+commit d1ccb6dadac180a81b8efcd4b9aa4eef3f818526
+Merge: 2b0c036 799ecec
+Author: Yasuhiro Fujita <muupan@gmail.com>
+Date:   Wed Jul 8 12:25:16 2020 +0900
+
+    Merge pull request #10 from keisuke-nakata/exponential-decay-epsilon-greedy
+    
+    ExponentialDecayEpsilonGreedy
+
+commit 799ececd7a3c542b3d2d2fc802cd22570437e7a4
+Author: NAKATA Keisuke <keisuke.nakata.919@gmail.com>
+Date:   Wed Jul 8 12:12:18 2020 +0900
+
+    fix lint
+
+commit 774393236de54094f4d89d9c6ab4e6d39319997c
+Author: NAKATA Keisuke <keisuke.nakata.919@gmail.com>
+Date:   Wed Jul 8 12:07:56 2020 +0900
+
+    use action counter for linear decay epsilon greedy test
+
+commit 50ed5757a999b8e0c2d765c40fb8380b13f2b055
+Author: NAKATA Keisuke <keisuke.nakata.919@gmail.com>
+Date:   Wed Jul 8 12:05:16 2020 +0900
+
+    migrate to pytest
+
+commit d85ae144a64e09dbc40feaa2a6542a9e171c5395
+Author: NAKATA Keisuke <keisuke.nakata.919@gmail.com>
+Date:   Wed Jul 8 12:03:23 2020 +0900
+
+    use action_func_counter for tests
+
+commit 2b0c0368e33bd91b1e74347e852cfa074fb03191
+Merge: 0c3675a 83e41b1
+Author: Yasuhiro Fujita <muupan@gmail.com>
+Date:   Wed Jul 8 12:00:30 2020 +0900
+
+    Merge pull request #19 from pfnet/improve-quickstart
+    
+    Improve quickstart guide
+
+commit 4d8a2be6f14ed26e79ce67c921cd0d13db22bf0c
+Author: Prabhat <prabhat.nagarajan@gmail.com>
+Date:   Wed Jul 8 11:01:54 2020 +0900
+
+    Adds IQN scores
+
+commit 0c3675a0dcc24fb07ae173071b56c850a2d63a5d
+Merge: 596cb63 8d3bd92
+Author: Yasuhiro Fujita <muupan@gmail.com>
+Date:   Wed Jul 8 10:44:20 2020 +0900
+
+    Merge pull request #24 from pfnet/rainbow_results
+    
+    Rainbow benchmark results
+
+commit 596cb63c75e444be7f13a6488a17a9707576a672
+Merge: 15ac645 60d4eb8
+Author: Prabhat Nagarajan <prabhat.nagarajan@gmail.com>
+Date:   Wed Jul 8 10:40:35 2020 +0900
+
+    Merge pull request #23 from pfnet/dqn_results
+    
+    DQN benchmark results
+
+commit 8d3bd92b80ef691e102c680545eb51cf22c2b5ce
+Author: Prabhat <prabhat.nagarajan@gmail.com>
+Date:   Wed Jul 8 10:13:15 2020 +0900
+
+    Updates commit hash and changes time->run in readme
+
+commit 60d4eb8f00d2ec60851c6ec3065ea829b6e4c434
+Author: Prabhat <prabhat.nagarajan@gmail.com>
+Date:   Wed Jul 8 10:10:52 2020 +0900
+
+    Updates commit hash and addresses review comments
+
+commit b009331f6b97c5bc790eba864b5b8d1b766f22f4
+Author: Prabhat <prabhat.nagarajan@gmail.com>
+Date:   Wed Jul 8 01:06:38 2020 +0900
+
+    Adds commit hash
+
+commit d9e108299a207be6066203af1f3c11c54fa0640e
+Author: Prabhat <prabhat.nagarajan@gmail.com>
+Date:   Wed Jul 8 00:37:00 2020 +0900
+
+    Rainbow benchmark results
+
+commit 72678b5eb651498d13d56e204cbb6ed7ea057ef6
+Author: Prabhat <prabhat.nagarajan@gmail.com>
+Date:   Wed Jul 8 00:31:24 2020 +0900
+
+    Minor update of wording
+
+commit 3b0ef6eab42ed26fd3a4d7770a4d44406c964aec
+Author: Prabhat <prabhat.nagarajan@gmail.com>
+Date:   Wed Jul 8 00:24:14 2020 +0900
+
+    Adds results for DQN
+
+commit 15ac645dfa5ddc71e5bfa2d5afd49d54b3ae4f1d
+Merge: 7ed379d 4a03a1e
+Author: Prabhat Nagarajan <prabhat.nagarajan@gmail.com>
+Date:   Tue Jul 7 23:35:43 2020 +0900
+
+    Merge pull request #22 from pfnet/replace-gifs
+    
+    Replace GIFs to reflect PFRL results
+
+commit 965f79e2ea9d8b4bc247fe6481e744b2ce166f21
+Author: Avinash Ummadisingu <avinash.umm@gmail.com>
+Date:   Tue Jul 7 21:14:25 2020 +0900
+
+    Fix error for Async Evaluator
+
+commit 4a03a1e68c44d3a003591b74e16d3fa048633b5f
+Author: muupan <muupan@gmail.com>
+Date:   Tue Jul 7 20:58:32 2020 +0900
+
+    Replace GIFs to reflect PFRL results
+
+commit f0ba978f23e890b4063902113c5e2cae9779421c
+Author: NAKATA Keisuke <keisuke.nakata.919@gmail.com>
+Date:   Tue Jun 30 13:05:40 2020 +0900
+
+    ExponentialDecayEpsilonGreedy
+
+commit 7ed379dbb97b2988d3b05cdd8995b893ed6a3690
+Merge: f19ea27 849e7ff
+Author: Yasuhiro Fujita <muupan@gmail.com>
+Date:   Tue Jul 7 02:09:56 2020 +0900
+
+    Merge pull request #20 from pfnet/a3c_results
+    
+    Updates A3C results with PFRL results
+
+commit 849e7ff8626414c9f8a04b8e9ec615e0cbf6a7f0
+Author: Prabhat <prabhat.nagarajan@gmail.com>
+Date:   Tue Jul 7 01:36:51 2020 +0900
+
+    Addresses PR comments
+
+commit cb3d2fa3cf326ac99f18466712a2d7653ea1f28a
+Author: Prabhat <prabhat.nagarajan@gmail.com>
+Date:   Mon Jul 6 17:46:28 2020 +0900
+
+    Adds statistics for jobs
+
+commit 8bbd43cf12f199390e057711db881713ac2e3b81
+Author: Prabhat <prabhat.nagarajan@gmail.com>
+Date:   Mon Jul 6 16:50:42 2020 +0900
+
+    Updates commit hash
+
+commit aad80e76a2fc57550a4cfd7ea79d2e93bf961aa3
+Author: Prabhat <prabhat.nagarajan@gmail.com>
+Date:   Mon Jul 6 16:43:10 2020 +0900
+
+    Updates A3C results with PFRL results
+
+commit edcad2d21553ab3899d112b74fcbcf7fbe7a79ab
+Merge: c43affe f19ea27
+Author: muupan <muupan@gmail.com>
+Date:   Mon Jul 6 14:27:44 2020 +0900
+
+    Merge branch 'master' into dqn-type-hint
+
+commit c43affe5b5a6a367e9c3388106fa88939dc6e4bd
+Author: muupan <muupan@gmail.com>
+Date:   Mon Jul 6 14:27:06 2020 +0900
+
+    Add type hint since mypy complains
+
+commit 83e41b1045652e77a234d215552113e6600dc9f1
+Author: muupan <muupan@gmail.com>
+Date:   Mon Jul 6 14:15:46 2020 +0900
+
+    Update results and metadata
+
+commit 353114f2d6ce3ea39c7f58552c726bd840e135ff
+Author: muupan <muupan@gmail.com>
+Date:   Mon Jul 6 14:05:16 2020 +0900
+
+    Add changes
+
+commit e1a21367c72ec29a02b24cb7bc35cd83ffeb65f7
+Merge: de00599 f19ea27
+Author: muupan <muupan@gmail.com>
+Date:   Mon Jul 6 13:31:58 2020 +0900
+
+    Merge branch 'master' into improve-quickstart
+
+commit f19ea2742880ff59c8d1d4502c824fee1cfa2936
+Merge: 218f180 2351bac
+Author: Yasuhiro Fujita <muupan@gmail.com>
+Date:   Mon Jul 6 13:29:01 2020 +0900
+
+    Merge pull request #18 from pfnet/dqn-cumulative-steps
+    
+    Update self._cumulative_steps in non-actor-learner training
+
+commit 218f18014b104ee9446373ece7072dcb13ea7de1
+Merge: bbaf003 f5c5115
+Author: Prabhat Nagarajan <prabhat.nagarajan@gmail.com>
+Date:   Mon Jul 6 13:24:43 2020 +0900
+
+    Merge pull request #13 from pfnet/remove-sample-with-log-prob
+    
+    Remove `sample_with_log_prob` and use `cache_size=1` instead
+
+commit bbaf00314db73a62f59c2bee28e13885717a4fd6
+Merge: 65282b9 b6872c0
+Author: Yasuhiro Fujita <muupan@gmail.com>
+Date:   Mon Jul 6 13:15:43 2020 +0900
+
+    Merge pull request #16 from pfnet/agent-type-hint
+    
+    Add type hints to agent interfaces
+
+commit b6872c0ac7233dcd8166feae174d4323de527f66
+Author: muupan <muupan@gmail.com>
+Date:   Mon Jul 6 12:40:46 2020 +0900
+
+    Add info to the docstring of process_idx
+
+commit 65282b99920131bd54aac20dea50df8a858c7461
+Merge: 2f7279d 43bab9e
+Author: Prabhat Nagarajan <prabhat.nagarajan@gmail.com>
+Date:   Mon Jul 6 11:06:48 2020 +0900
+
+    Merge pull request #15 from pfnet/remove-unused-arg
+    
+    Remove unused --use-sdl
+
+commit 2e1df28ff441806c3c1769c376b29aa6252e9fd5
+Author: muupan <muupan@gmail.com>
+Date:   Mon Jul 6 02:07:53 2020 +0900
+
+    Fix errors
+
+commit 2351bac8fdc8a38e605d4463b4b2580fc937cffc
+Author: muupan <muupan@gmail.com>
+Date:   Mon Jul 6 00:57:13 2020 +0900
+
+    Update self._cumulative_steps in non-actor-learner training
+
+commit de005993b91b3e71b54690f3d98f3da25ec07b09
+Author: muupan <muupan@gmail.com>
+Date:   Mon Jul 6 00:53:40 2020 +0900
+
+    Improve quickstart guide
+
+commit ca3a8dae8b497a54546dd7b0be05a13210c0ea51
+Author: muupan <muupan@gmail.com>
+Date:   Sun Jul 5 23:13:57 2020 +0900
+
+    Fix flake8 error
+
+commit 939052c1d7d35d5de69d5c2a27d1a4758c07ac3d
+Author: muupan <muupan@gmail.com>
+Date:   Sun Jul 5 23:07:28 2020 +0900
+
+    Add type hints to DQN
+
+commit bc135a6742a24169e94372a221a1e6dd69b05faa
+Author: muupan <muupan@gmail.com>
+Date:   Sun Jul 5 22:01:11 2020 +0900
+
+    Add type hints to agent interface
+
+commit 43bab9ea029ed2596de885c93a8423dea5f62c22
+Author: muupan <muupan@gmail.com>
+Date:   Sun Jul 5 19:49:07 2020 +0900
+
+    Remove unused --use-sdl
+
+commit 8e2f6c2651eb6070ec3ecba51ddfaad923e5ed86
+Author: muupan <muupan@gmail.com>
+Date:   Sun Jul 5 16:09:26 2020 +0900
+
+    Import slimevolleygym only when necessary
+
+commit 02883afb24161ef269bfb922dbe9246d2dcead4e
+Author: muupan <muupan@gmail.com>
+Date:   Sun Jul 5 15:57:07 2020 +0900
+
+    Fix mypy error
+
+commit fccd9a0f2ef1dfcc3f1c305b6406fdba0c5c8be4
+Author: muupan <muupan@gmail.com>
+Date:   Sun Jul 5 15:52:22 2020 +0900
+
+    Add example test
+
+commit d073312caceac30ce9e42b6db44b5574dc3b9b11
+Author: muupan <muupan@gmail.com>
+Date:   Sun Jul 5 13:56:28 2020 +0900
+
+    Black
+
+commit 53251aae23242707ebe8a92960b2a336f331e5f6
+Author: muupan <muupan@gmail.com>
+Date:   Sun Jul 5 13:53:09 2020 +0900
+
+    Add animation gif
+
+commit 7bd089c7c75b977298254c86b719aeaa3b8b3339
+Author: muupan <muupan@gmail.com>
+Date:   Sun Jul 5 13:49:00 2020 +0900
+
+    Clean the script
+
+commit 8131fb6ceae0b026cd4792c9a9aa10087eb98ca5
+Author: muupan <muupan@gmail.com>
+Date:   Sun Jul 5 13:47:00 2020 +0900
+
+    Add animation to top README
+
+commit f9bde46ef5351d26ed9bff1d34a7ac9e8d663161
+Author: muupan <muupan@gmail.com>
+Date:   Sat Jul 4 19:37:19 2020 +0900
+
+    Add learning curve
+
+commit c9de47b20ee5970a7ef2354252fb00cd3df119ea
+Author: muupan <muupan@gmail.com>
+Date:   Sat Jul 4 19:37:06 2020 +0900
+
+    Add readme
+
+commit f5c5115d9f8c987d39584830b389d7ac36f31aa7
+Author: muupan <muupan@gmail.com>
+Date:   Sat Jul 4 01:58:20 2020 +0900
+
+    Add comments
+
+commit cab2a6a5d5cae84367dc30ebfe34be1dbaebdbc5
+Author: muupan <muupan@gmail.com>
+Date:   Sat Jul 4 01:37:47 2020 +0900
+
+    Set cache_size=1 for TanhTransform for stability
+
+commit a3055ca59be02e12b3f8c9eb1c37fe10094db945
+Author: muupan <muupan@gmail.com>
+Date:   Sat Jul 4 01:35:26 2020 +0900
+
+    Remove sample_with_log_prob
+
+commit 2f7279d688e538753879a7a5a4607db0c8c4f4c3
+Merge: cd47a5c f481e12
+Author: Prabhat Nagarajan <prabhat.nagarajan@gmail.com>
+Date:   Sat Jul 4 01:27:48 2020 +0900
+
+    Merge pull request #11 from pfnet/fix-sample-with-log-prob
+    
+    Fix wrong event shape handling in sample_with_log_prob
+
+commit 441a3f2a0ea0bec69f5f0c25251a4ad40c86e18a
+Author: Avinash Ummadisingu <avinash.umm@gmail.com>
+Date:   Fri Jul 3 17:53:54 2020 +0900
+
+    Switch chart names to lowercase
+
+commit 62e14d04530ccd3202b843020baaf6582b910a22
+Author: Avinash Ummadisingu <avinash.umm@gmail.com>
+Date:   Fri Jul 3 17:30:06 2020 +0900
+
+    Add tensorboard logging functionality to the evaluator
+
+commit b96fa509d11d5f240470bf02a1fd36aaabec6de8
+Author: muupan <muupan@gmail.com>
+Date:   Fri Jul 3 17:17:40 2020 +0900
+
+    Match evaluation interval with hardmaru's ppo and train a bit longer
+
+commit d2eeac1ab93276f4c0fd3259052643ee469ef566
+Author: muupan <muupan@gmail.com>
+Date:   Fri Jun 26 04:12:12 2020 +0900
+
+    Add max_grad_norm option to DQN
+
+commit a4bfe25b2764fb5964e2669bb1be8308b1863c91
+Author: muupan <muupan@gmail.com>
+Date:   Fri Jul 3 16:54:49 2020 +0900
+
+    Add a SlimeVolley training script
+
+commit f481e120ab68ccea6184ef0fb872b222187f8da5
+Author: muupan <muupan@gmail.com>
+Date:   Thu Jul 2 22:16:33 2020 +0900
+
+    Lint
+
+commit 96a2ec35a137666c41de70f50c422d8a25fc316e
+Author: muupan <muupan@gmail.com>
+Date:   Thu Jul 2 21:50:31 2020 +0900
+
+    Handle event_shape correctly in sample_with_log_prob
+
+commit 26d6a31ac0cff5b0906e4e150914b837c874b306
+Author: muupan <muupan@gmail.com>
+Date:   Thu Jul 2 21:49:57 2020 +0900
+
+    Add test cases with non-scalar event shape
+
+commit 4070fe708b67e3ab7305fd1b3b12204720f8f3e0
+Author: Prabhat <prabhat.nagarajan@gmail.com>
+Date:   Thu Jul 2 02:01:09 2020 +0900
+
+    Updates pretrained_models file
+
+commit cd47a5ce0cb71629bfa288519188e372d9a4e2d8
+Merge: 327cac2 8d2cc70
+Author: Yasuhiro Fujita <muupan@gmail.com>
+Date:   Tue Jun 30 13:07:59 2020 +0900
+
+    Merge pull request #9 from keisuke-nakata/remove-gpus-argument-from-set_random_seed
+    
+    remove `gpus` argument from set_random_seed
+
+commit 8d2cc7047d85159cdd2f5c9061bc95e82a096171
+Author: NAKATA Keisuke <keisuke.nakata.919@gmail.com>
+Date:   Tue Jun 30 09:37:14 2020 +0900
+
+    remove `gpus` argument from set_random_seed
+
+commit 327cac274c52468a459c0d1242a1ca43e18aebd3
+Merge: c8296a5 39918e2
+Author: Mario Ynocente Castro <ycmario@gmail.com>
+Date:   Mon Jun 29 23:22:55 2020 +0900
+
+    Merge pull request #8 from pfnet/a3c-type-error-fix
+    
+    Fix A3C dtype error with torch>=1.5.0
+
+commit 39918e2b0061eb29325d1851304b6fd425e8bd28
+Author: muupan <muupan@gmail.com>
+Date:   Mon Jun 29 18:15:25 2020 +0900
+
+    Set dtype of returns
+
+commit c8296a5fdc3aadee3f924347175f8304ad1565d4
+Merge: 8b2580b 225795f
+Author: Prabhat Nagarajan <prabhat.nagarajan@gmail.com>
+Date:   Mon Jun 29 16:47:13 2020 +0900
+
+    Merge pull request #7 from pfnet/update-sac-results
+    
+    Update SAC results
+
+commit 225795f4f28568cb3c8862955e2784bbec964b3f
+Author: muupan <muupan@gmail.com>
+Date:   Mon Jun 29 16:22:37 2020 +0900
+
+    Update SAC results
+
+commit 8b2580ba6edd2fcdfe20edbc5e43008993b2b0ac
+Merge: a0ad6a7 24068b9
+Author: Mario Ynocente Castro <ycmario@gmail.com>
+Date:   Mon Jun 29 15:24:01 2020 +0900
+
+    Merge pull request #5 from pfnet/test-quickstart-in-ci
+    
+    Test quickstart in CI
+
+commit 24068b94507a884641dfb3b4b98bd37448afa0d9
+Author: muupan <muupan@gmail.com>
+Date:   Mon Jun 29 14:23:51 2020 +0900
+
+    Confirm that the file contains "gpu = -1"
+
+commit ef601a20666a9b3825d6c23163f0ee4cafb90626
+Author: muupan <muupan@gmail.com>
+Date:   Thu Jun 25 21:48:43 2020 +0900
+
+    Test quickstart in CI
+
+commit a0ad6a7cd128e75334a359d7e5c54eddf32a2f7f
+Author: muupan <muupan@gmail.com>
+Date:   Thu Jun 25 17:01:08 2020 +0900
+
+    Initial commit
+    
+    Co-authored-by: Prabhat Nagarajan <prabhat.nagarajan@gmail.com>
+    Co-authored-by: Avinash Ummadisingu <avinash.umm@gmail.com>
+    Co-authored-by: Mario Ynocente Castro <ycmario@gmail.com>
+    Co-authored-by: Nakata Keisuke <keisuke.nakata.919@gmail.com>
+    Co-authored-by: Toshiki Kataoka <tos.lunar@gmail.com>
