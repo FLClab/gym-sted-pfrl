@@ -125,7 +125,6 @@ def main():
 
     train_env = make_env(test=False)
     timestep_limit = train_env.spec.max_episode_steps
-    print(timestep_limit)
     obs_space = train_env.observation_space
     action_space = train_env.action_space
 
