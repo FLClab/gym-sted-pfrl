@@ -82,9 +82,11 @@ def main():
     import logging
 
     parser = argparse.ArgumentParser()
-    parser.add_argument("--env", type=str, default="gym_sted:STED-v0")
+    parser.add_argument("--env", type=str, default="gym_sted:STEDdebugBleach-v0")
     parser.add_argument("--seed", type=int, default=0, help="Random seed [0, 2 ** 32)")
     parser.add_argument("--gpu", type=int, default=None)
+    parser.add_argument("--exp_id", type=str, default="debug")
+    parser.add_argument("--dry-run", action="store_true", default=False)
     parser.add_argument(
         "--outdir",
         type=str,
@@ -94,11 +96,11 @@ def main():
             " If it does not exist, it will be created."
         ),
     )
-    parser.add_argument("--batchsize", type=int, default=10)
+    parser.add_argument("--batchsize", type=int, default=16)
     parser.add_argument("--steps", type=int, default=10 ** 5)
-    parser.add_argument("--eval-interval", type=int, default=10 ** 4)
-    parser.add_argument("--eval-n-runs", type=int, default=100)
-    parser.add_argument("--reward-scale-factor", type=float, default=1e-2)
+    parser.add_argument("--eval-interval", type=int, default=100)
+    parser.add_argument("--eval-n-runs", type=int, default=5)
+    parser.add_argument("--reward-scale-factor", type=float, default=1.)
     parser.add_argument("--render", action="store_true", default=False)
     parser.add_argument("--lr", type=float, default=1e-4)
     parser.add_argument("--demo", action="store_true", default=False)
@@ -112,7 +114,7 @@ def main():
     # Set a random seed used in PFRL.
     utils.set_random_seed(args.seed)
 
-    args.outdir = experiments.prepare_output_dir(args, args.outdir, exp_id="test")
+    args.outdir = experiments.prepare_output_dir(args, args.outdir, exp_id=args.exp_id, make_backup=not args.dry_run)
 
     def make_env(test):
         env = gym.make(args.env)
@@ -189,5 +191,5 @@ def main():
 if __name__ == "__main__":
 
     # Run the following line of code
-    # python main.py --env gym_sted:STEDdebug-v0 --batchsize=16 --gpu=0 --reward-scale-factor=1.0 --eval-interval=100 --eval-n-runs=5
+    # python main.py --env gym_sted:STEDdebug-v0 --batchsize=16 --gpu=None --reward-scale-factor=1.0 --eval-interval=100 --eval-n-runs=5
     main()
