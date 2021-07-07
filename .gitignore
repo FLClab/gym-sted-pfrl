@@ -1,5 +1,6 @@
 # user-defined
 results/
+panels/
 .microscope_cache.pkl
 
 # Byte-compiled / optimized / DLL files

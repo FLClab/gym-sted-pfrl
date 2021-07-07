@@ -73,7 +73,7 @@ def main():
     import logging
 
     parser = argparse.ArgumentParser()
-    parser.add_argument("--env", type=str, default="CartPole-v0")
+    parser.add_argument("--env", type=str, default="gym_sted:STEDdebug-v0")
     parser.add_argument("--seed", type=int, default=0, help="Random seed [0, 2 ** 32)")
     parser.add_argument("--gpu", type=int, default=0)
     parser.add_argument(
@@ -85,7 +85,6 @@ def main():
             " If it does not exist, it will be created."
         ),
     )
-    parser.add_argument("--beta", type=float, default=1e-4)
     parser.add_argument("--batchsize", type=int, default=10)
     parser.add_argument("--steps", type=int, default=10 ** 5)
     parser.add_argument("--eval-interval", type=int, default=10 ** 4)
