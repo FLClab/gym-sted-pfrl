@@ -319,6 +319,6 @@ def main_batch():
 if __name__ == "__main__":
 
     # Run the following line of code
-    # python main.py --env gym_sted:STEDdebug-v0 --batchsize=16 --gpu=None --reward-scale-factor=1.0 --eval-interval=100 --eval-n-runs=5
+    # python debug.py --env gym_sted:STEDdebugBleach-v0 --batchsize=16 --gpu=None --reward-scale-factor=1.0 --eval-interval=100 --eval-n-runs=5
     # main()
     main_batch()
