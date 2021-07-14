@@ -1,4 +1,5 @@
 # user-defined
+data
 results/
 panels/
 .microscope_cache.pkl
