@@ -1,5 +1,7 @@
 import argparse
 import numpy
+import datetime
+import functools
 
 import gym
 import gym.spaces
@@ -9,6 +11,8 @@ from torch import nn
 import pfrl
 from pfrl import experiments, utils
 from pfrl.policies import GaussianHeadWithFixedCovariance, SoftmaxCategoricalHead
+
+TIMEFMT = "%Y%m%d-%H%M%S"
 
 def calc_shape(shape, layers):
     _shape = numpy.array(shape[1:])
@@ -82,23 +86,30 @@ def main():
     import logging
 
     parser = argparse.ArgumentParser()
-    parser.add_argument("--env", type=str, default="gym_sted:STED-v0")
+    parser.add_argument("--env", type=str, default="gym_sted:STEDsum-v0")
+    parser.add_argument("--num-envs", type=int, default=1)
     parser.add_argument("--seed", type=int, default=0, help="Random seed [0, 2 ** 32)")
     parser.add_argument("--gpu", type=int, default=None)
     parser.add_argument(
         "--outdir",
         type=str,
-        default="results",
+        default="./data",
         help=(
             "Directory path to save output files."
             " If it does not exist, it will be created."
         ),
     )
-    parser.add_argument("--batchsize", type=int, default=10)
+    parser.add_argument(
+        "--exp_id", type=str, default=datetime.datetime.now().strftime(TIMEFMT),
+        help=(
+            "Identification of the experiment"
+        ),
+    )
+    parser.add_argument("--batchsize", type=int, default=16)
     parser.add_argument("--steps", type=int, default=10 ** 5)
-    parser.add_argument("--eval-interval", type=int, default=10 ** 4)
+    parser.add_argument("--eval-interval", type=int, default=10 ** 3)
     parser.add_argument("--eval-n-runs", type=int, default=100)
-    parser.add_argument("--reward-scale-factor", type=float, default=1e-2)
+    parser.add_argument("--reward-scale-factor", type=float, default=1.)
     parser.add_argument("--render", action="store_true", default=False)
     parser.add_argument("--lr", type=float, default=1e-4)
     parser.add_argument("--demo", action="store_true", default=False)
@@ -111,13 +122,18 @@ def main():
 
     # Set a random seed used in PFRL.
     utils.set_random_seed(args.seed)
+    process_seeds = numpy.arange(args.num_envs) + args.seed * args.num_envs
+    assert process_seeds.max() < 2 ** 32
 
-    args.outdir = experiments.prepare_output_dir(args, args.outdir, exp_id="test")
+    args.outdir = experiments.prepare_output_dir(args, args.outdir, exp_id=args.exp_id)
 
-    def make_env(test):
+    def make_env(idx, test):
+        # Use different random seeds for train and test envs
+        process_seed = int(process_seeds[idx])
+        env_seed = 2 ** 32 - 1 - process_seed if test else process_seed
+
         env = gym.make(args.env)
         # Use different random seeds for train and test envs
-        env_seed = 2 ** 32 - 1 - args.seed if test else args.seed
         env.seed(env_seed)
         # Cast observations to float32 because our model uses float32
         env = pfrl.wrappers.CastObservationToFloat32(env)
@@ -131,10 +147,20 @@ def main():
             env = pfrl.wrappers.Render(env)
         return env
 
-    train_env = make_env(test=False)
-    timestep_limit = train_env.spec.max_episode_steps
-    obs_space = train_env.observation_space
-    action_space = train_env.action_space
+    def make_batch_env(test):
+        vec_env = pfrl.envs.MultiprocessVectorEnv(
+            [
+                functools.partial(make_env, idx, test)
+                for idx, env in enumerate(range(args.num_envs))
+            ]
+        )
+        # vec_env = pfrl.wrappers.VectorFrameStack(vec_env, 4)
+        return vec_env
+
+    sample_env = make_env(0, test=False)
+    timestep_limit = sample_env.spec.max_episode_steps
+    obs_space = sample_env.observation_space
+    action_space = sample_env.action_space
 
     obs_size = obs_space.shape
     policy = Policy(obs_size=obs_size)
@@ -154,11 +180,9 @@ def main():
     if args.load:
         agent.load(args.load)
 
-    eval_env = make_env(test=True)
-
     if args.demo:
         eval_stats = experiments.eval_performance(
-            env=eval_env,
+            env=make_env(0, True),
             agent=agent,
             n_steps=None,
             n_episodes=args.eval_n_runs,
@@ -173,16 +197,15 @@ def main():
             )
         )
     else:
-        experiments.train_agent_with_evaluation(
+        experiments.train_agent_batch_with_evaluation(
             agent=agent,
-            env=train_env,
-            eval_env=eval_env,
+            env=make_batch_env(test=False),
+            eval_env=make_batch_env(test=True),
             outdir=args.outdir,
             steps=args.steps,
             eval_n_steps=None,
             eval_n_episodes=args.eval_n_runs,
-            eval_interval=args.eval_interval,
-            train_max_episode_len=timestep_limit,
+            eval_interval=args.eval_interval
         )
 
 
