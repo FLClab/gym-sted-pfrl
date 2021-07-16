@@ -5,7 +5,7 @@ import functools
 
 import gym
 import gym.spaces
-import torch, torchvision
+import torch
 from torch import nn
 
 import pfrl
