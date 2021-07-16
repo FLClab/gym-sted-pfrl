@@ -5,7 +5,7 @@ import functools
 
 import gym
 import gym.spaces
-import torch
+import torch, torchvision
 from torch import nn
 
 import pfrl
@@ -15,15 +15,50 @@ from pfrl.policies import GaussianHeadWithFixedCovariance, SoftmaxCategoricalHea
 TIMEFMT = "%Y%m%d-%H%M%S"
 
 def calc_shape(shape, layers):
+    """
+    Calculates the shape of the tensor after the layers
+
+    :param shape: A `tuple` of the input shape
+    :param layers: A `list`-like of layers
+
+    :returns : A `tuple` of the output shape
+    """
     _shape = numpy.array(shape[1:])
     for layer in layers:
         _shape = (_shape + 2 * numpy.array(layer.padding) - numpy.array(layer.dilation) * (numpy.array(layer.kernel_size) - 1) - 1) / numpy.array(layer.stride) + 1
         _shape = _shape.astype(int)
     return (shape[0], *_shape)
 
+class WrapPyTorch(gym.ObservationWrapper):
+    """
+    Wraps the observation of an OpenAI gym into a PyTorch gym
+
+    :param env: A `gym.env`
+    """
+    def __init__(self, env=None):
+        super(WrapPyTorch, self).__init__(env)
+        width, height, features = env.observation_space.shape
+        self.observation_space = gym.spaces.Box(
+            env.observation_space.low.transpose(2, 0, 1),
+            env.observation_space.high.transpose(2, 0, 1),
+            [features, width, height], dtype=env.observation_space.dtype)
+
+    def observation(self, observation):
+        """
+        Converts the observation. We rescale the observation values within a semi
+        0-1 range by dividing by 2**10 (1024).
+
+        :param observation: A `numpy.ndarray` of the current observation
+
+        :returns : A converted `numpy.ndarray` of the current observation
+        """
+        # We rescale the observation into a semi 0-1 range
+        observation = observation / 2**10
+        return observation.transpose((2, 0, 1))
+
 class Policy(nn.Module):
     def __init__(
-        self, in_channels=1, action_size=1, obs_size=1152,
+        self, in_channels=1, action_size=1, obs_size=(1, 64, 64),
         activation=nn.functional.leaky_relu
     ):
         self.in_channels = in_channels
@@ -55,7 +90,7 @@ class Policy(nn.Module):
 
 class ValueFunction(nn.Module):
     def __init__(
-        self, in_channels=1, action_size=1, obs_size=1152,
+        self, in_channels=1, action_size=1, obs_size=(1, 64, 64),
         activation=torch.tanh
     ):
         self.in_channels = in_channels
@@ -107,7 +142,7 @@ def main():
     )
     parser.add_argument("--batchsize", type=int, default=16)
     parser.add_argument("--steps", type=int, default=10 ** 5)
-    parser.add_argument("--eval-interval", type=int, default=10 ** 3)
+    parser.add_argument("--eval-interval", type=int, default=1e+3)
     parser.add_argument("--eval-n-runs", type=int, default=100)
     parser.add_argument("--reward-scale-factor", type=float, default=1.)
     parser.add_argument("--render", action="store_true", default=False)
@@ -135,8 +170,12 @@ def main():
         env = gym.make(args.env)
         # Use different random seeds for train and test envs
         env.seed(env_seed)
+        # Converts the openAI Gym to PyTorch tensor shape
+        env = WrapPyTorch(env)
         # Cast observations to float32 because our model uses float32
         env = pfrl.wrappers.CastObservationToFloat32(env)
+        # Normalize the action space
+        env = pfrl.wrappers.NormalizeActionSpace(env)
         if args.monitor:
             env = pfrl.wrappers.Monitor(env, args.outdir)
         if not test:
@@ -197,16 +236,28 @@ def main():
             )
         )
     else:
-        experiments.train_agent_batch_with_evaluation(
-            agent=agent,
-            env=make_batch_env(test=False),
-            eval_env=make_batch_env(test=True),
-            outdir=args.outdir,
-            steps=args.steps,
-            eval_n_steps=None,
-            eval_n_episodes=args.eval_n_runs,
-            eval_interval=args.eval_interval
-        )
+        if args.num_envs > 1:
+            experiments.train_agent_batch_with_evaluation(
+                agent=agent,
+                env=make_batch_env(test=False),
+                eval_env=make_batch_env(test=True),
+                outdir=args.outdir,
+                steps=args.steps,
+                eval_n_steps=None,
+                eval_n_episodes=args.eval_n_runs,
+                eval_interval=args.eval_interval
+            )
+        else:
+            experiments.train_agent_with_evaluation(
+                agent=agent,
+                env=make_env(0, test=False),
+                eval_env=make_env(0, test=True),
+                outdir=args.outdir,
+                steps=args.steps,
+                eval_n_steps=None,
+                eval_n_episodes=args.eval_n_runs,
+                eval_interval=args.eval_interval
+            )
 
 
 if __name__ == "__main__":
