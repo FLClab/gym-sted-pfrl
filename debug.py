@@ -11,110 +11,9 @@ import pfrl
 from pfrl import experiments, utils
 from pfrl.policies import GaussianHeadWithFixedCovariance, SoftmaxCategoricalHead
 
+from src import models, WrapPyTorch
+
 TIMEFMT = "%Y%m%d-%H%M%S"
-
-def calc_shape(shape, layers):
-    """
-    Calculates the shape of the tensor after the layers
-
-    :param shape: A `tuple` of the input shape
-    :param layers: A `list`-like of layers
-
-    :returns : A `tuple` of the output shape
-    """
-    _shape = numpy.array(shape[1:])
-    for layer in layers:
-        _shape = (_shape + 2 * numpy.array(layer.padding) - numpy.array(layer.dilation) * (numpy.array(layer.kernel_size) - 1) - 1) / numpy.array(layer.stride) + 1
-        _shape = _shape.astype(int)
-    return (shape[0], *_shape)
-
-class WrapPyTorch(gym.ObservationWrapper):
-    """
-    Wraps the observation of an OpenAI gym into a PyTorch gym
-
-    :param env: A `gym.env`
-    """
-    def __init__(self, env=None):
-        super(WrapPyTorch, self).__init__(env)
-        width, height, features = env.observation_space.shape
-        self.observation_space = gym.spaces.Box(
-            env.observation_space.low.transpose(2, 0, 1),
-            env.observation_space.high.transpose(2, 0, 1),
-            [features, width, height], dtype=env.observation_space.dtype)
-
-    def observation(self, observation):
-        """
-        Converts the observation. We rescale the observation values within a semi
-        0-1 range by dividing by 2**10 (1024).
-
-        :param observation: A `numpy.ndarray` of the current observation
-
-        :returns : A converted `numpy.ndarray` of the current observation
-        """
-        # We rescale the observation into a semi 0-1 range
-        observation = observation / 2**10
-        return observation.transpose((2, 0, 1))
-
-class Policy(nn.Module):
-    def __init__(
-        self, in_channels=1, action_size=1, obs_size=(1, 64, 64),
-        activation=nn.functional.leaky_relu
-    ):
-        self.in_channels = in_channels
-        self.action_size = action_size
-        self.obs_size = obs_size
-        self.activation = activation
-        super(Policy, self).__init__()
-
-        self.layers = nn.ModuleList([
-            nn.Conv2d(in_channels, 16, 8, stride=4),
-            nn.Conv2d(16, 32, 4, stride=2),
-        ])
-        out_shape = calc_shape(obs_size, self.layers)
-        self.linear = nn.Linear(32 * numpy.prod(out_shape), action_size)
-        self.policy =  pfrl.policies.GaussianHeadWithStateIndependentCovariance(
-            action_size=action_size,
-            var_type="diagonal",
-            var_func=lambda x: torch.exp(2 * x),  # Parameterize log std
-            var_param_init=0,  # log std = 0 => std = 1
-        )
-
-    def forward(self, x):
-        for layer in self.layers:
-            x = self.activation(layer(x))
-        x = x.view(x.size(0), -1)
-        x = self.linear(x)
-        x = self.policy(x)
-        return x
-
-class ValueFunction(nn.Module):
-    def __init__(
-        self, in_channels=1, action_size=1, obs_size=(1, 64, 64),
-        activation=torch.tanh
-    ):
-        self.in_channels = in_channels
-        self.action_size = action_size
-        self.obs_size = obs_size
-        self.activation = activation
-        super(ValueFunction, self).__init__()
-
-        self.layers = nn.ModuleList([
-            nn.Conv2d(in_channels, 16, 8, stride=4),
-            nn.Conv2d(16, 32, 4, stride=2),
-        ])
-        out_shape = calc_shape(obs_size, self.layers)
-        self.linears = nn.ModuleList([
-            nn.Linear(32 * numpy.prod(out_shape), 64),
-            nn.Linear(64, 1)
-        ])
-
-    def forward(self, x):
-        for layer in self.layers:
-            x = self.activation(layer(x))
-        x = x.view(x.size(0), -1)
-        for layer in self.linears:
-            x = self.activation(layer(x))
-        return x
 
 def main():
     import logging
@@ -197,8 +96,8 @@ def main():
     action_space = sample_env.action_space
 
     obs_size = obs_space.shape
-    policy = Policy(obs_size=obs_size)
-    vf = ValueFunction(obs_size=obs_size)
+    policy = models.Policy(obs_size=obs_size)
+    vf = models.ValueFunction(obs_size=obs_size)
     model = pfrl.nn.Branched(policy, vf)
 
     opt = torch.optim.Adam(model.parameters(), lr=args.lr)
