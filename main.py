@@ -101,7 +101,8 @@ def main():
     action_space = sample_env.action_space
 
     obs_size = obs_space.shape
-    policy = models.Policy(obs_size=obs_size)
+    action_size = action_space.shape[0]
+    policy = models.Policy(obs_size=obs_size, action_size=action_size)
     vf = models.ValueFunction(obs_size=obs_size)
     model = pfrl.nn.Branched(policy, vf)
 

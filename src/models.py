@@ -70,7 +70,7 @@ class ValueFunction(nn.Module):
         out_shape = calc_shape(obs_size, self.layers)
         self.linears = nn.ModuleList([
             nn.Linear(32 * numpy.prod(out_shape), 64),
-            nn.Linear(64, 1)
+            nn.Linear(64, action_size)
         ])
 
     def forward(self, x):
