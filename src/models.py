@@ -23,12 +23,12 @@ def calc_shape(shape, layers):
 
 class Policy(nn.Module):
     def __init__(
-        self, in_channels=1, action_size=1, obs_size=(1, 64, 64),
+        self, in_channels=1, action_size=1, obs_space=None,
         activation=nn.functional.leaky_relu
     ):
         self.in_channels = in_channels
         self.action_size = action_size
-        self.obs_size = obs_size
+        self.obs_space = obs_space
         self.activation = activation
         super(Policy, self).__init__()
 
@@ -37,9 +37,14 @@ class Policy(nn.Module):
             nn.Conv2d(in_channels, 16, 8, stride=4),
             nn.Conv2d(16, 32, 4, stride=2),
         ])
-        out_shape = calc_shape(obs_size, self.layers)
+        if isinstance(self.obs_space, gym.spaces.Tuple):
+            out_shape = calc_shape(self.obs_space[0].shape, self.layers)
+            in_features = 32 * numpy.prod(out_shape) + self.obs_space[1].shape[0]
+        else:
+            out_shape = calc_shape(self.obs_space.shape, self.layers)
+            in_features = 32 * numpy.prod(out_shape)
         self.policy =  nn.Sequential(
-            nn.Linear(32 * numpy.prod(out_shape), action_size),
+            nn.Linear(in_features, action_size),
             pfrl.policies.GaussianHeadWithStateIndependentCovariance(
                 action_size=action_size,
                 var_type="diagonal",
@@ -49,37 +54,53 @@ class Policy(nn.Module):
         )
 
     def forward(self, x):
+        if isinstance(self.obs_space, gym.spaces.Tuple):
+            x, articulation = x
         for layer in self.layers:
             x = self.activation(layer(x))
         x = x.view(x.size(0), -1)
+        if isinstance(self.obs_space, gym.spaces.Tuple):
+            x = torch.cat([x, articulation], dim=1)
         x = self.policy(x)
         return x
 
 class ValueFunction(nn.Module):
     def __init__(
-        self, in_channels=1, action_size=1, obs_size=(1, 64, 64),
+        self, in_channels=1, action_size=1, obs_space=None,
         activation=torch.tanh
     ):
         self.in_channels = in_channels
         self.action_size = action_size
-        self.obs_size = obs_size
+        self.obs_space = obs_space
         self.activation = activation
         super(ValueFunction, self).__init__()
 
+        # Creates the layers of the model
         self.layers = nn.ModuleList([
             nn.Conv2d(in_channels, 16, 8, stride=4),
             nn.Conv2d(16, 32, 4, stride=2),
         ])
-        out_shape = calc_shape(obs_size, self.layers)
+        if isinstance(self.obs_space, gym.spaces.Tuple):
+            out_shape = calc_shape(self.obs_space[0].shape, self.layers)
+            in_features = 32 * numpy.prod(out_shape) + self.obs_space[1].shape[0]
+        else:
+            out_shape = calc_shape(self.obs_space.shape, self.layers)
+            in_features = 32 * numpy.prod(out_shape)
         self.linears = nn.ModuleList([
-            nn.Linear(32 * numpy.prod(out_shape), 64),
+            nn.Linear(in_features, 64),
             nn.Linear(64, action_size)
         ])
 
     def forward(self, x):
+        if isinstance(self.obs_space, gym.spaces.Tuple):
+            x, articulation = x
         for layer in self.layers:
             x = self.activation(layer(x))
         x = x.view(x.size(0), -1)
+
+        if isinstance(self.obs_space, gym.spaces.Tuple):
+            x = torch.cat([x, articulation], dim=1)
+
         for layer in self.linears:
             x = self.activation(layer(x))
         return x

@@ -71,8 +71,6 @@ def main():
         env.seed(env_seed)
         # Converts the openAI Gym to PyTorch tensor shape
         env = WrapPyTorch(env)
-        # Cast observations to float32 because our model uses float32
-        env = pfrl.wrappers.CastObservationToFloat32(env)
         # Normalize the action space
         env = pfrl.wrappers.NormalizeActionSpace(env)
         if args.monitor:
@@ -100,9 +98,8 @@ def main():
     obs_space = sample_env.observation_space
     action_space = sample_env.action_space
 
-    obs_size = obs_space.shape
-    policy = models.Policy(obs_size=obs_size, action_size=action_space.shape[0])
-    vf = models.ValueFunction(obs_size=obs_size)
+    policy = models.Policy(obs_space=obs_space, action_size=action_space.shape[0])
+    vf = models.ValueFunction(obs_space=obs_space)
     model = pfrl.nn.Branched(policy, vf)
 
     opt = torch.optim.Adam(model.parameters(), lr=args.lr)
