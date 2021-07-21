@@ -1,5 +1,6 @@
 
 import numpy
+import gym
 import pfrl
 import torch
 
@@ -31,24 +32,26 @@ class Policy(nn.Module):
         self.activation = activation
         super(Policy, self).__init__()
 
+        # Creates the layers of the model
         self.layers = nn.ModuleList([
             nn.Conv2d(in_channels, 16, 8, stride=4),
             nn.Conv2d(16, 32, 4, stride=2),
         ])
         out_shape = calc_shape(obs_size, self.layers)
-        self.linear = nn.Linear(32 * numpy.prod(out_shape), action_size)
-        self.policy =  pfrl.policies.GaussianHeadWithStateIndependentCovariance(
-            action_size=action_size,
-            var_type="diagonal",
-            var_func=lambda x: torch.exp(2 * x),  # Parameterize log std
-            var_param_init=0,  # log std = 0 => std = 1
+        self.policy =  nn.Sequential(
+            nn.Linear(32 * numpy.prod(out_shape), action_size),
+            pfrl.policies.GaussianHeadWithStateIndependentCovariance(
+                action_size=action_size,
+                var_type="diagonal",
+                var_func=lambda x: torch.exp(2 * x),  # Parameterize log std
+                var_param_init=0,  # log std = 0 => std = 1
+            )
         )
 
     def forward(self, x):
         for layer in self.layers:
             x = self.activation(layer(x))
         x = x.view(x.size(0), -1)
-        x = self.linear(x)
         x = self.policy(x)
         return x
 
