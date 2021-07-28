@@ -19,14 +19,22 @@ def calc_shape(shape, layers):
     for layer in layers:
         _shape = (_shape + 2 * numpy.array(layer.padding) - numpy.array(layer.dilation) * (numpy.array(layer.kernel_size) - 1) - 1) / numpy.array(layer.stride) + 1
         _shape = _shape.astype(int)
-    return (shape[0], *_shape)
+    # return (shape[0], *_shape)
+    return _shape
+
 
 class Policy(nn.Module):
     def __init__(
         self, in_channels=1, action_size=1, obs_space=None,
         activation=nn.functional.leaky_relu
     ):
-        self.in_channels = in_channels
+        if isinstance(obs_space, gym.spaces.Tuple):
+            self.in_channels = obs_space[0].shape[0]
+        elif isinstance(obs_space, gym.spaces.Box):
+            self.in_channels = obs_space.shape[0]
+        else:
+            self.in_channels = in_channels
+        # self.in_channels = in_channels
         self.action_size = action_size
         self.obs_space = obs_space
         self.activation = activation
@@ -34,7 +42,7 @@ class Policy(nn.Module):
 
         # Creates the layers of the model
         self.layers = nn.ModuleList([
-            nn.Conv2d(in_channels, 16, 8, stride=4),
+            nn.Conv2d(self.in_channels, 16, 8, stride=4),
             nn.Conv2d(16, 32, 4, stride=2),
         ])
         if isinstance(self.obs_space, gym.spaces.Tuple):
@@ -69,7 +77,13 @@ class ValueFunction(nn.Module):
         self, in_channels=1, action_size=1, obs_space=None,
         activation=torch.tanh
     ):
-        self.in_channels = in_channels
+        if isinstance(obs_space, gym.spaces.Tuple):
+            self.in_channels = obs_space[0].shape[0]
+        elif isinstance(obs_space, gym.spaces.Box):
+            self.in_channels = obs_space.shape[0]
+        else:
+            self.in_channels = in_channels
+        # self.in_channels = in_channels
         self.action_size = action_size
         self.obs_space = obs_space
         self.activation = activation
@@ -77,7 +91,7 @@ class ValueFunction(nn.Module):
 
         # Creates the layers of the model
         self.layers = nn.ModuleList([
-            nn.Conv2d(in_channels, 16, 8, stride=4),
+            nn.Conv2d(self.in_channels, 16, 8, stride=4),
             nn.Conv2d(16, 32, 4, stride=2),
         ])
         if isinstance(self.obs_space, gym.spaces.Tuple):
