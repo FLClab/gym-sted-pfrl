@@ -2,6 +2,7 @@ import argparse
 import numpy
 import datetime
 import functools
+import uuid
 
 import gym
 import gym.spaces
@@ -59,7 +60,7 @@ def main():
     process_seeds = numpy.arange(args.num_envs) + args.seed * args.num_envs
     assert process_seeds.max() < 2 ** 32
 
-    args.outdir = experiments.prepare_output_dir(args, args.outdir, exp_id=args.exp_id)
+    args.outdir = experiments.prepare_output_dir(args, args.outdir, exp_id="{}_{}".format(args.exp_id, str(uuid.uuid4())[:8]))
 
     def make_env(idx, test):
         # Use different random seeds for train and test envs
