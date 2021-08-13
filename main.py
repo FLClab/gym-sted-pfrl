@@ -50,6 +50,7 @@ def main():
     parser.add_argument("--load", type=str, default="")
     parser.add_argument("--log-level", type=int, default=logging.INFO)
     parser.add_argument("--monitor", action="store_true")
+    parser.add_argument("--checkpoint_freq", type=int, default=None)
     args = parser.parse_args()
 
     logging.basicConfig(level=args.log_level)
@@ -138,6 +139,7 @@ def main():
                 env=make_batch_env(test=False),
                 eval_env=make_batch_env(test=True),
                 outdir=args.outdir,
+                checkpoint_freq=args.checkpoint_freq,
                 steps=args.steps,
                 eval_n_steps=None,
                 eval_n_episodes=args.eval_n_runs,
@@ -149,6 +151,7 @@ def main():
                 env=make_env(0, test=False),
                 eval_env=make_env(0, test=True),
                 outdir=args.outdir,
+                checkpoint_freq=args.checkpoint_freq,
                 steps=args.steps,
                 eval_n_steps=None,
                 eval_n_episodes=args.eval_n_runs,
