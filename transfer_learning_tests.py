@@ -100,8 +100,8 @@ def main():
     obs_space = sample_env.observation_space
     action_space = sample_env.action_space
 
-    policy = models.Policy(obs_space=obs_space, action_size=action_space.shape[0])
-    vf = models.ValueFunction(obs_space=obs_space)
+    policy = models.Policy2(obs_space=obs_space, action_size=action_space.shape[0])
+    vf = models.ValueFunction2(obs_space=obs_space)
     model = pfrl.nn.Branched(policy, vf)
 
     opt = torch.optim.Adam(model.parameters(), lr=args.lr)
