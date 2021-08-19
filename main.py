@@ -52,6 +52,7 @@ def main():
     parser.add_argument("--load", type=str, default="")
     parser.add_argument("--log-level", type=int, default=logging.INFO)
     parser.add_argument("--monitor", action="store_true")
+    parser.add_argument("--bleach_sampling", type=str, default="constant")
     args = parser.parse_args()
 
     logging.basicConfig(level=args.log_level)
@@ -68,7 +69,7 @@ def main():
         process_seed = int(process_seeds[idx])
         env_seed = 2 ** 32 - 1 - process_seed if test else process_seed
 
-        env = gym.make(args.env)
+        env = gym.make(args.env, bleach_sampling=args.bleach_sampling)   # faque c'est ici que je devrais mettre un args.bleach_sampling arg
         # Use different random seeds for train and test envs
         env.seed(env_seed)
         # Converts the openAI Gym to PyTorch tensor shape
