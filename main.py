@@ -35,7 +35,7 @@ def main():
         ),
     )
     parser.add_argument(
-        "--exp_id", type=str, default=datetime.datetime.now().strftime(TIMEFMT),
+        "--exp-id", type=str, default=datetime.datetime.now().strftime(TIMEFMT),
         help=(
             "Identification of the experiment"
         ),
@@ -44,6 +44,7 @@ def main():
     parser.add_argument("--steps", type=int, default=10 ** 5)
     parser.add_argument("--eval-interval", type=int, default=1e+3)
     parser.add_argument("--eval-n-runs", type=int, default=100)
+    parser.add_argument("--checkpoint-freq", type=int, default=None)
     parser.add_argument("--reward-scale-factor", type=float, default=1.)
     parser.add_argument("--render", action="store_true", default=False)
     parser.add_argument("--lr", type=float, default=1e-4)
@@ -51,7 +52,6 @@ def main():
     parser.add_argument("--load", type=str, default="")
     parser.add_argument("--log-level", type=int, default=logging.INFO)
     parser.add_argument("--monitor", action="store_true")
-    parser.add_argument("--checkpoint_freq", type=int, default=None)
     args = parser.parse_args()
 
     logging.basicConfig(level=args.log_level)
@@ -100,8 +100,8 @@ def main():
     obs_space = sample_env.observation_space
     action_space = sample_env.action_space
 
-    policy = models.Policy(obs_space=obs_space, action_size=action_space.shape[0])
-    vf = models.ValueFunction(obs_space=obs_space)
+    policy = models.Policy2(obs_space=obs_space, action_size=action_space.shape[0])
+    vf = models.ValueFunction2(obs_space=obs_space)
     model = pfrl.nn.Branched(policy, vf)
 
     opt = torch.optim.Adam(model.parameters(), lr=args.lr)
@@ -140,11 +140,11 @@ def main():
                 env=make_batch_env(test=False),
                 eval_env=make_batch_env(test=True),
                 outdir=args.outdir,
-                checkpoint_freq=args.checkpoint_freq,
                 steps=args.steps,
                 eval_n_steps=None,
                 eval_n_episodes=args.eval_n_runs,
-                eval_interval=args.eval_interval
+                eval_interval=args.eval_interval,
+                checkpoint_freq=args.checkpoint_freq
             )
         else:
             experiments.train_agent_with_evaluation(
@@ -152,11 +152,11 @@ def main():
                 env=make_env(0, test=False),
                 eval_env=make_env(0, test=True),
                 outdir=args.outdir,
-                checkpoint_freq=args.checkpoint_freq,
                 steps=args.steps,
                 eval_n_steps=None,
                 eval_n_episodes=args.eval_n_runs,
-                eval_interval=args.eval_interval
+                eval_interval=args.eval_interval,
+                checkpoint_freq=args.checkpoint_freq
             )
 
 

@@ -113,7 +113,8 @@ class Policy2(nn.Module):
 
         # Signal encoder ([SNR, Resolution, Bleach] to a vector of length 4 (?)
         self.signal_encoder_layers = nn.ModuleList([
-            nn.Linear(self.obs_space[1].shape[0], self.encoded_signal_shape)
+            nn.Linear(self.obs_space[1].shape[0], 16),
+            nn.Linear(16, self.encoded_signal_shape)
         ])
 
         out_shape = calc_shape(self.img_shape, self.image_encoder_layers)
@@ -258,7 +259,8 @@ class ValueFunction2(nn.Module):
 
         # Signal encoder ([SNR, Resolution, Bleach] to a vector of length 4 (?)
         self.signal_encoder_layers = nn.ModuleList([
-            nn.Linear(self.obs_space[1].shape[0], self.encoded_signal_shape)
+            nn.Linear(self.obs_space[1].shape[0], 16),
+            nn.Linear(16, self.encoded_signal_shape)
         ])
 
         out_shape = calc_shape(self.img_shape, self.image_encoder_layers)
