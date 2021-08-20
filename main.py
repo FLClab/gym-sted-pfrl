@@ -44,7 +44,7 @@ def main():
     parser.add_argument("--steps", type=int, default=10 ** 5)
     parser.add_argument("--eval-interval", type=int, default=1e+3)
     parser.add_argument("--eval-n-runs", type=int, default=100)
-    parser.add_argument("--checkpoint-freq", type=int, default=None)
+    parser.add_argument("--checkpoint_freq", type=int, default=None)
     parser.add_argument("--reward-scale-factor", type=float, default=1.)
     parser.add_argument("--render", action="store_true", default=False)
     parser.add_argument("--lr", type=float, default=1e-4)
