@@ -44,7 +44,7 @@ def main():
     parser.add_argument("--steps", type=int, default=10 ** 5)
     parser.add_argument("--eval-interval", type=int, default=1e+3)
     parser.add_argument("--eval-n-runs", type=int, default=100)
-    parser.add_argument("--checkpoint_freq", type=int, default=None)
+    parser.add_argument("--checkpoint-freq", type=int, default=None)
     parser.add_argument("--reward-scale-factor", type=float, default=1.)
     parser.add_argument("--render", action="store_true", default=False)
     parser.add_argument("--lr", type=float, default=1e-4)
@@ -52,7 +52,7 @@ def main():
     parser.add_argument("--load", type=str, default="")
     parser.add_argument("--log-level", type=int, default=logging.INFO)
     parser.add_argument("--monitor", action="store_true")
-    parser.add_argument("--bleach_sampling", type=str, default="constant")
+    parser.add_argument("--bleach-sampling", type=str, default="constant")
     parser.add_argument("--recurrent", action="store_true", default=False)
     args = parser.parse_args()
 
@@ -69,8 +69,7 @@ def main():
         # Use different random seeds for train and test envs
         process_seed = int(process_seeds[idx])
         env_seed = 2 ** 32 - 1 - process_seed if test else process_seed
-
-        env = gym.make(args.env, bleach_sampling=args.bleach_sampling)   # faque c'est ici que je devrais mettre un args.bleach_sampling arg
+        env = gym.make(args.env)
         # Use different random seeds for train and test envs
         env.seed(env_seed)
         # Converts the openAI Gym to PyTorch tensor shape
