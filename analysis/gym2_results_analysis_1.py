@@ -40,7 +40,7 @@ def main():
 
     parser.add_argument("--main_dir", type=str, default="")
     parser.add_argument("--analysis_n_runs", type=int, default=1)
-
+    parser.add_argument("--checkpoints_interval", type=int, default=5000)
     parser.add_argument("--env", type=str, default="gym_sted:STEDtimed-v4")
     parser.add_argument("--num-envs", type=int, default=1)
     parser.add_argument("--seed", type=int, default=0, help="Random seed [0, 2 ** 32)")
@@ -115,21 +115,27 @@ def main():
         # vec_env = pfrl.wrappers.VectorFrameStack(vec_env, 4)
         return vec_env
 
-    if not os.path.exists(args.main_dir + "/analysis_results"):
-        os.makedirs(args.main_dir + "/analysis_results")
+    # if not os.path.exists(args.main_dir + "/analysis_results"):
+    #     os.makedirs(args.main_dir + "/analysis_results")
 
-    checkpoints = numpy.arange(1000, 100000 + 5000, 5000)
-    checkpoints_n_successes = numpy.zeros(checkpoints.shape)
+    checkpoints = numpy.arange(1000, 100000 + args.checkpoints_interval, args.checkpoints_interval)
+    if checkpoints[-1] > 100000:
+        checkpoints[-1] = 100000
+    checkpoints = checkpoints.tolist()
+    checkpoints.append("best")
+    checkpoints_n_successes = numpy.zeros(len(checkpoints))
     for idx_checkpoint, checkpoint in enumerate(checkpoints):
         current_dir = args.main_dir + f"/{checkpoint}_checkpoint"
+        if not os.path.exists(current_dir + "/analysis_results"):
+            os.makedirs(current_dir + "/analysis_results")
 
         sample_env = make_env(0, test=False)
         timestep_limit = sample_env.spec.max_episode_steps
         obs_space = sample_env.observation_space
         action_space = sample_env.action_space
 
-        policy = models.Policy(obs_space=obs_space, action_size=action_space.shape[0])
-        vf = models.ValueFunction(obs_space=obs_space)
+        policy = models.Policy2(obs_space=obs_space, action_size=action_space.shape[0])
+        vf = models.ValueFunction2(obs_space=obs_space)
         model = pfrl.nn.Branched(policy, vf)
 
         opt = torch.optim.Adam(model.parameters(), lr=args.lr)
@@ -148,6 +154,7 @@ def main():
         fixed_n_nanodomains_threshold = 0.8
 
         for i in range(args.analysis_n_runs):
+            file = open(current_dir + f"/analysis_results/{i}.txt", "w")
             eval_env = make_env(0, test=True)
 
             action_spaces = {
@@ -172,9 +179,11 @@ def main():
             obs = eval_env.reset()
             # je veux save les positions gt des nanodomaines
             nanodomain_coords = numpy.array(eval_env.temporal_datamap.synapse.nanodomains_coords)
+            file.write(f"{nanodomain_coords.shape[0]}\n")
             nd_assigned_truth_list = []
             new_threshold = numpy.floor(fixed_n_nanodomains_threshold *
                                         nanodomain_coords.shape[0]) / nanodomain_coords.shape[0]
+            file.write(f"{new_threshold}\n")
             for i in range(nanodomain_coords.shape[0]):
                 nd_assigned_truth_list.append(0)
             done = False
@@ -203,14 +212,16 @@ def main():
 
             if numpy.sum(nd_assigned_truth_list) / nanodomain_coords.shape[0] >= new_threshold:
                 checkpoints_n_successes[idx_checkpoint] += 1
+            file.write(f"{numpy.sum(nd_assigned_truth_list)}\n")
+            file.close()
 
 
         # exit()   # juste tester que la méchanique marche pour 1 image pour le premier checkpoint
 
-    checkpoints_n_successes_percentage = checkpoints_n_successes / args.analysis_n_runs
-
-    numpy.save(save_path + "/checkpoints_n_successes", checkpoints_n_successes)
-    numpy.save(save_path + "/checkpoints_n_successes_percentage", checkpoints_n_successes_percentage)
+    # checkpoints_n_successes_percentage = checkpoints_n_successes / args.analysis_n_runs
+    #
+    # numpy.save(save_path + "/checkpoints_n_successes", checkpoints_n_successes)
+    # numpy.save(save_path + "/checkpoints_n_successes_percentage", checkpoints_n_successes_percentage)
 
 
 if __name__ == "__main__":
