@@ -53,6 +53,7 @@ def main():
     parser.add_argument("--log-level", type=int, default=logging.INFO)
     parser.add_argument("--monitor", action="store_true")
     parser.add_argument("--bleach_sampling", type=str, default="constant")
+    parser.add_argument("--recurrent", action="store_true", default=False)
     args = parser.parse_args()
 
     logging.basicConfig(level=args.log_level)
@@ -101,9 +102,14 @@ def main():
     obs_space = sample_env.observation_space
     action_space = sample_env.action_space
 
-    policy = models.Policy2(obs_space=obs_space, action_size=action_space.shape[0])
-    vf = models.ValueFunction2(obs_space=obs_space)
-    model = pfrl.nn.Branched(policy, vf)
+    if args.recurrent:
+        policy = models.RecurrentPolicy(obs_space=obs_space, action_size=action_space.shape[0])
+        vf = models.RecurrentValueFunction(obs_space=obs_space)
+        model = pfrl.nn.RecurrentBranched(policy, vf)
+    else:
+        policy = models.Policy2(obs_space=obs_space, action_size=action_space.shape[0])
+        vf = models.ValueFunction2(obs_space=obs_space)
+        model = pfrl.nn.Branched(policy, vf)
 
     opt = torch.optim.Adam(model.parameters(), lr=args.lr)
 
@@ -113,7 +119,8 @@ def main():
         gpu=args.gpu,
         minibatch_size=args.batchsize,
         max_grad_norm=1.0,
-        update_interval=100
+        update_interval=100,
+        recurrent=args.recurrent
     )
     if args.load:
         agent.load(args.load)
