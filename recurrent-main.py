@@ -100,9 +100,9 @@ def main():
     obs_space = sample_env.observation_space
     action_space = sample_env.action_space
 
-    policy = models.Policy2(obs_space=obs_space, action_size=action_space.shape[0])
-    vf = models.ValueFunction2(obs_space=obs_space)
-    model = pfrl.nn.Branched(policy, vf)
+    policy = models.RecurrentPolicy(obs_space=obs_space, action_size=action_space.shape[0])
+    vf = models.RecurrentValueFunction(obs_space=obs_space)
+    model = pfrl.nn.RecurrentBranched(policy, vf)
 
     opt = torch.optim.Adam(model.parameters(), lr=args.lr)
 
@@ -112,7 +112,8 @@ def main():
         gpu=args.gpu,
         minibatch_size=args.batchsize,
         max_grad_norm=1.0,
-        update_interval=100
+        update_interval=100,
+        recurrent=True
     )
     if args.load:
         agent.load(args.load)
