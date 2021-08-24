@@ -47,7 +47,7 @@ class WrapPyTorch(gym.ObservationWrapper):
             observation, articulation = observation
             # We rescale the observation into a semi 0-1 range
             observation = observation / 2**10
-            return [observation.transpose((2, 0, 1)).astype(self.dtype), articulation.astype(self.dtype)]
+            return tuple((observation.transpose((2, 0, 1)).astype(self.dtype), articulation.astype(self.dtype)))
         # Case where the observation contains only the current image
         else:
             # We rescale the observation into a semi 0-1 range

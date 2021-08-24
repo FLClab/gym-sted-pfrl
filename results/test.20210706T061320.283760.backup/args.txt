@@ -1,1 +1,0 @@
-{"env": "gym_sted:STEDdebug-v0", "seed": 0, "gpu": 0, "outdir": "results", "beta": 0.0001, "batchsize": 16, "steps": 100000, "eval_interval": 100, "eval_n_runs": 5, "reward_scale_factor": 1.0, "render": false, "lr": 0.0001, "demo": false, "load": "", "log_level": 20, "monitor": false}
