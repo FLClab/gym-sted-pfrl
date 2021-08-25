@@ -118,7 +118,7 @@ def main():
         gpu=args.gpu,
         minibatch_size=args.batchsize,
         max_grad_norm=1.0,
-        update_interval=100,
+        update_interval=512,
         recurrent=args.recurrent
     )
     if args.load:

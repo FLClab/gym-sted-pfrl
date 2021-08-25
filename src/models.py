@@ -219,7 +219,7 @@ class RecurrentPolicy(nn.Module, pfrl.nn.Recurrent):
         # Action selection using LSTM network
         self.policy_to_actions_layer = pfrl.nn.RecurrentSequential(
             nn.LSTM(
-                input_size=in_features, hidden_size=16, num_layers=2, batch_first=True
+                input_size=in_features, hidden_size=16, num_layers=2, batch_first=False
             ),
             nn.Linear(
                 in_features=16, out_features=self.action_size - 1
@@ -227,7 +227,7 @@ class RecurrentPolicy(nn.Module, pfrl.nn.Recurrent):
         )
         self.policy_to_ranking_layer = pfrl.nn.RecurrentSequential(
             nn.LSTM(
-                input_size=in_features, hidden_size=16, num_layers=2, batch_first=True
+                input_size=in_features, hidden_size=16, num_layers=2, batch_first=False
             ),
             nn.Linear(
                 in_features=16, out_features=1
@@ -258,10 +258,14 @@ class RecurrentPolicy(nn.Module, pfrl.nn.Recurrent):
         articulation, _ = self.signal_encoder_layers(articulation, None)
 
         # Combines the encoded image and articulation layers
+        batch_sizes, sorted_indices, unsorted_indices = x.batch_sizes, x.sorted_indices, x.unsorted_indices
         x = torch.cat([x.data, articulation.data], dim=1)
-        x = nn.utils.rnn.pack_sequence(x[:, None])
+        x = nn.utils.rnn.PackedSequence(
+            data=x, batch_sizes=batch_sizes,
+            sorted_indices=sorted_indices, unsorted_indices=unsorted_indices
+        )
 
-        # # Applies the lstm models on both inputs
+        # Applies the lstm models on both inputs
         x_1, x_1_r = self.policy_to_actions_layer(x, r)
         x_1 = pfrl.utils.recurrent.unwrap_packed_sequences_recursive(x_1)
         x_2, x_2_r = self.policy_to_ranking_layer(x, r)
@@ -470,8 +474,12 @@ class RecurrentValueFunction(nn.Module, pfrl.nn.Recurrent):
         articulation, _ = self.signal_encoder_layers(articulation, None)
 
         # Combines the encoded image and articulation layers
+        batch_sizes, sorted_indices, unsorted_indices = x.batch_sizes, x.sorted_indices, x.unsorted_indices
         x = torch.cat([x.data, articulation.data], dim=1)
-        x = nn.utils.rnn.pack_sequence(x[:, None])
+        x = nn.utils.rnn.PackedSequence(
+            data=x, batch_sizes=batch_sizes,
+            sorted_indices=sorted_indices, unsorted_indices=unsorted_indices
+        )
 
         # Applies the lstm models on both inputs
         x, r = self.lstm(x, r)
