@@ -26,6 +26,8 @@ def main():
 
     import logging
     from matplotlib import pyplot as plt
+    import metrics
+    from skimage.feature import peak_local_max
 
     parser = argparse.ArgumentParser()
     parser.add_argument("--env", type=str, default="gym_sted:STEDtimed-v3")
@@ -146,6 +148,8 @@ def main():
     )
 
     laser_received_per_episode = []
+    n_nanodomains_per_episode = []
+    n_nanodomains_identified_per_episode = []
     # save_path = args.outdir
     for i in range(args.n_runs):
         laser_received_this_episode = 0
@@ -153,6 +157,11 @@ def main():
         eval_env = make_env(0, test=True)
 
         obs = eval_env.reset()
+        nanodomain_coords = numpy.array(eval_env.temporal_datamap.synapse.nanodomains_coords)
+        n_nanodomains_per_episode.append(nanodomain_coords.shape[0])
+        nd_assigned_truth_list = []
+        for i in range(nanodomain_coords.shape[0]):
+            nd_assigned_truth_list.append(0)
         done = False
         while not done:
             a = agent.act(obs)
@@ -163,10 +172,21 @@ def main():
 
             obs, r, done, info = eval_env.step(a)
 
+            guess_coords = peak_local_max(obs[0][-1], min_distance=2, threshold_rel=0.5)
+            guess_coords_list.append(guess_coords)
+            detector = metrics.CentroidDetectionError(nanodomain_coords, guess_coords, 2, algorithm="hungarian")
+            for nd in detector.truth_couple:
+                nd_assigned_truth_list[nd] = 1
+
         laser_received_per_episode.append(laser_received_this_episode)
+        n_nanodomains_identified_per_episode.append(numpy.sum(nd_assigned_truth_list))
 
     laser_received_per_episode = numpy.asarray(laser_received_per_episode)
-    numpy.save("gym-sted-pfrl/analysis/laser_received/laser_dose_agent_params.npy", laser_received_per_episode)   # how do I set the save path properly??
+    n_nanodomains_per_episode = numpy.asarray(n_nanodomains_per_episode)
+    n_nanodomains_identified_per_episode = numpy.asarray(n_nanodomains_identified_per_episode)
+    numpy.save("gym-sted-pfrl/analysis/laser_received/laser_dose_agent_params.npy", laser_received_per_episode)
+    numpy.save("gym-sted-pfrl/analysis/laser_received/gt_nb_nanodomains_agent_params.npy", n_nanodomains_per_episode)
+    numpy.save("gym-sted-pfrl/analysis/laser_received/nb_nanodomains_id_agent_params.npy", n_nanodomains_identified_per_episode)
 
 
 if __name__ == "__main__":
