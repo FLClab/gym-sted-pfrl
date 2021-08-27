@@ -28,6 +28,8 @@ def main():
     from matplotlib import pyplot as plt
     import metrics
     from skimage.feature import peak_local_max
+    import json
+    import os
 
     parser = argparse.ArgumentParser()
     parser.add_argument("--env", type=str, default="gym_sted:STEDtimed-v3")
@@ -150,6 +152,7 @@ def main():
     laser_received_per_episode = []
     n_nanodomains_per_episode = []
     n_nanodomains_identified_per_episode = []
+    actions_per_run = {}
     # save_path = args.outdir
     for i in range(args.n_runs):
         laser_received_this_episode = 0
@@ -161,13 +164,15 @@ def main():
         n_nanodomains_per_episode.append(nanodomain_coords.shape[0])
         nd_assigned_truth_list = []
         guess_coords_list = []
-        for i in range(nanodomain_coords.shape[0]):
+        actions_per_run[i] = []
+        for j in range(nanodomain_coords.shape[0]):
             nd_assigned_truth_list.append(0)
         done = False
         while not done:
             a = agent.act(obs)
 
             action_clipped = numpy.clip(a, action_space.low, action_space.high)
+            actions_per_run[i].append(action_clipped.tolist())
 
             laser_received_this_episode += action_clipped[0] * (action_clipped[1] + action_clipped[2])
 
@@ -185,9 +190,13 @@ def main():
     laser_received_per_episode = numpy.asarray(laser_received_per_episode)
     n_nanodomains_per_episode = numpy.asarray(n_nanodomains_per_episode)
     n_nanodomains_identified_per_episode = numpy.asarray(n_nanodomains_identified_per_episode)
-    numpy.save("gym-sted-pfrl/analysis/laser_received/laser_dose_agent_params.npy", laser_received_per_episode)
-    numpy.save("gym-sted-pfrl/analysis/laser_received/gt_nb_nanodomains_agent_params.npy", n_nanodomains_per_episode)
-    numpy.save("gym-sted-pfrl/analysis/laser_received/nb_nanodomains_id_agent_params.npy", n_nanodomains_identified_per_episode)
+    if not os.path.exists("gym-sted-pfrl/analysis/laser_received/agent_params"):
+        os.makedirs("gym-sted-pfrl/analysis/laser_received/agent_params")
+    numpy.save("gym-sted-pfrl/analysis/laser_received/agent_params/laser_dose.npy", laser_received_per_episode)
+    numpy.save("gym-sted-pfrl/analysis/laser_received/agent_params/gt_nb_nanodomains.npy", n_nanodomains_per_episode)
+    numpy.save("gym-sted-pfrl/analysis/laser_received/agent_params/nb_nanodomains_id.npy", n_nanodomains_identified_per_episode)
+    with open("gym-sted-pfrl/analysis/laser_received/agent_params/actions_per_run.txt", "w") as file:
+        file.write(json.dumps(actions_per_run))
 
 
 if __name__ == "__main__":
