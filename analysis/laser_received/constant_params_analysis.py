@@ -160,6 +160,7 @@ def main():
         nanodomain_coords = numpy.array(eval_env.temporal_datamap.synapse.nanodomains_coords)
         n_nanodomains_per_episode.append(nanodomain_coords.shape[0])
         nd_assigned_truth_list = []
+        guess_coords_list = []
         for i in range(nanodomain_coords.shape[0]):
             nd_assigned_truth_list.append(0)
         done = False
