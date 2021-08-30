@@ -203,12 +203,12 @@ def main():
     laser_received_per_episode = numpy.asarray(laser_received_per_episode)
     n_nanodomains_per_episode = numpy.asarray(n_nanodomains_per_episode)
     n_nanodomains_identified_per_episode = numpy.asarray(n_nanodomains_identified_per_episode)
-    if not os.path.exists("gym-sted-pfrl/analysis/laser_received/two_params"):
-        os.makedirs("gym-sted-pfrl/analysis/laser_received/two_params")
-    numpy.save("gym-sted-pfrl/analysis/laser_received/two_params/laser_dose.npy", laser_received_per_episode)
-    numpy.save("gym-sted-pfrl/analysis/laser_received/two_params/gt_nb_nanodomains.npy", n_nanodomains_per_episode)
-    numpy.save("gym-sted-pfrl/analysis/laser_received/two_params/nb_nanodomains_id.npy", n_nanodomains_identified_per_episode)
-    with open("gym-sted-pfrl/analysis/laser_received/two_params/actions_per_run.txt", "w") as file:
+    if not os.path.exists(f"gym-sted-pfrl/analysis/laser_received/two_params_pdt_{args.pdt}"):
+        os.makedirs(f"gym-sted-pfrl/analysis/laser_received/two_params_pdt_{args.pdt}")
+    numpy.save(f"gym-sted-pfrl/analysis/laser_received/two_params_pdt_{args.pdt}/laser_dose.npy", laser_received_per_episode)
+    numpy.save(f"gym-sted-pfrl/analysis/laser_received/two_params_pdt_{args.pdt}/gt_nb_nanodomains.npy", n_nanodomains_per_episode)
+    numpy.save(f"gym-sted-pfrl/analysis/laser_received/two_params_pdt_{args.pdt}/nb_nanodomains_id.npy", n_nanodomains_identified_per_episode)
+    with open(f"gym-sted-pfrl/analysis/laser_received/two_params_pdt_{args.pdt}/actions_per_run.txt", "w") as file:
         file.write(json.dumps(actions_per_run))
 
 
