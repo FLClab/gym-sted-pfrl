@@ -65,6 +65,7 @@ def main():
     parser.add_argument("--log-level", type=int, default=logging.INFO)
     parser.add_argument("--monitor", action="store_true")
     parser.add_argument("--n-runs", type=int, default=1)
+    parser.add_argument("--pdt", type=float, default=10e-6)
     args = parser.parse_args()
 
     logging.basicConfig(level=args.log_level)
@@ -154,7 +155,7 @@ def main():
     laser_received_per_episode = []
     # save_path = args.outdir
     param_set_monitoring = numpy.asarray([10e-6, 5e-6, 0.0])
-    param_set_acquiring = numpy.asarray([10e-6, 5e-6, 3e-3])
+    param_set_acquiring = numpy.asarray([args.pdt, 5e-6, 3e-3])
     n_nanodomains_per_episode = []
     n_nanodomains_identified_per_episode = []
     actions_per_run = {}
