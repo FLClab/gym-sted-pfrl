@@ -219,18 +219,18 @@ class RecurrentPolicy(nn.Module, pfrl.nn.Recurrent):
         # Action selection using LSTM network
         self.policy_to_actions_layer = pfrl.nn.RecurrentSequential(
             nn.LSTM(
-                input_size=in_features, hidden_size=16, num_layers=2, batch_first=False
+                input_size=in_features, hidden_size=512, num_layers=1, batch_first=False
             ),
             nn.Linear(
-                in_features=16, out_features=self.action_size - 1
+                in_features=512, out_features=self.action_size - 1
             )
         )
         self.policy_to_ranking_layer = pfrl.nn.RecurrentSequential(
             nn.LSTM(
-                input_size=in_features, hidden_size=16, num_layers=2, batch_first=False
+                input_size=in_features, hidden_size=512, num_layers=1, batch_first=False
             ),
             nn.Linear(
-                in_features=16, out_features=1
+                in_features=512, out_features=1
             )
         )
 
@@ -449,10 +449,10 @@ class RecurrentValueFunction(nn.Module, pfrl.nn.Recurrent):
         # Action selection using LSTM network
         self.lstm = pfrl.nn.RecurrentSequential(
             nn.LSTM(
-                input_size=in_features, hidden_size=16, num_layers=2, batch_first=True
+                input_size=in_features, hidden_size=512, num_layers=1, batch_first=False
             ),
             nn.Linear(
-                in_features=16, out_features=self.action_size
+                in_features=512, out_features=self.action_size
             ),
             self.activation()
         )
