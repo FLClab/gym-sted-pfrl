@@ -65,6 +65,8 @@ def main():
     parser.add_argument("--log-level", type=int, default=logging.INFO)
     parser.add_argument("--monitor", action="store_true")
     parser.add_argument("--n-runs", type=int, default=1)
+    parser.add_argument("--pdt", type=float, default=10e-6)
+    parser.add_argument("--p-sted", type=float, default=3e-3)
     args = parser.parse_args()
 
     logging.basicConfig(level=args.log_level)
@@ -154,7 +156,7 @@ def main():
     laser_received_per_episode = []
     # save_path = args.outdir
     param_set_monitoring = numpy.asarray([10e-6, 5e-6, 0.0])
-    param_set_acquiring = numpy.asarray([10e-6, 5e-6, 3e-3])
+    param_set_acquiring = numpy.asarray([args.pdt, 5e-6, args.p_sted])
     n_nanodomains_per_episode = []
     n_nanodomains_identified_per_episode = []
     actions_per_run = {}
@@ -202,12 +204,12 @@ def main():
     laser_received_per_episode = numpy.asarray(laser_received_per_episode)
     n_nanodomains_per_episode = numpy.asarray(n_nanodomains_per_episode)
     n_nanodomains_identified_per_episode = numpy.asarray(n_nanodomains_identified_per_episode)
-    if not os.path.exists("gym-sted-pfrl/analysis/laser_received/two_params"):
-        os.makedirs("gym-sted-pfrl/analysis/laser_received/two_params")
-    numpy.save("gym-sted-pfrl/analysis/laser_received/two_params/laser_dose.npy", laser_received_per_episode)
-    numpy.save("gym-sted-pfrl/analysis/laser_received/two_params/gt_nb_nanodomains.npy", n_nanodomains_per_episode)
-    numpy.save("gym-sted-pfrl/analysis/laser_received/two_params/nb_nanodomains_id.npy", n_nanodomains_identified_per_episode)
-    with open("gym-sted-pfrl/analysis/laser_received/two_params/actions_per_run.txt", "w") as file:
+    if not os.path.exists(f"gym-sted-pfrl/analysis/laser_received/two_params_pdt_{args.pdt}_psted_{args.p_sted}"):
+        os.makedirs(f"gym-sted-pfrl/analysis/laser_received/two_params_pdt_{args.pdt}_psted_{args.p_sted}")
+    numpy.save(f"gym-sted-pfrl/analysis/laser_received/two_params_pdt_{args.pdt}_psted_{args.p_sted}/laser_dose.npy", laser_received_per_episode)
+    numpy.save(f"gym-sted-pfrl/analysis/laser_received/two_params_pdt_{args.pdt}_psted_{args.p_sted}/gt_nb_nanodomains.npy", n_nanodomains_per_episode)
+    numpy.save(f"gym-sted-pfrl/analysis/laser_received/two_params_pdt_{args.pdt}_psted_{args.p_sted}/nb_nanodomains_id.npy", n_nanodomains_identified_per_episode)
+    with open(f"gym-sted-pfrl/analysis/laser_received/two_params_pdt_{args.pdt}_psted_{args.p_sted}/actions_per_run.txt", "w") as file:
         file.write(json.dumps(actions_per_run))
 
 
