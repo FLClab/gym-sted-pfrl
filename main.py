@@ -44,6 +44,7 @@ def main():
     parser.add_argument("--steps", type=int, default=10 ** 5)
     parser.add_argument("--eval-interval", type=int, default=1e+3)
     parser.add_argument("--eval-n-runs", type=int, default=100)
+    parser.add_argument("--update-interval", type=int, default=512)
     parser.add_argument("--checkpoint-freq", type=int, default=None)
     parser.add_argument("--reward-scale-factor", type=float, default=1.)
     parser.add_argument("--render", action="store_true", default=False)
@@ -118,7 +119,7 @@ def main():
         gpu=args.gpu,
         minibatch_size=args.batchsize,
         max_grad_norm=1.0,
-        update_interval=512,
+        update_interval=args.update_interval,
         recurrent=args.recurrent,
         max_recurrent_sequence_len=10
     )
