@@ -124,6 +124,89 @@ class Policy2(nn.Module):
         in_features = 64 * numpy.prod(out_shape) + self.encoded_signal_shape
 
         # Action selection
+        self.policy_to_actions_layer = nn.Linear(in_features, action_size)
+        self.pfrl_head = pfrl.policies.GaussianHeadWithStateIndependentCovariance(
+            action_size=action_size,
+            var_type="diagonal",
+            var_func=lambda x: torch.exp(2 * x),  # Parameterize log std
+            var_param_init=0,  # log std = 0 => std = 1
+        )
+
+    def forward(self, x):
+        # je crois que oui peu importe que ce soit gym 1 ou gym 2
+        # si c'est gym 1, x = (img, [SNR, Resolution, Bleach, 1hot])
+        # si c'est gym 2, x = ([4 imgs], [SNR, Resolution, Bleach, 1hot])
+        if isinstance(self.obs_space, gym.spaces.Tuple):
+            x, articulation = x
+
+        # passer x dans une couche qui send de 4 imgs vers 1
+        if self.is_timed_env:
+            for layer in self.recording_queue_encoder_layers:
+                x = self.activation(layer(x))
+
+        # passer l'image dans le nn standard
+        for layer in self.image_encoder_layers:
+            x = self.activation(layer(x))
+        x = x.view(x.size(0), -1)
+
+        # passer le signal dans une couche linéaire X --> 4
+        for layer in self.signal_encoder_layers:
+            articulation = self.activation(layer(articulation))
+
+        if isinstance(self.obs_space, gym.spaces.Tuple):
+            x = torch.cat([x, articulation], dim=1)
+
+        x = self.policy_to_actions_layer(x)
+        x = self.pfrl_head(x)
+        return x
+
+class PolicyWithSideAction(nn.Module):
+    """
+    if Policy was so good, why isn't there a Policy 2?
+    """
+    def __init__(
+        self, in_channels=1, action_size=1, obs_space=None, encoded_signal_shape=4,
+        activation=nn.functional.leaky_relu
+    ):
+        self.in_channels = in_channels
+        self.action_size = action_size
+        self.obs_space = obs_space
+        self.activation = activation
+        super(Policy2, self).__init__()
+
+        self.encoded_signal_shape = encoded_signal_shape   # param d'entrée ?
+        self.img_shape = (1, 64, 64)
+
+        # mon obs_space est un tuple, maintenant il faut déterminer la shape du premier elt du tuple:
+        # c'est soit (1, 64, 64) (gym1) ou (4, 64, 64)
+        # il faut stoquer cette info qqpart pour pouvoir faire le forward comme il faut
+        if self.obs_space[0].shape[0] == 1:
+            self.is_timed_env = False
+        else:
+            self.is_timed_env = True
+
+        # RecordingQueue encoder (4 images to 1)
+        self.recording_queue_encoder_layers = nn.ModuleList([
+            nn.Conv2d(self.obs_space[0].shape[0], 1, 3, stride=1, padding=1)
+        ])
+
+        # Image encoder (1 image to a vector) (This is the LargeAtari architecture)
+        self.image_encoder_layers = nn.ModuleList([
+            nn.Conv2d(self.in_channels, 32, 8, stride=4),
+            nn.Conv2d(32, 64, 4, stride=2),
+            nn.Conv2d(64, 64, 3, stride=1),
+        ])
+
+        # Signal encoder ([SNR, Resolution, Bleach] to a vector of length 4 (?)
+        self.signal_encoder_layers = nn.ModuleList([
+            nn.Linear(self.obs_space[1].shape[0], 16),
+            nn.Linear(16, self.encoded_signal_shape)
+        ])
+
+        out_shape = calc_shape(self.img_shape, self.image_encoder_layers)
+        in_features = 64 * numpy.prod(out_shape) + self.encoded_signal_shape
+
+        # Action selection
         self.policy_to_ranking_layer = nn.Linear(in_features, 1)
         if self.is_timed_env:
             self.policy_to_actions_layer = nn.Linear(in_features, action_size)
@@ -177,6 +260,95 @@ class Policy2(nn.Module):
         return x
 
 class RecurrentPolicy(nn.Module, pfrl.nn.Recurrent):
+    """
+    Implements a `ReccurentPolicy` using the provided utilitaries in the `pfrl`
+    library
+    """
+    def __init__(
+        self, in_channels=1, action_size=1, obs_space=None, encoded_signal_shape=4,
+        activation=nn.LeakyReLU
+    ):
+        self.in_channels = in_channels
+        self.action_size = action_size
+        self.obs_space = obs_space
+        self.activation = activation
+        super(RecurrentPolicy, self).__init__()
+
+        self.encoded_signal_shape = encoded_signal_shape   # param d'entrée ?
+        self.img_shape = (1, 64, 64)
+
+        # Image encoder (1 image to a vector) (This is the LargeAtari architecture)
+        self.image_encoder_layers = pfrl.nn.RecurrentSequential(
+            nn.Conv2d(self.in_channels, 32, 8, stride=4),
+            self.activation(),
+            nn.Conv2d(32, 64, 4, stride=2),
+            self.activation(),
+            nn.Conv2d(64, 64, 3, stride=1),
+            self.activation(),
+            nn.Flatten()
+        )
+
+        # Signal encoder ([SNR, Resolution, Bleach] to a vector of length 4 (?)
+        self.signal_encoder_layers = pfrl.nn.RecurrentSequential(
+            nn.Linear(self.obs_space[1].shape[0], 16),
+            self.activation(),
+            nn.Linear(16, self.encoded_signal_shape),
+            self.activation()
+        )
+
+        out_shape = calc_shape(self.img_shape, self.image_encoder_layers)
+        in_features = 64 * numpy.prod(out_shape) + self.encoded_signal_shape
+
+        # Action selection using LSTM network
+        self.policy_to_actions_layer = pfrl.nn.RecurrentSequential(
+            nn.LSTM(
+                input_size=in_features, hidden_size=512, num_layers=1, batch_first=False
+            ),
+            nn.Linear(
+                in_features=512, out_features=self.action_size
+            )
+        )
+
+        # Policy
+        self.pfrl_head = pfrl.policies.GaussianHeadWithStateIndependentCovariance(
+            action_size=action_size,
+            var_type="diagonal",
+            var_func=lambda x: torch.exp(2 * x),  # Parameterize log std
+            var_param_init=0,  # log std = 0 => std = 1
+        )
+
+    def forward(self, x, r):
+
+        # Separates the image and the articulation
+        x, articulation = x
+
+        # Encodes the image signal
+        # There are no recurrent layer in this layer
+        # We do not modify the recurrent state
+        x, _ = self.image_encoder_layers(x, None)
+
+        # Encodes the articulation signal
+        # There are no recurrent layer in this layer
+        # We do not modify the recurrent state
+        articulation, _ = self.signal_encoder_layers(articulation, None)
+
+        # Combines the encoded image and articulation layers
+        batch_sizes, sorted_indices, unsorted_indices = x.batch_sizes, x.sorted_indices, x.unsorted_indices
+        x = torch.cat([x.data, articulation.data], dim=1)
+        x = nn.utils.rnn.PackedSequence(
+            data=x, batch_sizes=batch_sizes,
+            sorted_indices=sorted_indices, unsorted_indices=unsorted_indices
+        )
+
+        # Applies the lstm models on both inputs
+        x, r = self.policy_to_actions_layer(x, r)
+        x = pfrl.utils.recurrent.unwrap_packed_sequences_recursive(x)
+
+        # Creates the sampling distribution
+        x = self.pfrl_head(x)
+        return x, r
+
+class RecurrentPolicyWithSideAction(nn.Module, pfrl.nn.Recurrent):
     """
     Implements a `ReccurentPolicy` using the provided utilitaries in the `pfrl`
     library
