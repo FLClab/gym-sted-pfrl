@@ -172,7 +172,7 @@ class PolicyWithSideAction(nn.Module):
         self.action_size = action_size
         self.obs_space = obs_space
         self.activation = activation
-        super(Policy2, self).__init__()
+        super(PolicyWithSideAction, self).__init__()
 
         self.encoded_signal_shape = encoded_signal_shape   # param d'entrée ?
         self.img_shape = (1, 64, 64)
@@ -361,7 +361,7 @@ class RecurrentPolicyWithSideAction(nn.Module, pfrl.nn.Recurrent):
         self.action_size = action_size
         self.obs_space = obs_space
         self.activation = activation
-        super(RecurrentPolicy, self).__init__()
+        super(RecurrentPolicyWithSideAction, self).__init__()
 
         self.encoded_signal_shape = encoded_signal_shape   # param d'entrée ?
         self.img_shape = (1, 64, 64)
