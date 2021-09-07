@@ -213,6 +213,8 @@ if __name__ == "__main__":
                         help="The number of simultaneous environment to use")
     parser.add_argument("--eval-n-runs", type=int, default=1,
                         help="The number of episodes to run")
+    parser.add_argument("--env", type=str, default=None,
+                        help="If given it overwrites the env that the model was trained with")
     args = parser.parse_args()
 
     assert os.path.isdir(os.path.join(args.savedir, args.model_name)), f"This is not a valid model name : {args.model_name}"
@@ -221,7 +223,8 @@ if __name__ == "__main__":
     os.makedirs(os.path.join(args.savedir, args.model_name, "eval"), exist_ok=True)
 
     loaded_args = json.load(open(os.path.join(args.savedir, args.model_name, "args.txt"), "r"))
-    loaded_args["env"] = "gym_sted:MOSTEDRankingWithArticulation-easy-v4"
+    if args.env:
+        loaded_args["env"] = args.env
 
     process_seeds = numpy.arange(args.num_envs) + 42
     def make_env(idx, test, **kwargs):
