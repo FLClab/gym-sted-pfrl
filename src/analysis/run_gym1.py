@@ -6,7 +6,6 @@ import gym_sted
 import pfrl
 import torch
 import sys
-import pandas
 import random
 import pickle
 import logging
@@ -213,6 +212,8 @@ if __name__ == "__main__":
                         help="The number of simultaneous environment to use")
     parser.add_argument("--eval-n-runs", type=int, default=1,
                         help="The number of episodes to run")
+    parser.add_argument("--gpu", type=int, default=None,
+                        help="The id of the gpu")                        
     parser.add_argument("--env", type=str, default=None,
                         help="If given it overwrites the env that the model was trained with")
     args = parser.parse_args()
@@ -266,7 +267,7 @@ if __name__ == "__main__":
     agent = pfrl.agents.PPO(
         model,
         opt,
-        gpu=0,
+        gpu=args.gpu,
         minibatch_size=loaded_args["batchsize"],
         max_grad_norm=1.0,
         update_interval=512
