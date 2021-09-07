@@ -27,11 +27,14 @@ class WrapPyTorch(gym.ObservationWrapper):
                 )
             ))
         else:
-            width, height, features = env.observation_space.shape
-            self.observation_space = gym.spaces.Box(
-                env.observation_space.low.transpose(2, 0, 1),
-                env.observation_space.high.transpose(2, 0, 1),
-                [features, width, height], dtype=env.observation_space.dtype)
+            if len(env.observation_space.shape) == 3:
+                width, height, features = env.observation_space.shape
+                self.observation_space = gym.spaces.Box(
+                    env.observation_space.low.transpose(2, 0, 1),
+                    env.observation_space.high.transpose(2, 0, 1),
+                    [features, width, height], dtype=env.observation_space.dtype)
+            else:
+                self.observation_space = env.observation_space
 
     def observation(self, observation):
         """
@@ -49,7 +52,9 @@ class WrapPyTorch(gym.ObservationWrapper):
             observation = observation / 2**10
             return tuple((observation.transpose((2, 0, 1)).astype(self.dtype), articulation.astype(self.dtype)))
         # Case where the observation contains only the current image
-        else:
+        elif len(self.observation_space.shape) == 3:
             # We rescale the observation into a semi 0-1 range
             observation = observation / 2**10
             return observation.transpose((2, 0, 1)).astype(self.dtype)
+        else:
+            return observation.astype(self.dtype)

@@ -42,8 +42,9 @@ def main():
     )
     parser.add_argument("--batchsize", type=int, default=16)
     parser.add_argument("--steps", type=int, default=10 ** 5)
-    parser.add_argument("--eval-interval", type=int, default=1e+3)
+    parser.add_argument("--eval-interval", type=int, default=1024)
     parser.add_argument("--eval-n-runs", type=int, default=100)
+    parser.add_argument("--update-interval", type=int, default=512)
     parser.add_argument("--checkpoint-freq", type=int, default=None)
     parser.add_argument("--reward-scale-factor", type=float, default=1.)
     parser.add_argument("--render", action="store_true", default=False)
@@ -100,8 +101,8 @@ def main():
     obs_space = sample_env.observation_space
     action_space = sample_env.action_space
 
-    policy = models.RecurrentPolicy(obs_space=obs_space, action_size=action_space.shape[0])
-    vf = models.RecurrentValueFunction(obs_space=obs_space)
+    policy = models.RecurrentPolicyWithoutVision(obs_space=obs_space, action_size=action_space.shape[0])
+    vf = models.RecurrentValueFunctionWithoutVision(obs_space=obs_space)
     model = pfrl.nn.RecurrentBranched(policy, vf)
 
     opt = torch.optim.Adam(model.parameters(), lr=args.lr)
@@ -112,8 +113,8 @@ def main():
         gpu=args.gpu,
         minibatch_size=args.batchsize,
         max_grad_norm=1.0,
-        update_interval=100,
-        recurrent=True
+        update_interval=args.update_interval,
+        recurrent=True,
     )
     if args.load:
         agent.load(args.load)

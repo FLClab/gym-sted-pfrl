@@ -348,6 +348,71 @@ class RecurrentPolicy(nn.Module, pfrl.nn.Recurrent):
         x = self.pfrl_head(x)
         return x, r
 
+class RecurrentPolicyWithoutVision(nn.Module, pfrl.nn.Recurrent):
+    """
+    Implements a `ReccurentPolicy` using the provided utilitaries in the `pfrl`
+    library
+    """
+    def __init__(
+        self, in_channels=1, action_size=1, obs_space=None, encoded_signal_shape=4,
+        activation=nn.LeakyReLU
+    ):
+        self.in_channels = in_channels
+        self.action_size = action_size
+        self.obs_space = obs_space
+        self.activation = activation
+        super(RecurrentPolicyWithoutVision, self).__init__()
+
+        self.encoded_signal_shape = encoded_signal_shape   # param d'entrée ?
+        self.img_shape = (1, 64, 64)
+
+        # Signal encoder ([SNR, Resolution, Bleach] to a vector of length 4 (?)
+        self.signal_encoder_layers = pfrl.nn.RecurrentSequential(
+            nn.Linear(self.obs_space.shape[0], 16),
+            self.activation(),
+            nn.Linear(16, self.encoded_signal_shape),
+            self.activation()
+        )
+
+        # Action selection using LSTM network
+        in_features = self.encoded_signal_shape
+        self.policy_to_actions_layer = pfrl.nn.RecurrentSequential(
+            nn.LSTM(
+                input_size=in_features, hidden_size=16, num_layers=1, batch_first=False
+            ),
+            nn.Linear(
+                in_features=16, out_features=self.action_size
+            )
+        )
+
+        # Policy
+        self.pfrl_head = pfrl.policies.GaussianHeadWithStateIndependentCovariance(
+            action_size=action_size,
+            var_type="diagonal",
+            var_func=lambda x: torch.exp(2 * x),  # Parameterize log std
+            var_param_init=0,  # log std = 0 => std = 1
+        )
+
+    def forward(self, x, r):
+
+        # Encodes the articulation signal
+        # There are no recurrent layer in this layer
+        # We do not modify the recurrent state
+        # print("in x:", x)
+        # print("in r:", r)
+        x, _ = self.signal_encoder_layers(x, None)
+
+        # Applies the lstm models on both inputs
+        x, r = self.policy_to_actions_layer(x, r)
+        batch_sizes, sorted_indices = pfrl.utils.recurrent.get_packed_sequence_info(x)
+        x = pfrl.utils.recurrent.unwrap_packed_sequences_recursive(x)
+        # Creates the sampling distribution
+        x = self.pfrl_head(x)
+
+        # Wraps back the sequence
+        x = pfrl.utils.recurrent.wrap_packed_sequences_recursive(x, batch_sizes, sorted_indices)
+        return x, r
+
 class RecurrentPolicyWithSideAction(nn.Module, pfrl.nn.Recurrent):
     """
     Implements a `ReccurentPolicy` using the provided utilitaries in the `pfrl`
@@ -652,6 +717,52 @@ class RecurrentValueFunction(nn.Module, pfrl.nn.Recurrent):
             data=x, batch_sizes=batch_sizes,
             sorted_indices=sorted_indices, unsorted_indices=unsorted_indices
         )
+
+        # Applies the lstm models on both inputs
+        x, r = self.lstm(x, r)
+
+        return x, r
+
+class RecurrentValueFunctionWithoutVision(nn.Module, pfrl.nn.Recurrent):
+    """
+    Implements a `ReccurentValueFunction` using the provided utilitaries in the `pfrl`
+    library
+    """
+    def __init__(
+        self, in_channels=1, action_size=1, obs_space=None, encoded_signal_shape=4,
+        activation=nn.Tanh
+    ):
+        self.in_channels = in_channels
+        self.action_size = action_size
+        self.obs_space = obs_space
+        self.activation = activation
+        super(RecurrentValueFunctionWithoutVision, self).__init__()
+
+        self.encoded_signal_shape = encoded_signal_shape
+        # Signal encoder ([SNR, Resolution, Bleach] to a vector of length 4 (?)
+        self.signal_encoder_layers = pfrl.nn.RecurrentSequential(
+            nn.Linear(self.obs_space.shape[0], 16),
+            nn.LeakyReLU(),
+            nn.Linear(16, self.encoded_signal_shape),
+            nn.LeakyReLU()
+        )
+
+        in_features = self.encoded_signal_shape
+        # Action selection using LSTM network
+        self.lstm = pfrl.nn.RecurrentSequential(
+            nn.LSTM(
+                input_size=in_features, hidden_size=16, num_layers=1, batch_first=False
+            ),
+            nn.Linear(
+                in_features=16, out_features=self.action_size
+            ),
+            self.activation()
+        )
+
+
+    def forward(self, x, r):
+
+        x, _ = self.signal_encoder_layers(x, None)
 
         # Applies the lstm models on both inputs
         x, r = self.lstm(x, r)
