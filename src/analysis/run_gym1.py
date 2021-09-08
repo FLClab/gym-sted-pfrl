@@ -215,6 +215,8 @@ if __name__ == "__main__":
                         help="The number of episodes to run")
     parser.add_argument("--env", type=str, default=None,
                         help="If given it overwrites the env that the model was trained with")
+    parser.add_argument("--gpu", type=str, default=None,
+                        help="Wheter gpu should be used")
     args = parser.parse_args()
 
     assert os.path.isdir(os.path.join(args.savedir, args.model_name)), f"This is not a valid model name : {args.model_name}"
@@ -267,7 +269,7 @@ if __name__ == "__main__":
     agent = pfrl.agents.PPO(
         model,
         opt,
-        gpu=0,
+        gpu=args.gpu,
         minibatch_size=loaded_args["batchsize"],
         max_grad_norm=1.0,
         update_interval=512
