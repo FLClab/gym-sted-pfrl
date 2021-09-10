@@ -294,13 +294,11 @@ if __name__ == "__main__":
             agent_subdirs.append(split_subdir[-1])
 
     for saved_model_dir in agent_subdirs:
-        print(saved_model_dir)
         scores, lengths, records = batch_run_evaluation_episodes_record_actions(env, agent, n_steps=None,
                                                                                 n_episodes=args.eval_n_runs,
                                                                                 save_dir=args.savedir +
                                                                                          args.model_name +
                                                                                          saved_model_dir + "/")
-        print("done! next :")
 
     # Avoids pending with multiprocessing
     if not env.closed:
