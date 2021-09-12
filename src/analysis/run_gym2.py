@@ -6,7 +6,6 @@ import gym_sted
 import pfrl
 import torch
 import sys
-import pandas
 import random
 import pickle
 import logging
