@@ -245,6 +245,7 @@ if __name__ == "__main__":
         env = gym.make(loaded_args["env"])
         # Use different random seeds for train and test envs
         env.seed(env_seed)
+        # env.seed(None)
         # Converts the openAI Gym to PyTorch tensor shape
         env = WrapPyTorch(env)
         # Normalize the action space
@@ -292,6 +293,9 @@ if __name__ == "__main__":
         dir_name_split = split_subdir[-1].split("_")
         if dir_name_split[0] == "best" or dir_name_split[-1] == "checkpoint":
             agent_subdirs.append(split_subdir[-1])
+
+    # temp for testing
+    # agent_subdirs = ["best"]
 
     for saved_model_dir in agent_subdirs:
         scores, lengths, records = batch_run_evaluation_episodes_record_actions(env, agent, n_steps=None,
