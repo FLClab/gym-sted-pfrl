@@ -167,8 +167,36 @@ def _batch_run_episodes_record(
     lengths = [float(ln) for ln in eval_episode_lens]
     infos = [info for info in eval_episode_infos]
 
-    with open(save_dir + "episodes_dict.pkl", 'wb') as f:
-        pickle.dump(episode_infos, f, pickle.HIGHEST_PROTOCOL)
+    # trim the episode_infos dict into a lighter one with only the relevant info
+    lighter_dict = {}
+    for episode_key in episode_infos:
+        # there should be a way to stack the unbleched base dmap with unbleached flash_stack, might save space idk
+        # unbleached_stack = ??
+        episodic_info_dict = {
+            "ND_positions": episode_infos[episode_key][0]["ND_positions"],
+            "flash_curve": episode_infos[episode_key][0]["flash_curve"],
+            "unbleached_base_dmap": episode_infos[episode_key][0]["base_datamap"],
+            "unbleached_flash_tstack": episode_infos[episode_key][0]["flash_tstack"]
+        }
+        per_step_info_dict = {
+            "pdt_s": [],
+            "p_ex_s": [],
+            "p_sted_s": [],
+            "sted_image_s": [],
+            "bleached_s": []
+        }
+        for step in range(len(episode_infos[episode_key])):
+            per_step_info_dict["pdt_s"].append(episode_infos[episode_key][step]["pdt"])
+            per_step_info_dict["p_ex_s"].append(episode_infos[episode_key][step]["p_ex"])
+            per_step_info_dict["p_sted_s"].append(episode_infos[episode_key][step]["p_sted"])
+            per_step_info_dict["sted_image_s"].append(episode_infos[episode_key][step]["sted_image"])
+            per_step_info_dict["bleached_s"].append(episode_infos[episode_key][step]["bleached"])
+
+        lighter_dict[episode_key] = {"episodic": episodic_info_dict,
+                                     "per_step": per_step_info_dict}
+
+    with open(save_dir + "lighter_episodes_dict.pkl", 'wb') as f:
+        pickle.dump(lighter_dict, f, pickle.HIGHEST_PROTOCOL)
 
     return scores, lengths, infos
 
