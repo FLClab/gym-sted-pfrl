@@ -318,7 +318,7 @@ if __name__ == "__main__":
     for subdir, _, _ in os.walk(args.savedir + args.model_name):
         split_subdir = subdir.split("/")
         dir_name_split = split_subdir[-1].split("_")
-        if dir_name_split[0] == "best" or dir_name_split[-1] == "checkpoint":
+        if dir_name_split[0] == "best" or dir_name_split[-1] == "checkpoint" or dir_name_split[-1] == "finish":
             agent_subdirs.append(split_subdir[-1])
 
     # temp for testing
