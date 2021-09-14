@@ -11,6 +11,7 @@ import pickle
 import logging
 import functools
 import numpy
+import bz2   # for compression :)
 
 from tqdm.auto import trange, tqdm
 from matplotlib import pyplot
@@ -195,8 +196,8 @@ def _batch_run_episodes_record(
         lighter_dict[episode_key] = {"episodic": episodic_info_dict,
                                      "per_step": per_step_info_dict}
 
-    with open(save_dir + "lighter_episodes_dict.pkl", 'wb') as f:
-        pickle.dump(lighter_dict, f, pickle.HIGHEST_PROTOCOL)
+    with open(save_dir + "lighter_episodes_dict.pbz2", 'wb') as f:
+        pickle.dump(lighter_dict, f)   # pickle.HIGHEST_PROTOCOL ???
 
     return scores, lengths, infos
 
