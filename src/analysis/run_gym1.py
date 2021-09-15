@@ -215,7 +215,7 @@ if __name__ == "__main__":
                         help="The number of episodes to run")
     parser.add_argument("--env", type=str, default=None,
                         help="If given it overwrites the env that the model was trained with")
-    parser.add_argument("--gpu", type=str, default=None,
+    parser.add_argument("--gpu", type=int, default=None,
                         help="Wheter gpu should be used")
     args = parser.parse_args()
 
