@@ -17,6 +17,7 @@ from src import models, WrapPyTorch
 
 import itertools
 from pfrl.utils.batch_states import batch_states
+from pfrl.experiments.evaluator import save_agent
 
 TIMEFMT = "%Y%m%d-%H%M%S"
 
@@ -299,10 +300,12 @@ def main():
         lambd=agent.lambd,
         device=agent.device,
     )
+    
+    agent._update(dataset)
 
-    print(dataset)
-    print("bye là")
-    exit()
+    logger = None or logging.getLogger(__name__)
+
+    save_agent(agent, 0, "./data/pre_traj_tests", logger, suffix="_plswork")
 
 
 if __name__ == "__main__":
