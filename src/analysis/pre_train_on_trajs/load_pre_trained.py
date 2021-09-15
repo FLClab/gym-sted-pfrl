@@ -125,3 +125,26 @@ def main():
     )
     if args.load:
         agent.load(args.load)
+
+    eval_env = make_env(None, test=True)
+    obs = eval_env.reset()
+    done = False
+    episode_len = 0
+    max_episode_len = 50
+    while not done:
+        action = agent.act(obs)
+        print(f"stepping! action = {action}")
+        print(agent.model(obs))
+        obs, r, done, info = eval_env.step(action)
+
+        episode_len += 1
+        reset = episode_len == max_episode_len or info.get("needs_reset", False)
+
+        agent.observe(obs, r, done, reset)
+
+
+if __name__ == "__main__":
+
+    # Run the following line of code
+    # python main.py --env gym_sted:STED-v0 --batchsize=16 --gpu=None --reward-scale-factor=1.0 --eval-interval=100 --eval-n-runs=5
+    main()

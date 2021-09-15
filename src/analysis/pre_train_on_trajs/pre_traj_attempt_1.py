@@ -132,6 +132,7 @@ def make_agent_act(agent, action, obs):
             # genre ça va tu me calculer des trucs avec les mauvaises valeurs d'état et tout
             # vu que ça va essayer de sélectionner sa propre action ?
             action_distrib, batch_value = agent.model(b_state)
+            print(action_distrib.mean)
         # je pense que dans mon cas je fais juste faire que batch_action = action en input,
         # agent.entropy_record.extend(np.array([0]))
         # pour la value je fais quoi tho?
@@ -246,6 +247,7 @@ def main():
         model = pfrl.nn.Branched(policy, vf)
 
     opt = torch.optim.Adam(model.parameters(), lr=args.lr)
+    # opt = torch.optim.Adam(model.parameters(), lr=1.)
 
     agent = pfrl.agents.PPO(
         model,
@@ -255,7 +257,8 @@ def main():
         max_grad_norm=1.0,
         update_interval=args.update_interval,
         recurrent=args.recurrent,
-        max_recurrent_sequence_len=10
+        max_recurrent_sequence_len=10,
+        epochs=500
     )
     if args.load:
         agent.load(args.load)
@@ -300,12 +303,40 @@ def main():
         lambd=agent.lambd,
         device=agent.device,
     )
-    
-    agent._update(dataset)
+
+    n_updates = 1
+    for i in range(n_updates):
+        if i % 100 == 0:
+            print(i)
+        agent._update(dataset)
+
+    obs = sample_env.reset()
+    print("!-----------------------------------------------------------!")
+    done = False
+    episode_len = 0
+    max_episode_len = 50
+    while not done:
+        print("stepping!")
+        # make this into a function or something
+        # jpense qu'il faut que j'émulate ce qui se passe dans PPO._batch_act_train() ?
+        action = numpy.array([10., 10., 10.])
+        # the make_agent_act function makes it so everything has the right format as if the agent had
+        # selected the action itself or something like that
+        action = make_agent_act(agent, action, [obs])
+        obs, r, done, info = sample_env.step(action[0])
+
+        episode_len += 1
+        reset = episode_len == max_episode_len or info.get("needs_reset", False)
+
+        # agent.batch_last_action = list(action)
+        # agent.batch_last_state = list(obs)
+
+        agent.observe(obs, r, done, reset)
+    print("done stepping")
 
     logger = None or logging.getLogger(__name__)
 
-    save_agent(agent, 0, "./data/pre_traj_tests", logger, suffix="_plswork")
+    save_agent(agent, n_updates, "./data/pre_traj_tests", logger, suffix="_plswork")
 
 
 if __name__ == "__main__":
