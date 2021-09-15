@@ -16,6 +16,7 @@ from pfrl.policies import GaussianHeadWithFixedCovariance, SoftmaxCategoricalHea
 from src import models, WrapPyTorch
 
 import itertools
+from pfrl.utils.batch_states import batch_states
 
 TIMEFMT = "%Y%m%d-%H%M%S"
 
@@ -34,10 +35,6 @@ def _add_log_prob_and_value_to_episodes(
     # Compute v_pred and next_v_pred
     states = batch_states([b["state"] for b in dataset], device, phi)
     next_states = batch_states([b["next_state"] for b in dataset], device, phi)
-
-    print(states)
-    print(states.shape)
-    exit()
 
     if obs_normalizer:
         states = obs_normalizer(states, update=False)
@@ -97,6 +94,60 @@ def _make_dataset(
     _add_advantage_and_value_target_to_episodes(episodes, gamma=gamma, lambd=lambd)
 
     return list(itertools.chain.from_iterable(episodes))
+
+
+def make_agent_act(agent, action, obs):
+    """
+    ??????????????
+    Not sure how to do this ok :)
+    ??????????????
+    """
+    assert agent.training
+    b_state = agent.batch_states(obs, agent.device, agent.phi)
+
+    if agent.obs_normalizer:
+        b_state = agent.obs_normalizer(b_state, update=False)
+
+    num_envs = len(obs)
+    if agent.batch_last_episode is None:
+        agent._initialize_batch_variables(num_envs)
+    assert len(agent.batch_last_episode) == num_envs
+    assert len(agent.batch_last_state) == num_envs
+    assert len(agent.batch_last_action) == num_envs
+
+    # action_distrib will be recomputed when computing gradients
+    with torch.no_grad(), pfrl.utils.evaluating(agent.model):
+        if agent.recurrent:
+            assert agent.train_prev_recurrent_states is None
+            agent.train_prev_recurrent_states = agent.train_recurrent_states
+            (
+                (action_distrib, batch_value),
+                agent.train_recurrent_states,
+            ) = one_step_forward(
+                agent.model, b_state, agent.train_prev_recurrent_states
+            )
+        else:
+            # là jpense que j'overwrite mon action, comment je fais pour pas faire ça? :)
+            # genre ça va tu me calculer des trucs avec les mauvaises valeurs d'état et tout
+            # vu que ça va essayer de sélectionner sa propre action ?
+            action_distrib, batch_value = agent.model(b_state)
+        # je pense que dans mon cas je fais juste faire que batch_action = action en input,
+        # agent.entropy_record.extend(np.array([0]))
+        # pour la value je fais quoi tho?
+        # I guess jpeux add la valeur pareil direct vu que ça dépend pas de l'action jouée,
+        # ça prend juste l'état en entrée sooo I should be good ?
+
+        # batch_action = action_distrib.sample().cpu().numpy()
+        # agent.entropy_record.extend(action_distrib.entropy().cpu().numpy())
+
+        batch_action = numpy.array([action])
+        agent.entropy_record.extend(numpy.array([0]))
+        agent.value_record.extend(batch_value.cpu().numpy())
+
+    agent.batch_last_state = list(obs)
+    agent.batch_last_action = list(batch_action)
+
+    return batch_action
 
 
 def main():
@@ -184,8 +235,6 @@ def main():
     obs_space = sample_env.observation_space
     action_space = sample_env.action_space
 
-    sample_env.reset()
-
     if args.recurrent:
         policy = models.RecurrentPolicy(obs_space=obs_space, action_size=action_space.shape[0])
         vf = models.RecurrentValueFunction(obs_space=obs_space)
@@ -210,9 +259,12 @@ def main():
     if args.load:
         agent.load(args.load)
 
+    # PPO.initialize_batch_variables(num_envs)
     agent.batch_last_episode = [[] for _ in range(args.num_envs)]
     agent.batch_last_state = [None] * args.num_envs
     agent.batch_last_action = [None] * args.num_envs
+
+    obs = sample_env.reset()
 
     done = False
     episode_len = 0
@@ -220,14 +272,18 @@ def main():
     while not done:
         print("stepping!")
         # make this into a function or something
+        # jpense qu'il faut que j'émulate ce qui se passe dans PPO._batch_act_train() ?
         action = numpy.array([10., 10., 10.])
-        obs, r, done, info = sample_env.step(action)
+        # the make_agent_act function makes it so everything has the right format as if the agent had
+        # selected the action itself or something like that
+        action = make_agent_act(agent, action, [obs])
+        obs, r, done, info = sample_env.step(action[0])
 
         episode_len += 1
         reset = episode_len == max_episode_len or info.get("needs_reset", False)
 
-        agent.batch_last_action = list(action)
-        agent.batch_last_state = list(obs)
+        # agent.batch_last_action = list(action)
+        # agent.batch_last_state = list(obs)
 
         agent.observe(obs, r, done, reset)
     print("done stepping")
