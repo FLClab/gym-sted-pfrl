@@ -290,4 +290,4 @@ if __name__ == "__main__":
             env.close()
 
     # Saves all runs
-    # pickle.dump(all_records, open(os.path.join(args.savedir, args.model_name, "eval", "stats.pkl"), "wb"))
+    pickle.dump(all_records, open(os.path.join(args.savedir, args.model_name, "eval", "stats.pkl"), "wb"))
