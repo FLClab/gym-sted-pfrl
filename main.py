@@ -120,8 +120,7 @@ def main():
         minibatch_size=args.batchsize,
         max_grad_norm=1.0,
         update_interval=args.update_interval,
-        recurrent=args.recurrent,
-        max_recurrent_sequence_len=10
+        recurrent=args.recurrent
     )
     if args.load:
         agent.load(args.load)
