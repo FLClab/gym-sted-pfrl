@@ -55,6 +55,7 @@ def main():
     parser.add_argument("--monitor", action="store_true")
     parser.add_argument("--bleach-sampling", type=str, default="constant")
     parser.add_argument("--recurrent", action="store_true", default=False)
+    parser.add_argument("--gamma", type=float, default=0.99)
     args = parser.parse_args()
 
     logging.basicConfig(level=args.log_level)
@@ -120,7 +121,8 @@ def main():
         minibatch_size=args.batchsize,
         max_grad_norm=1.0,
         update_interval=args.update_interval,
-        recurrent=args.recurrent
+        recurrent=args.recurrent,
+        gamma=args.gamma
     )
     if args.load:
         agent.load(args.load)
