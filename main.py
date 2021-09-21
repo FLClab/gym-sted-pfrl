@@ -56,6 +56,7 @@ def main():
     parser.add_argument("--bleach-sampling", type=str, default="constant")
     parser.add_argument("--recurrent", action="store_true", default=False)
     parser.add_argument("--gamma", type=float, default=0.99)
+    parser.add_argument("--delayed-reward", action="store_true", default=False)
     args = parser.parse_args()
 
     logging.basicConfig(level=args.log_level)
@@ -154,7 +155,8 @@ def main():
                 eval_n_steps=None,
                 eval_n_episodes=args.eval_n_runs,
                 eval_interval=args.eval_interval,
-                checkpoint_freq=args.checkpoint_freq
+                checkpoint_freq=args.checkpoint_freq,
+                with_delayed_reward=args.delayed_reward
             )
         else:
             experiments.train_agent_with_evaluation(
@@ -166,7 +168,8 @@ def main():
                 eval_n_steps=None,
                 eval_n_episodes=args.eval_n_runs,
                 eval_interval=args.eval_interval,
-                checkpoint_freq=args.checkpoint_freq
+                checkpoint_freq=args.checkpoint_freq,
+                with_delayed_reward=args.delayed_reward
             )
 
 
