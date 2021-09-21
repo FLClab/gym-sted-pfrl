@@ -3,6 +3,7 @@ import numpy
 import datetime
 import functools
 import uuid
+import os
 
 import gym
 import gym.spaces
@@ -51,6 +52,7 @@ def main():
     parser.add_argument("--lr", type=float, default=1e-4)
     parser.add_argument("--demo", action="store_true", default=False)
     parser.add_argument("--load", type=str, default="")
+    parser.add_argument("--load-ckpt", type=int, default=0)
     parser.add_argument("--log-level", type=int, default=logging.INFO)
     parser.add_argument("--monitor", action="store_true")
     parser.add_argument("--bleach-sampling", type=str, default="constant")
@@ -66,7 +68,10 @@ def main():
     process_seeds = numpy.arange(args.num_envs) + args.seed * args.num_envs
     assert process_seeds.max() < 2 ** 32
 
-    args.outdir = experiments.prepare_output_dir(args, args.outdir, exp_id="{}_{}".format(args.exp_id, str(uuid.uuid4())[:8]))
+    if args.load:
+        args.outdir = experiments.prepare_output_dir(args, args.outdir, exp_id=args.load)
+    else:
+        args.outdir = experiments.prepare_output_dir(args, args.outdir, exp_id="{}_{}".format(args.exp_id, str(uuid.uuid4())[:8]))
 
     def make_env(idx, test):
         # Use different random seeds for train and test envs
@@ -126,7 +131,8 @@ def main():
         gamma=args.gamma
     )
     if args.load:
-        agent.load(args.load)
+        model_path = os.path.join(args.outdir, f"{args.load_ckpt}_checkpoint")
+        agent.load(model_path)
 
     if args.demo:
         eval_stats = experiments.eval_performance(
@@ -152,6 +158,7 @@ def main():
                 eval_env=make_batch_env(test=True),
                 outdir=args.outdir,
                 steps=args.steps,
+                step_offset=args.load_ckpt,
                 eval_n_steps=None,
                 eval_n_episodes=args.eval_n_runs,
                 eval_interval=args.eval_interval,
@@ -165,6 +172,7 @@ def main():
                 eval_env=make_env(0, test=True),
                 outdir=args.outdir,
                 steps=args.steps,
+                step_offset=args.load_ckpt,
                 eval_n_steps=None,
                 eval_n_episodes=args.eval_n_runs,
                 eval_interval=args.eval_interval,
