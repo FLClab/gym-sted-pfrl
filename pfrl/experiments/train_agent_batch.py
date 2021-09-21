@@ -86,10 +86,10 @@ def train_agent_batch_with_delayed_reward(
             # Make mask. 0 if done/reset, 1 if pass
             end = np.logical_or(resets, dones)
             not_end = np.logical_not(end)
-
             for idx in np.argwhere(end).ravel():
                 # Redistribute reward
                 rewards = episode_memory[idx][-1]["r"].copy()
+                episode_r[idx] = np.sum(rewards)
                 for j in range(1, len(episode_memory[idx])):
                     episode_memory[idx][j]["r"] = rewards[j - 1]
 
