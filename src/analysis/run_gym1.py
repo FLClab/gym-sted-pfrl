@@ -11,6 +11,7 @@ import pickle
 import logging
 import functools
 import numpy
+import bz2
 
 from tqdm.auto import trange, tqdm
 from matplotlib import pyplot
@@ -22,7 +23,8 @@ while "../.." in sys.path:
 sys.path.insert(0, "../..")
 from src import models, WrapPyTorch
 
-from gym_sted.envs.sted_env import action_spaces, scales_dict, bounds_dict
+from gym_sted.defaults import action_spaces
+from gym_sted.envs.sted_env import scales_dict, bounds_dict
 from gym_sted.utils import BleachSampler
 
 # Defines constants
@@ -289,4 +291,5 @@ if __name__ == "__main__":
             env.close()
 
     # Saves all runs
-    # pickle.dump(all_records, open(os.path.join(args.savedir, args.model_name, "eval", "stats.pkl"), "wb"))
+    with bz2.open(os.path.join(args.savedir, args.model_name, "eval", "stats.pbz2"), "wb") as file:
+        pickle.dump(all_records, file)
