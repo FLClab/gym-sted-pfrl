@@ -11,6 +11,7 @@ import pickle
 import logging
 import functools
 import numpy
+import bz2
 
 from tqdm.auto import trange, tqdm
 from matplotlib import pyplot
@@ -290,4 +291,5 @@ if __name__ == "__main__":
             env.close()
 
     # Saves all runs
-    pickle.dump(all_records, open(os.path.join(args.savedir, args.model_name, "eval", "stats.pkl"), "wb"))
+    with bz2.open(os.path.join(args.savedir, args.model_name, "eval", "stats.pbz2"), "wb") as file:
+        pickle.dump(all_records, file)
