@@ -23,7 +23,8 @@ while "../.." in sys.path:
 sys.path.insert(0, "../..")
 from src import models, WrapPyTorch
 
-from gym_sted.envs.sted_env import action_spaces, scales_dict, bounds_dict
+from gym_sted.envs.sted_env import scales_dict, bounds_dict
+from gym_sted.defaults import action_spaces
 from gym_sted.utils import BleachSampler
 
 from gym_sted.envs.timed_sted_env import timedExpSTEDEnv
