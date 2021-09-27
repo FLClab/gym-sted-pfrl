@@ -23,7 +23,8 @@ while "../.." in sys.path:
 sys.path.insert(0, "../..")
 from src import models, WrapPyTorch
 
-from gym_sted.envs.sted_env import action_spaces, scales_dict, bounds_dict
+from gym_sted.envs.sted_env import scales_dict, bounds_dict
+from gym_sted.defaults import action_spaces
 from gym_sted.utils import BleachSampler
 
 from gym_sted.envs.timed_sted_env import timedExpSTEDEnv
@@ -196,7 +197,7 @@ def _batch_run_episodes_record(
         lighter_dict[episode_key] = {"episodic": episodic_info_dict,
                                      "per_step": per_step_info_dict}
 
-    with open(save_dir + "lighter_episodes_dict.pbz2", 'wb') as f:
+    with bz2.BZ2File(save_dir + "lighter_episodes_dict.pbz2", 'wb') as f:
         pickle.dump(lighter_dict, f)   # pickle.HIGHEST_PROTOCOL ???
 
     return scores, lengths, infos
