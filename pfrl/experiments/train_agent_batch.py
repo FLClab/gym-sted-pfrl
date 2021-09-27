@@ -57,7 +57,7 @@ def train_agent_batch_with_delayed_reward(
     # o_0, r_0
     obss = env.reset()
     for i in range(num_envs):
-        episode_memory[i].append({"obs" : obss[i], "r" : 0, "done" : False, "info" : None, "action" : None})
+        episode_memory[i].append({"obs" : obss[i], "r" : 0, "done" : False, "action" : None})
 
     t = step_offset
     if hasattr(agent, "t"):
@@ -71,7 +71,7 @@ def train_agent_batch_with_delayed_reward(
             # o_{t+1}, r_{t+1}
             obss, rs, dones, infos = env.step(actions)
             for i in range(num_envs):
-                episode_memory[i].append({"obs" : obss[i], "r" : rs[i], "done" : dones[i], "info" : infos[i], "action" : actions[i]})
+                episode_memory[i].append({"obs" : obss[i], "r" : rs[i], "done" : dones[i], "action" : actions[i]})
             episode_len += 1
 
             # Compute mask for done and reset
@@ -160,7 +160,7 @@ def train_agent_batch_with_delayed_reward(
             obss = env.reset(not_end)
             # Clear memory buffer
             for idx in np.argwhere(end).ravel():
-                episode_memory[idx] = [{"obs" : obss[idx], "r" : 0, "done" : False, "info" : None, "action" : None}]
+                episode_memory[idx] = [{"obs" : obss[idx], "r" : 0, "done" : False, "action" : None}]
 
     except (Exception, KeyboardInterrupt):
         # Save the current model before being killed

@@ -380,7 +380,7 @@ def _batch_run_episodes_with_delayed_reward(
 
     obss = env.reset()
     for i in range(num_envs):
-        episode_memory[i].append({"obs" : obss[i], "r" : 0, "done" : False, "info" : None, "action" : None})
+        episode_memory[i].append({"obs" : obss[i], "r" : 0, "done" : False, "action" : None})
     rs = np.zeros(num_envs, dtype="f")
 
     termination_conditions = False
@@ -392,7 +392,7 @@ def _batch_run_episodes_with_delayed_reward(
         # o_{t+1}, r_{t+1}
         obss, rs, dones, infos = env.step(actions)
         for i in range(num_envs):
-            episode_memory[i].append({"obs" : obss[i], "r" : rs[i], "done" : dones[i], "info" : infos[i], "action" : actions[i]})
+            episode_memory[i].append({"obs" : obss[i], "r" : rs[i], "done" : dones[i], "action" : actions[i]})
         episode_len += 1
         # Compute mask for done and reset
         if max_episode_len is None:
@@ -484,7 +484,7 @@ def _batch_run_episodes_with_delayed_reward(
             obss = env.reset(not_end)
             # Clear memory buffer
             for idx in np.argwhere(end).ravel():
-                episode_memory[idx] = [{"obs" : obss[idx], "r" : 0, "done" : False, "info" : None, "action" : None}]
+                episode_memory[idx] = [{"obs" : obss[idx], "r" : 0, "done" : False, "action" : None}]
 
     for i, (epi_len, epi_ret) in enumerate(
         zip(eval_episode_lens, eval_episode_returns)
