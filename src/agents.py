@@ -48,9 +48,12 @@ class HumanAgent(agent.BatchAgent):
                 r[5]
             ))
 
-        # fig, ax = pyplot.subplots()
-        # ax.imshow(image[0], vmin=0, cmap="hot")
-        # pyplot.show(block=True)
+        fig, axes = pyplot.subplots(1, 2)
+        axes[0].imshow(image[0], vmin=0, cmap="hot")
+        axes[0].set_title("STED")
+        axes[1].imshow(image[1], vmin=0, cmap="hot")
+        axes[1].set_title("Confocal")
+        pyplot.show(block=True)
 
         p_sted = float(input("p_sted [%] : ")) / 100
         p_ex = float(input("p_ex [%] : ")) / 100
@@ -80,6 +83,13 @@ class HumanAgent(agent.BatchAgent):
         Returns:
             None
         """
+        # image, context = batch_obs[0]
+        # fig, axes = pyplot.subplots(1, 2)
+        # axes[0].imshow(image[0], vmin=0, cmap="hot")
+        # axes[0].set_title("STED")
+        # axes[1].imshow(image[1], vmin=0, cmap="hot")
+        # axes[1].set_title("Confocal")
+        # pyplot.show(block=True)
         pass
 
     def load(self):
