@@ -167,6 +167,149 @@ def _batch_run_episodes_record(
     infos = [info for info in eval_episode_infos]
     return scores, lengths, infos
 
+def _batch_run_episodes_recurrent_record(
+    env,
+    agent,
+    n_steps,
+    n_episodes,
+    max_episode_len=None,
+    logger=None,
+):
+    """Run multiple episodes and return returns in a batch manner."""
+    assert (n_steps is None) != (n_episodes is None)
+
+    logger = logger or logging.getLogger(__name__)
+    num_envs = env.num_envs
+    episode_returns = dict()
+    episode_lengths = dict()
+    episode_infos = dict()
+    episode_indices = numpy.zeros(num_envs, dtype="i")
+    episode_idx = 0
+    for i in range(num_envs):
+        episode_indices[i] = episode_idx
+        episode_idx += 1
+    episode_r = numpy.zeros(num_envs, dtype=numpy.float64)
+    episode_len = numpy.zeros(num_envs, dtype="i")
+    episode_info = [[] for _ in range(num_envs)]
+
+    obss = env.reset()
+    rs = numpy.zeros(num_envs, dtype="f")
+
+    termination_conditions = False
+    timestep = 0
+    while True:
+
+        # a_t
+        actions = agent.batch_act(obss)
+        timestep += 1
+        # o_{t+1}, r_{t+1}
+        obss, rs, dones, infos = env.step(actions)
+        episode_r += rs
+        episode_len += 1
+        for i, info in enumerate(infos):
+
+            # Extract recurrent states from agent
+            for key, recurrent_states in zip(["policy_recurrent_states", "value_recurrent_states"], agent.test_recurrent_states):
+                states = []
+                for recurrent_state in recurrent_states:
+                    # for each recurrent layer in recurrent_states
+                    # h_n : final hidden state
+                    # c_n : final cell state
+                    h_n, c_n = recurrent_state
+                    states.append([h_n[:, i, :].cpu().data.numpy(), c_n[:, i, :].cpu().data.numpy()])
+                info[key] = states
+
+            episode_info[i].append(info)
+
+        # Compute mask for done and reset
+        if max_episode_len is None:
+            resets = numpy.zeros(num_envs, dtype=bool)
+        else:
+            resets = episode_len == max_episode_len
+        resets = numpy.logical_or(
+            resets, [info.get("needs_reset", False) for info in infos]
+        )
+
+        # Make mask. 0 if done/reset, 1 if pass
+        end = numpy.logical_or(resets, dones)
+        not_end = numpy.logical_not(end)
+
+        for index in range(len(end)):
+            if end[index]:
+                episode_returns[episode_indices[index]] = episode_r[index]
+                episode_lengths[episode_indices[index]] = episode_len[index]
+                episode_infos[episode_indices[index]] = episode_info[index]
+                # Give the new episode an a new episode index
+                episode_indices[index] = episode_idx
+                episode_idx += 1
+
+        # Resets done episode
+        episode_r[end] = 0
+        episode_len[end] = 0
+        for index in range(len(end)):
+            if end[index]:
+                episode_info[index] = []
+
+        # find first unfinished episode
+        first_unfinished_episode = 0
+        while first_unfinished_episode in episode_returns:
+            first_unfinished_episode += 1
+
+        # Check for termination conditions
+        eval_episode_returns = []
+        eval_episode_lens = []
+        eval_episode_infos = []
+        if n_steps is not None:
+            total_time = 0
+            for index in range(first_unfinished_episode):
+                total_time += episode_lengths[index]
+                # If you will run over allocated steps, quit
+                if total_time > n_steps:
+                    break
+                else:
+                    eval_episode_returns.append(episode_returns[index])
+                    eval_episode_lens.append(episode_lengths[index])
+                    eval_episode_infos.append(episode_infos[index])
+            termination_conditions = total_time >= n_steps
+            if not termination_conditions:
+                unfinished_index = numpy.where(
+                    episode_indices == first_unfinished_episode
+                )[0]
+                if total_time + episode_len[unfinished_index] >= n_steps:
+                    termination_conditions = True
+                    if first_unfinished_episode == 0:
+                        eval_episode_returns.append(episode_r[unfinished_index])
+                        eval_episode_lens.append(episode_len[unfinished_index])
+                        eval_episode_infos.append(episode_infos[index])
+        else:
+            termination_conditions = first_unfinished_episode >= n_episodes
+            if termination_conditions:
+                # Get the first n completed episodes
+                for index in range(n_episodes):
+                    eval_episode_returns.append(episode_returns[index])
+                    eval_episode_lens.append(episode_lengths[index])
+                    eval_episode_infos.append(episode_infos[index])
+
+        if termination_conditions:
+            # If this is the last step, make sure the agent observes reset=True
+            resets.fill(True)
+
+        # Agent observes the consequences.
+        agent.batch_observe(obss, rs, dones, resets)
+
+        if termination_conditions:
+            break
+        else:
+            obss = env.reset(not_end)
+
+    for i, (epi_len, epi_ret) in enumerate(
+        zip(eval_episode_lens, eval_episode_returns)
+    ):
+        logger.info("evaluation episode %s length: %s R: %s", i, epi_len, epi_ret)
+    scores = [float(r) for r in eval_episode_returns]
+    lengths = [float(ln) for ln in eval_episode_lens]
+    infos = [info for info in eval_episode_infos]
+    return scores, lengths, infos
 
 def batch_run_evaluation_episodes_record_actions(
     env,
@@ -175,6 +318,7 @@ def batch_run_evaluation_episodes_record_actions(
     n_episodes,
     max_episode_len=None,
     logger=None,
+    recurrent=False
 ):
     """Run multiple evaluation episodes and return returns in a batch manner.
 
@@ -194,14 +338,24 @@ def batch_run_evaluation_episodes_record_actions(
         List of returns of evaluation runs.
     """
     with agent.eval_mode():
-        return _batch_run_episodes_record(
-            env=env,
-            agent=agent,
-            n_steps=n_steps,
-            n_episodes=n_episodes,
-            max_episode_len=max_episode_len,
-            logger=logger,
-        )
+        if recurrent:
+            return _batch_run_episodes_recurrent_record(
+                env=env,
+                agent=agent,
+                n_steps=n_steps,
+                n_episodes=n_episodes,
+                max_episode_len=max_episode_len,
+                logger=logger,
+            )
+        else:
+            return _batch_run_episodes_record(
+                env=env,
+                agent=agent,
+                n_steps=n_steps,
+                n_episodes=n_episodes,
+                max_episode_len=max_episode_len,
+                logger=logger,
+            )
 
 if __name__ == "__main__":
 
@@ -255,7 +409,6 @@ if __name__ == "__main__":
                 for idx, env in enumerate(range(args.num_envs))
             ]
         )
-        # vec_env = pfrl.wrappers.VectorFrameStack(vec_env, 4)
         return vec_env
 
     env = make_env(0, True)
@@ -264,9 +417,14 @@ if __name__ == "__main__":
     action_space = env.action_space
 
     # Creates the agent
-    policy = models.Policy2(action_size=action_space.shape[0], obs_space=obs_space)
-    vf = models.ValueFunction2(obs_space=obs_space)
-    model = pfrl.nn.Branched(policy, vf)
+    if loaded_args["recurrent"]:
+        policy = models.RecurrentPolicy(obs_space=obs_space, action_size=action_space.shape[0])
+        vf = models.RecurrentValueFunction(obs_space=obs_space)
+        model = pfrl.nn.RecurrentBranched(policy, vf)
+    else:
+        policy = models.Policy2(action_size=action_space.shape[0], obs_space=obs_space)
+        vf = models.ValueFunction2(obs_space=obs_space)
+        model = pfrl.nn.Branched(policy, vf)
     opt = torch.optim.Adam(model.parameters(), lr=loaded_args["lr"])
     agent = pfrl.agents.PPO(
         model,
@@ -274,7 +432,8 @@ if __name__ == "__main__":
         gpu=args.gpu,
         minibatch_size=loaded_args["batchsize"],
         max_grad_norm=1.0,
-        update_interval=512
+        update_interval=512,
+        recurrent=loaded_args["recurrent"]
     )
     agent.load(os.path.join(args.savedir, args.model_name, "best"))
 
@@ -283,7 +442,7 @@ if __name__ == "__main__":
     for key, phy_react in tqdm(PHY_REACTS.items()):
         # Creates the batch envs
         env = make_batch_env(test=True, phy_react=phy_react)
-        scores, lengths, records = batch_run_evaluation_episodes_record_actions(env, agent, n_steps=None, n_episodes=args.eval_n_runs)
+        scores, lengths, records = batch_run_evaluation_episodes_record_actions(env, agent, n_steps=None, n_episodes=args.eval_n_runs, recurrent=loaded_args["recurrent"])
         all_records[key] = records
 
         # Avoids pending with multiprocessing
