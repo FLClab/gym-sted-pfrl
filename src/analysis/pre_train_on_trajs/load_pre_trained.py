@@ -21,7 +21,7 @@ def main():
     import logging
 
     parser = argparse.ArgumentParser()
-    parser.add_argument("--env", type=str, default="gym_sted:STEDsum-v0")
+    parser.add_argument("--env", type=str, default="gym_sted:STEDtimed-exp-easy-v5")
     parser.add_argument("--num-envs", type=int, default=1)
     parser.add_argument("--seed", type=int, default=0, help="Random seed [0, 2 ** 32)")
     parser.add_argument("--gpu", type=int, default=None)
@@ -134,7 +134,6 @@ def main():
     while not done:
         action = agent.act(obs)
         print(f"stepping! action = {action}")
-        print(agent.model(obs))
         obs, r, done, info = eval_env.step(action)
 
         episode_len += 1
