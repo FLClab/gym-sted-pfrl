@@ -154,10 +154,12 @@ def make_agent_act(agent, action, obs):
 
 def main():
     import logging
+    from matplotlib import pyplot as plt
 
     parser = argparse.ArgumentParser()
     parser.add_argument("--env", type=str, default="gym_sted:STEDtimed-exp-easy-v5")
-    parser.add_argument("--num-envs", type=int, default=1)
+    parser.add_argument("--num-envs",
+                        type=int, default=1)
     parser.add_argument("--seed", type=int, default=0, help="Random seed [0, 2 ** 32)")
     parser.add_argument("--gpu", type=int, default=None)
     parser.add_argument(
@@ -237,6 +239,19 @@ def main():
     obs_space = sample_env.observation_space
     action_space = sample_env.action_space
 
+    # verify if the env is always the same on the first reset of script call
+    sample_env.reset(seed=42, flash_delay=2, rotate=False)
+    # sample_env.reset()
+    for t in range(sample_env.temporal_datamap.flash_tstack.shape[0]):
+        fig, axes = plt.subplots(1, 2)
+        axes[0].imshow(sample_env.temporal_datamap.whole_datamap[sample_env.temporal_datamap.roi])
+        axes[1].imshow(sample_env.temporal_datamap.flash_tstack[t][sample_env.temporal_datamap.roi],
+                       vmin=0, vmax=numpy.max(sample_env.temporal_datamap.flash_tstack))
+        fig.suptitle(f"t = {t}")
+        plt.show()
+        plt.close(fig)
+    exit()
+
     if args.recurrent:
         policy = models.RecurrentPolicy(obs_space=obs_space, action_size=action_space.shape[0])
         vf = models.RecurrentValueFunction(obs_space=obs_space)
@@ -313,27 +328,6 @@ def main():
 
     print("!-----------------------------------------------------------!")
     obs = sample_env.reset()
-    # done = False
-    # episode_len = 0
-    # max_episode_len = 50
-    # while not done:
-    #     print("stepping!")
-    #     # make this into a function or something
-    #     # jpense qu'il faut que j'émulate ce qui se passe dans PPO._batch_act_train() ?
-    #     action = numpy.array([10., 10., 10.])
-    #     # the make_agent_act function makes it so everything has the right format as if the agent had
-    #     # selected the action itself or something like that
-    #     action = make_agent_act(agent, action, [obs])
-    #     obs, r, done, info = sample_env.step(action[0])
-    #
-    #     episode_len += 1
-    #     reset = episode_len == max_episode_len or info.get("needs_reset", False)
-    #
-    #     # agent.batch_last_action = list(action)
-    #     # agent.batch_last_state = list(obs)
-    #
-    #     agent.observe(obs, r, done, reset)
-    # print("done stepping")
 
     logger = None or logging.getLogger(__name__)
 
