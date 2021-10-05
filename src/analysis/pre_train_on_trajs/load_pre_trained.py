@@ -14,8 +14,48 @@ from pfrl import experiments, utils
 from pfrl.policies import GaussianHeadWithFixedCovariance, SoftmaxCategoricalHead
 
 from src import models, WrapPyTorch
+from gym_sted import defaults
 
 TIMEFMT = "%Y%m%d-%H%M%S"
+
+def action_rescaler(action_val, action_type, action_spaces=defaults.action_spaces, way="range_to_space"):
+    """
+    rescales the action from range [-1, 1] to the action space space of the corresponding action
+    Args:
+        action_val: the input value (float)
+        action_type: pdt, p_ex or p_sted (str)
+
+    Returns:
+
+    """
+    way_vals = ["range_to_space", "space_to_range"]
+    if way not in way_vals:
+        raise ValueError(f"invalid way, valid values are {way_vals}")
+
+    if way == "range_to_space":
+        if action_val <= -1. :
+            action_val = -1.
+        elif action_val >= 1. :
+            action_val = 1.
+
+        action_range_min = action_spaces[action_type]['low']
+        action_range_max = action_spaces[action_type]['high']
+        input_range_min, input_range_max = -1., 1.
+
+        m = (action_val - input_range_min) / (input_range_max - input_range_min) * (action_range_max - action_range_min) + action_range_min
+    elif way == "space_to_range":
+        if action_val <= action_spaces[action_type]['low']:
+            action_val = action_spaces[action_type]['low']
+        elif action_val >= action_spaces[action_type]['high']:
+            action_val = action_spaces[action_type]['high']
+
+        action_range_min = action_spaces[action_type]['low']
+        action_range_max = action_spaces[action_type]['high']
+        input_range_min, input_range_max = -1., 1.
+
+        m = (action_val - action_range_min) / (action_range_max - action_range_min) * (input_range_max - input_range_min) + input_range_min
+
+    return m
 
 def main():
     import logging
@@ -133,7 +173,10 @@ def main():
     max_episode_len = 50
     while not done:
         action = agent.act(obs)
-        print(f"stepping! action = {action}")
+        pdt_val = action_rescaler(action[0], 'pdt')
+        p_ex_val = action_rescaler(action[1], 'p_ex')
+        p_sted_val = action_rescaler(action[2], 'p_sted')
+        print(f"stepping! pdt = {pdt_val}, p_ex = {p_ex_val}, p_sted = {p_sted_val}")
         obs, r, done, info = eval_env.step(action)
 
         episode_len += 1

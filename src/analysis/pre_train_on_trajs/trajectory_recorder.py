@@ -1,3 +1,8 @@
+"""
+In this script I will attempt to record trajectories, as the title of the file suggests :)
+"""
+
+import os
 import argparse
 import numpy
 import datetime
@@ -154,10 +159,14 @@ def make_agent_act(agent, action, obs):
 
 def main():
     import logging
+    from matplotlib import pyplot as plt
+    from gym_sted import defaults
+
 
     parser = argparse.ArgumentParser()
     parser.add_argument("--env", type=str, default="gym_sted:STEDtimed-exp-easy-v5")
-    parser.add_argument("--num-envs", type=int, default=1)
+    parser.add_argument("--num-envs",
+                        type=int, default=1)
     parser.add_argument("--seed", type=int, default=0, help="Random seed [0, 2 ** 32)")
     parser.add_argument("--gpu", type=int, default=None)
     parser.add_argument(
@@ -190,6 +199,9 @@ def main():
     parser.add_argument("--monitor", action="store_true")
     parser.add_argument("--bleach-sampling", type=str, default="constant")
     parser.add_argument("--recurrent", action="store_true", default=False)
+    parser.add_argument("--flash-delay", type=int, default=2)
+    parser.add_argument("--rotate", type=int, default=0)
+
     args = parser.parse_args()
 
     logging.basicConfig(level=args.log_level)
@@ -237,6 +249,18 @@ def main():
     obs_space = sample_env.observation_space
     action_space = sample_env.action_space
 
+    # verify if the env is always the same on the first reset of script call
+    sample_env.reset(seed=args.seed, flash_delay=args.flash_delay, rotate=args.rotate)
+    # for t in range(sample_env.temporal_datamap.flash_tstack.shape[0]):
+    #     fig, axes = plt.subplots(1, 2)
+    #     axes[0].imshow(sample_env.temporal_datamap.whole_datamap[sample_env.temporal_datamap.roi])
+    #     axes[1].imshow(sample_env.temporal_datamap.flash_tstack[t][sample_env.temporal_datamap.roi],
+    #                    vmin=0, vmax=numpy.max(sample_env.temporal_datamap.flash_tstack))
+    #     fig.suptitle(f"t = {t}")
+    #     plt.show()
+    #     plt.close(fig)
+    # exit()
+
     if args.recurrent:
         policy = models.RecurrentPolicy(obs_space=obs_space, action_size=action_space.shape[0])
         vf = models.RecurrentValueFunction(obs_space=obs_space)
@@ -249,7 +273,7 @@ def main():
     opt = torch.optim.Adam(model.parameters(), lr=args.lr)
     # opt = torch.optim.Adam(model.parameters(), lr=1.)
 
-    n_epochs = 100
+    n_epochs = 10
     agent = pfrl.agents.PPO(
         model,
         opt,
@@ -269,33 +293,44 @@ def main():
     agent.batch_last_state = [None] * args.num_envs
     agent.batch_last_action = [None] * args.num_envs
 
-    # what if je fais genre 10 épisodes à place de juste 1 avant d'updater le model?
-    n_episodes = 10
-    for ep_idx in range(n_episodes):
-        print(f"starting episode {ep_idx + 1} of {n_episodes}")
-        obs = sample_env.reset()
+    obs = sample_env.reset()
 
-        done = False
-        episode_len = 0
-        max_episode_len = 50
-        while not done:
-            print("stepping!")
-            # make this into a function or something
-            # jpense qu'il faut que j'émulate ce qui se passe dans PPO._batch_act_train() ?
-            action = numpy.array([1., 1., 1.])
-            # the make_agent_act function makes it so everything has the right format as if the agent had
-            # selected the action itself or something like that
-            action = make_agent_act(agent, action, [obs])
-            obs, r, done, info = sample_env.step(action[0])
+    parent_dir = "./gym-sted-pfrl/src/analysis/pre_train_on_trajs/"
+    trajectory_dir = f"traj_seed_{args.seed}_flash_delay_{args.flash_delay}_rotate_{args.rotate}/"
+    if not os.path.exists(parent_dir + trajectory_dir):
+        os.makedirs(parent_dir + trajectory_dir)
 
-            episode_len += 1
-            reset = episode_len == max_episode_len or info.get("needs_reset", False)
+    selected_pdt_arr, selected_p_ex_arr, selected_p_sted_arr = [], [], []
 
-            # agent.batch_last_action = list(action)
-            # agent.batch_last_state = list(obs)
+    done = False
+    episode_len = 0
+    max_episode_len = 50
+    while not done:
+        print("stepping!")
+        # make this into a function or something
+        # jpense qu'il faut que j'émulate ce qui se passe dans PPO._batch_act_train() ?
+        selected_pdt = float(input(f"Enter a pdt value (low = {defaults.action_spaces['pdt']['low']} , "
+                                   f"high = {defaults.action_spaces['pdt']['high']}) : "))
+        selected_p_ex = float(input(f"Enter a p_ex value (low = {defaults.action_spaces['p_ex']['low']} , "
+                                    f"high = {defaults.action_spaces['p_ex']['high']}) : "))
+        selected_p_sted = float(input(f"Enter a p_sted value (low = {defaults.action_spaces['p_sted']['low']} ,"
+                                      f"high = {defaults.action_spaces['p_sted']['high']}) : "))
+        print(f"pdt = {selected_pdt}, p_ex = {selected_p_ex}, p_sted = {selected_p_sted}")
+        exit()
+        action = numpy.array([-10., -10., -10.])
+        # the make_agent_act function makes it so everything has the right format as if the agent had
+        # selected the action itself or something like that
+        action = make_agent_act(agent, action, [obs])
+        obs, r, done, info = sample_env.step(action[0])
 
-            agent.observe(obs, r, done, reset)
-        print(f"done with episode {ep_idx + 1}")
+        episode_len += 1
+        reset = episode_len == max_episode_len or info.get("needs_reset", False)
+
+        # agent.batch_last_action = list(action)
+        # agent.batch_last_state = list(obs)
+
+        agent.observe(obs, r, done, reset)
+    print("done stepping")
 
     # build the dataset from the agent's memory
     dataset = _make_dataset(
@@ -309,7 +344,7 @@ def main():
         device=agent.device,
     )
 
-    n_updates = 100
+    n_updates = 500
     for i in range(n_updates):
         if i % 10 == 0:
             print(i)
@@ -317,33 +352,11 @@ def main():
 
     print("!-----------------------------------------------------------!")
     obs = sample_env.reset()
-    # done = False
-    # episode_len = 0
-    # max_episode_len = 50
-    # while not done:
-    #     print("stepping!")
-    #     # make this into a function or something
-    #     # jpense qu'il faut que j'émulate ce qui se passe dans PPO._batch_act_train() ?
-    #     action = numpy.array([10., 10., 10.])
-    #     # the make_agent_act function makes it so everything has the right format as if the agent had
-    #     # selected the action itself or something like that
-    #     action = make_agent_act(agent, action, [obs])
-    #     obs, r, done, info = sample_env.step(action[0])
-    #
-    #     episode_len += 1
-    #     reset = episode_len == max_episode_len or info.get("needs_reset", False)
-    #
-    #     # agent.batch_last_action = list(action)
-    #     # agent.batch_last_state = list(obs)
-    #
-    #     agent.observe(obs, r, done, reset)
-    # print("done stepping")
 
     logger = None or logging.getLogger(__name__)
 
     # save_agent(agent, n_updates, "./data/pre_traj_tests", logger, suffix=f"__neg_{n_epochs}epochs")
-    save_agent(agent, n_updates, "./data/pre_traj_tests", logger,
-               suffix=f"_updates_{n_epochs}_epochs_{n_episodes}_episodes_maximize_bleach_test")
+    save_agent(agent, n_updates, "./data/pre_traj_tests", logger, suffix=f"_lol_{n_epochs}_epochs_{n_updates}_updates_neg_action")
 
 
 if __name__ == "__main__":
