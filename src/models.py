@@ -92,19 +92,11 @@ class Policy2(nn.Module):
         super(Policy2, self).__init__()
 
         self.encoded_signal_shape = encoded_signal_shape   # param d'entrée ?
-        self.img_shape = (1, 64, 64)
-
-        # mon obs_space est un tuple, maintenant il faut déterminer la shape du premier elt du tuple:
-        # c'est soit (1, 64, 64) (gym1) ou (4, 64, 64)
-        # il faut stoquer cette info qqpart pour pouvoir faire le forward comme il faut
-        if self.obs_space[0].shape[0] == 1:
-            self.is_timed_env = False
-        else:
-            self.is_timed_env = True
+        self.img_shape = (self.in_channels, 64, 64)
 
         # RecordingQueue encoder (4 images to 1)
         self.recording_queue_encoder_layers = nn.ModuleList([
-            nn.Conv2d(self.obs_space[0].shape[0], 1, 3, stride=1, padding=1)
+            nn.Conv2d(self.obs_space[0].shape[0], self.in_channels, 3, stride=1, padding=1)
         ])
 
         # Image encoder (1 image to a vector) (This is the LargeAtari architecture)
@@ -133,29 +125,28 @@ class Policy2(nn.Module):
         )
 
     def forward(self, x):
-        # je crois que oui peu importe que ce soit gym 1 ou gym 2
-        # si c'est gym 1, x = (img, [SNR, Resolution, Bleach, 1hot])
-        # si c'est gym 2, x = ([4 imgs], [SNR, Resolution, Bleach, 1hot])
+        # Split image and articulation
         if isinstance(self.obs_space, gym.spaces.Tuple):
             x, articulation = x
 
-        # passer x dans une couche qui send de 4 imgs vers 1
-        if self.is_timed_env:
-            for layer in self.recording_queue_encoder_layers:
-                x = self.activation(layer(x))
+        # Encode to single channel image
+        for layer in self.recording_queue_encoder_layers:
+            x = self.activation(layer(x))
 
-        # passer l'image dans le nn standard
+        # Encode image in AtariNetwork
         for layer in self.image_encoder_layers:
             x = self.activation(layer(x))
         x = x.view(x.size(0), -1)
 
-        # passer le signal dans une couche linéaire X --> 4
+        # Encode articulation
         for layer in self.signal_encoder_layers:
             articulation = self.activation(layer(articulation))
 
+        # Combines encoded image and articulation
         if isinstance(self.obs_space, gym.spaces.Tuple):
             x = torch.cat([x, articulation], dim=1)
 
+        # Runs the encoded into the policy
         x = self.policy_to_actions_layer(x)
         x = self.pfrl_head(x)
         return x
@@ -275,10 +266,12 @@ class RecurrentPolicy(nn.Module, pfrl.nn.Recurrent):
         super(RecurrentPolicy, self).__init__()
 
         self.encoded_signal_shape = encoded_signal_shape   # param d'entrée ?
-        self.img_shape = (1, 64, 64)
+        self.img_shape = (self.in_channels, 64, 64)
 
         # Image encoder (1 image to a vector) (This is the LargeAtari architecture)
         self.image_encoder_layers = pfrl.nn.RecurrentSequential(
+            nn.Conv2d(self.obs_space[0].shape[0], self.in_channels, 3, stride=1, padding=1),
+            self.activation(),
             nn.Conv2d(self.in_channels, 32, 8, stride=4),
             self.activation(),
             nn.Conv2d(32, 64, 4, stride=2),
@@ -580,19 +573,11 @@ class ValueFunction2(nn.Module):
         super(ValueFunction2, self).__init__()
 
         self.encoded_signal_shape = encoded_signal_shape
-        self.img_shape = (1, 64, 64)
-
-        # mon obs_space est un tuple, maintenant il faut déterminer la shape du premier elt du tuple:
-        # c'est soit (1, 64, 64) (gym1) ou (4, 64, 64)
-        # il faut stoquer cette info qqpart pour pouvoir faire le forward comme il faut
-        if self.obs_space[0].shape[0] == 1:
-            self.is_timed_env = False
-        else:
-            self.is_timed_env = True
+        self.img_shape = (self.in_channels, 64, 64)
 
         # RecordingQueue encoder (4 images to 1)
         self.recording_queue_encoder_layers = nn.ModuleList([
-            nn.Conv2d(self.obs_space[0].shape[0], 1, 3, stride=1, padding=1)
+            nn.Conv2d(self.obs_space[0].shape[0], self.in_channels, 3, stride=1, padding=1)
         ])
 
         # Image encoder (1 image to a vector) (This is the LargeAtari architecture)
@@ -621,10 +606,8 @@ class ValueFunction2(nn.Module):
         if isinstance(self.obs_space, gym.spaces.Tuple):
             x, articulation = x
 
-        # passer x dans une couche qui send de 4 imgs vers 1
-        if self.is_timed_env:
-            for layer in self.recording_queue_encoder_layers:
-                x = self.activation(layer(x))
+        for layer in self.recording_queue_encoder_layers:
+            x = self.activation(layer(x))
 
         # passer l'image dans le nn standard
         for layer in self.image_encoder_layers:
@@ -659,10 +642,12 @@ class RecurrentValueFunction(nn.Module, pfrl.nn.Recurrent):
         super(RecurrentValueFunction, self).__init__()
 
         self.encoded_signal_shape = encoded_signal_shape
-        self.img_shape = (1, 64, 64)
+        self.img_shape = (self.in_channels, 64, 64)
 
         # Image encoder (1 image to a vector) (This is the LargeAtari architecture)
         self.image_encoder_layers = pfrl.nn.RecurrentSequential(
+            nn.Conv2d(self.obs_space[0].shape[0], self.in_channels, 3, stride=1, padding=1),
+            self.activation(),
             nn.Conv2d(self.in_channels, 32, 8, stride=4),
             nn.LeakyReLU(),
             nn.Conv2d(32, 64, 4, stride=2),
