@@ -48,11 +48,13 @@ class HumanAgent(agent.BatchAgent):
                 r[5]
             ))
 
-        fig, axes = pyplot.subplots(1, 2)
-        axes[0].imshow(image[0], vmin=0, cmap="hot")
-        axes[0].set_title("STED")
-        axes[1].imshow(image[1], vmin=0, cmap="hot")
+        fig, axes = pyplot.subplots(1, 3)
+        axes[0].imshow(image[0] * 1024, vmin=0, cmap="hot")
+        axes[0].set_title("New Confocal")
+        axes[1].imshow(image[1] * 1024, vmin=0, cmap="hot")
         axes[1].set_title("Confocal")
+        axes[2].imshow(image[2] * 1024, vmin=0, cmap="hot")
+        axes[2].set_title("STED")
         pyplot.show(block=True)
 
         p_sted = float(input("p_sted [%] : ")) / 100

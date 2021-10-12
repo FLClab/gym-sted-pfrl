@@ -31,8 +31,8 @@ from gym_sted.utils import BleachSampler
 PATH = "../../data"
 PHY_REACTS = {
     "low-bleach" : gym_sted.defaults.FLUO["phy_react"],
-    "mid-bleach" : {488: 0.5e-7 + 3 * 0.25e-7, 575: 50.0e-11 + 3 * 25.0e-11},
-    "high-bleach" : {488: 0.5e-7 + 10 * 0.25e-7, 575: 50.0e-11 + 10 * 25.0e-11},
+    "mid-bleach" : {488: 0.008e-5 + 3 * 0.007e-5 / 2.576, 575: 0.008e-8 + 3 * 0.004e-8 / 2.576},
+    "high-bleach" : {488: 0.008e-5 + 5 * 0.007e-5 / 2.576, 575: 0.008e-8 + 5 * 0.004e-8 / 2.576},
 }
 
 def _batch_run_episodes_record(
