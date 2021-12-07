@@ -48,7 +48,7 @@ We also provide the `bash` files that were used to evaluate our models in [bash-
 
 ### Manual interaction
 
-We provide an example file in which a user may interact with the environment by sequentially choosing the actions. The acquired images and history of parameters/objectives is presented to the user at each time steps as it would be to a RL agent.
+We provide an example file in which a user may interact with the environment by sequentially choosing the actions. The acquired images and history of parameters/objectives are presented to the user at each time step.
 
 To test the manual interaction, the user may launch the following
 
