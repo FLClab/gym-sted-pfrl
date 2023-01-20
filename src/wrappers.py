@@ -3,6 +3,32 @@ import numpy
 import gym
 import gym.spaces
 
+class GymnasiumWrapper(gym.Wrapper):
+    def __init__(self, env: gym.Env):
+        super().__init__(env)
+
+    def reset(self, *args, **kwargs):
+        """Steps through the environment and if the number of steps elapsed exceeds ``max_episode_steps`` then truncate.
+        Args:
+            action: The environment step action
+        Returns:
+            The environment step ``(observation, reward, terminated, truncated, info)`` with `truncated=True`
+            if the number of steps elapsed >= max episode steps
+        """
+        observation, _ = self.env.reset(*args, **kwargs)
+        return observation
+
+    def step(self, action):
+        """Steps through the environment and if the number of steps elapsed exceeds ``max_episode_steps`` then truncate.
+        Args:
+            action: The environment step action
+        Returns:
+            The environment step ``(observation, reward, terminated, truncated, info)`` with `truncated=True`
+            if the number of steps elapsed >= max episode steps
+        """
+        observation, reward, terminated, truncated, info = self.env.step(action)
+        return observation, reward, terminated, info
+
 class WrapPyTorch(gym.ObservationWrapper):
     """
     Wraps the observation of an OpenAI gym into a PyTorch gym

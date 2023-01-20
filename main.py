@@ -14,7 +14,7 @@ import pfrl
 from pfrl import experiments, utils
 from pfrl.policies import GaussianHeadWithFixedCovariance, SoftmaxCategoricalHead
 
-from src import models, WrapPyTorch
+from src import models, WrapPyTorch, GymnasiumWrapper
 
 TIMEFMT = "%Y%m%d-%H%M%S"
 
@@ -71,19 +71,19 @@ def main():
     if args.load:
         args.outdir = experiments.prepare_output_dir(args, args.outdir, exp_id=args.load)
     else:
-        args.outdir = experiments.prepare_output_dir(args, args.outdir, exp_id="{}_{}".format(args.exp_id, str(uuid.uuid4())[:8]))
+        args.outdir = experiments.prepare_output_dir(args, args.outdir, exp_id="{}_{}".format(args.exp_id, str(uuid.uuid4())[:8]) if args.exp_id != "debug" else args.exp_id)
 
     def make_env(idx, test):
         # Use different random seeds for train and test envs
         process_seed = int(process_seeds[idx])
         env_seed = 2 ** 32 - 1 - process_seed if test else process_seed
-        env = gym.make(args.env)
-        # Use different random seeds for train and test envs
-        env.seed(env_seed)
-        # Converts the openAI Gym to PyTorch tensor shape
-        env = WrapPyTorch(env)
+        env = gym.make(args.env, disable_env_checker=True)
         # Normalize the action space
         env = pfrl.wrappers.NormalizeActionSpace(env)
+        # Use different random seeds for train and test envs
+        env.reset(seed=env_seed)
+        # Converts the openAI Gym to PyTorch tensor shape
+        env = WrapPyTorch(env)
         if args.monitor:
             env = pfrl.wrappers.Monitor(env, args.outdir)
         if not test:
@@ -92,6 +92,10 @@ def main():
             env = pfrl.wrappers.ScaleReward(env, args.reward_scale_factor)
         if args.render and not test:
             env = pfrl.wrappers.Render(env)
+
+        # Converts the new gymnasium implementation to old gym implementation
+        env = GymnasiumWrapper(env)
+
         return env
 
     def make_batch_env(test):
