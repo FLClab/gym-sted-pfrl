@@ -15,6 +15,7 @@ from pfrl import experiments, utils
 from pfrl.policies import GaussianHeadWithFixedCovariance, SoftmaxCategoricalHead
 
 from src import models, WrapPyTorch, GymnasiumWrapper
+from src.hooks import ProgressStepHook
 
 TIMEFMT = "%Y%m%d-%H%M%S"
 
@@ -54,6 +55,7 @@ def main():
     parser.add_argument("--load", type=str, default="")
     parser.add_argument("--load-ckpt", type=int, default=0)
     parser.add_argument("--log-level", type=int, default=logging.INFO)
+    parser.add_argument("--log-interval", type=int, default=256)
     parser.add_argument("--monitor", action="store_true")
     parser.add_argument("--bleach-sampling", type=str, default="constant")
     parser.add_argument("--recurrent", action="store_true", default=False)
@@ -167,7 +169,8 @@ def main():
                 eval_n_episodes=args.eval_n_runs,
                 eval_interval=args.eval_interval,
                 checkpoint_freq=args.checkpoint_freq,
-                with_delayed_reward=args.delayed_reward
+                log_interval=args.log_interval,
+                with_delayed_reward=args.delayed_reward,
             )
         else:
             experiments.train_agent_with_evaluation(
@@ -181,7 +184,8 @@ def main():
                 eval_n_episodes=args.eval_n_runs,
                 eval_interval=args.eval_interval,
                 checkpoint_freq=args.checkpoint_freq,
-                with_delayed_reward=args.delayed_reward
+                with_delayed_reward=args.delayed_reward,
+                step_hooks=(ProgressStepHook(args.log_interval),)
             )
 
 
