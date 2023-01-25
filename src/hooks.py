@@ -35,6 +35,7 @@ class ProgressStepHook(StepHook):
                     elapsed / step,
                 )
             )
+            self.logger.info("statistics:%s", agent.get_statistics())
 
 class EvaluationActionHook(EvaluationHook):
 
