@@ -61,6 +61,7 @@ def main():
     parser.add_argument("--recurrent", action="store_true", default=False)
     parser.add_argument("--gamma", type=float, default=0.99)
     parser.add_argument("--delayed-reward", action="store_true", default=False)
+    parser.add_argument("--use-tensorboard", action="store_true", default=False)
     args = parser.parse_args()
 
     logging.basicConfig(level=args.log_level)
@@ -171,6 +172,7 @@ def main():
                 checkpoint_freq=args.checkpoint_freq,
                 log_interval=args.log_interval,
                 with_delayed_reward=args.delayed_reward,
+                use_tensorboard=args.use_tensorboard
             )
         else:
             experiments.train_agent_with_evaluation(
@@ -185,7 +187,8 @@ def main():
                 eval_interval=args.eval_interval,
                 checkpoint_freq=args.checkpoint_freq,
                 with_delayed_reward=args.delayed_reward,
-                step_hooks=(ProgressStepHook(args.log_interval),)
+                step_hooks=(ProgressStepHook(args.log_interval),),
+                use_tensorboard=args.use_tensorboard
             )
 
 
