@@ -11,7 +11,7 @@ import pickle
 import logging
 import functools
 import numpy
-import bz2
+import h5py
 
 from tqdm.auto import trange, tqdm
 from matplotlib import pyplot
@@ -21,7 +21,7 @@ from skimage import io
 while "../.." in sys.path:
     sys.path.remove("../..")
 sys.path.insert(0, "../..")
-from src import models, WrapPyTorch
+from src import models, WrapPyTorch, GymnasiumWrapper
 
 from gym_sted.defaults import action_spaces
 from gym_sted.envs.sted_env import scales_dict, bounds_dict
@@ -29,11 +29,74 @@ from gym_sted.utils import BleachSampler
 
 # Defines constants
 PATH = "../../data"
-PHY_REACTS = {
-    "low-bleach" : gym_sted.defaults.FLUO["phy_react"],
-    "mid-bleach" : {488: 0.008e-5 + 3 * 0.007e-5 / 2.576, 575: 0.008e-8 + 3 * 0.004e-8 / 2.576},
-    "high-bleach" : {488: 0.008e-5 + 5 * 0.007e-5 / 2.576, 575: 0.008e-8 + 5 * 0.004e-8 / 2.576},
+ROUTINES = {
+    "low" : {
+        "lambda_": 6.9e-7,
+        "qy": 0.65,
+        "sigma_abs": {
+            635: 2.14e-20,
+            750: 3.5e-25
+        },
+        "sigma_ste": {
+            750: 3.0e-22
+        },
+        "tau": 3.5e-9,
+        "tau_vib": 1e-12,
+        "tau_tri": 0.0000012,
+        "k0": 0,
+        "k1": 1.3e-15,
+        "b": 1.58,
+        "triplet_dynamics_frac": 0
+    },
+    "mid" : {
+        "lambda_": 6.9e-7,
+        "qy": 0.65,
+        "sigma_abs": {
+            635: 2.14e-20,
+            750: 3.5e-25
+        },
+        "sigma_ste": {
+            750: 3.0e-22
+        },
+        "tau": 3.5e-9,
+        "tau_vib": 1e-12,
+        "tau_tri": 0.0000012,
+        "k0": 0,
+        "k1": 1.3e-15,
+        "b": 1.6,
+        "triplet_dynamics_frac": 0},
+    "high" : {
+        "lambda_": 6.9e-7,
+        "qy": 0.65,
+        "sigma_abs": {
+            635: 2.14e-20,
+            750: 3.5e-25
+        },
+        "sigma_ste": {
+            750: 3.0e-22
+        },
+        "tau": 3.5e-9,
+        "tau_vib": 1e-12,
+        "tau_tri": 0.0000012,
+        "k0": 0,
+        "k1": 1.3e-15,
+        "b": 1.62,
+        "triplet_dynamics_frac": 0}
 }
+
+def aggregate(items):
+    """
+    Aggregates a list of dict into a single dict
+
+    :param items: A `list` of dict
+
+    :returns : A `dict` with aggregated items
+    """
+    out = defaultdict(list)
+    for item in items:
+        for key, value in item.items():
+            out[key].append(value)
+    return out
 
 def _batch_run_episodes_record(
     env,
@@ -518,6 +581,8 @@ if __name__ == "__main__":
                         help="If given it overwrites the env that the model was trained with")
     parser.add_argument("--gpu", type=int, default=None,
                         help="Wheter gpu should be used")
+    parser.add_argument("--checkpoint", type=int, default=None,
+                        help="Wheter gpu should be used")
     args = parser.parse_args()
 
     assert os.path.isdir(os.path.join(args.savedir, args.model_name)), f"This is not a valid model name : {args.model_name}"
@@ -530,20 +595,23 @@ if __name__ == "__main__":
         loaded_args["env"] = args.env
 
     process_seeds = numpy.arange(args.num_envs) + 42
+
     def make_env(idx, test, **kwargs):
         # Use different random seeds for train and test envs
         process_seed = int(process_seeds[idx])
         env_seed = 2 ** 32 - 1 - process_seed if test else process_seed
-        env = gym.make(loaded_args["env"])
-        # Use different random seeds for train and test envs
-        env.seed(env_seed)
-        # Converts the openAI Gym to PyTorch tensor shape
-        env = WrapPyTorch(env)
+        env = gym.make(loaded_args["env"], disable_env_checker=True)
         # Normalize the action space
         env = pfrl.wrappers.NormalizeActionSpace(env)
+        # Use different random seeds for train and test envs
+        env.reset(seed=env_seed)
+        # Converts the openAI Gym to PyTorch tensor shape
+        env = WrapPyTorch(env)
+        # Converts the new gymnasium implementation to old gym implementation
+        env = GymnasiumWrapper(env)
 
-        if "phy_react" in kwargs:
-            env.update_(bleach_sampler=BleachSampler("constant", kwargs.get("phy_react")))
+        if "fluo" in kwargs:
+            env.update_(bleach_sampler=BleachSampler("constant", kwargs.get("fluo")))
 
         return env
 
@@ -554,6 +622,7 @@ if __name__ == "__main__":
                 for idx, env in enumerate(range(args.num_envs))
             ]
         )
+        # vec_env = pfrl.wrappers.VectorFrameStack(vec_env, 4)
         return vec_env
 
     env = make_env(0, True)
@@ -570,33 +639,52 @@ if __name__ == "__main__":
         policy = models.Policy2(action_size=action_space.shape[0], obs_space=obs_space)
         vf = models.ValueFunction2(obs_space=obs_space)
         model = pfrl.nn.Branched(policy, vf)
+
     opt = torch.optim.Adam(model.parameters(), lr=loaded_args["lr"])
+
     agent = pfrl.agents.PPO(
         model,
         opt,
         gpu=args.gpu,
         minibatch_size=loaded_args["batchsize"],
         max_grad_norm=1.0,
-        update_interval=512,
+        update_interval=loaded_args["update_interval"],
         recurrent=loaded_args["recurrent"]
     )
-    agent.load(os.path.join(args.savedir, args.model_name, "best"))
+    if isinstance(args.checkpoint, int):
+        agent.load(os.path.join(args.savedir, args.model_name, f"{args.checkpoint}_checkpoint"))
+    else:
+        agent.load(os.path.join(args.savedir, args.model_name, "best"))
 
     # Runs the agent
     all_records = {}
-    for key, phy_react in tqdm(PHY_REACTS.items()):
+    for key, fluo in tqdm(ROUTINES.items()):
         # Creates the batch envs
-        env = make_batch_env(test=True, phy_react=phy_react)
+        env = make_batch_env(test=True, fluo=fluo)
         scores, lengths, records = batch_run_evaluation_episodes_record_actions(
             env, agent, n_steps=None, n_episodes=args.eval_n_runs,
             recurrent=loaded_args["recurrent"], with_delayed_reward="WithDelayedReward" in loaded_args["env"]
         )
         all_records[key] = records
 
-        # Avoids pending with multiprocessing
-        if not env.closed:
-            env.close()
+    # Avoids pending with multiprocessing
+    if not env.closed:
+        env.close()
 
-    # Saves all runs
-    with bz2.open(os.path.join(args.savedir, args.model_name, "eval", "stats.pbz2"), "wb") as file:
-        pickle.dump(all_records, file)
+    # # Saves all runs
+    savename = f"stats_{args.checkpoint}_checkpoint.hdf5" if args.checkpoint else "stats_best.hdf5"
+    with h5py.File(os.path.join(args.savedir, args.model_name, "eval", savename), "w") as file:
+        for routine_name, routine in all_records.items():
+            routine_group = file.create_group(routine_name)
+            for eval_run, record in enumerate(routine):
+                eval_group = routine_group.create_group(str(eval_run))
+                for key, values in aggregate(record).items():
+                    if key == "nanodomains-coords":
+                        step_group = eval_group.create_group(key)
+                        for step, value in enumerate(values):
+                            step_group.create_dataset(str(step), data=value)
+                    else:
+                        data = numpy.array(values)
+                        eval_group.create_dataset(
+                            key, data=numpy.array(values), compression="gzip", compression_opts=5
+                        )
