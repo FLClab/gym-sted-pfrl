@@ -49,8 +49,8 @@ ROUTINES = {
         # "triplet_dynamics_frac": 0
         "bleach" : {
             "p_ex" : 10e-6,
-            "p_sted" : 150e-3,
-            "pdt" : 2.0e-6,
+            "p_sted" : 200e-3,
+            "pdt" : 1.0e-6,
             "target" : 0.5
         },
         "signal" : { # Avoids breaking the microscope with saturation of detector
@@ -665,8 +665,8 @@ if __name__ == "__main__":
             env, agent, n_steps=None, n_episodes=args.eval_n_runs,
             recurrent=loaded_args["recurrent"], with_delayed_reward="WithDelayedReward" in loaded_args["env"]
         )
-        # for i in range(len(records[0])):
-        #     print(records[0][i]["action"], records[0][i]["mo_objs"], records[0][i]["f1-score"])
+        for i in range(len(records[0])):
+            print(records[0][i]["action"], records[0][i]["mo_objs"], records[0][i]["f1-score"])
         all_records[key] = records
 
     # Avoids pending with multiprocessing
