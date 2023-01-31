@@ -23,65 +23,49 @@ while "../.." in sys.path:
 sys.path.insert(0, "../..")
 from src import models, WrapPyTorch, GymnasiumWrapper
 
-from gym_sted.defaults import action_spaces
+from gym_sted.defaults import action_spaces, FLUO
 from gym_sted.envs.sted_env import scales_dict, bounds_dict
 from gym_sted.utils import BleachSampler
 
 # Defines constants
 PATH = "../../data"
 ROUTINES = {
-    "low" : {
-        "lambda_": 6.9e-7,
-        "qy": 0.65,
-        "sigma_abs": {
-            635: 2.14e-20,
-            750: 3.5e-25
-        },
-        "sigma_ste": {
-            750: 3.0e-22
-        },
-        "tau": 3.5e-9,
-        "tau_vib": 1e-12,
-        "tau_tri": 0.0000012,
-        "k0": 0,
-        "k1": 1.3e-15,
-        "b": 1.58,
-        "triplet_dynamics_frac": 0
-    },
-    "mid" : {
-        "lambda_": 6.9e-7,
-        "qy": 0.65,
-        "sigma_abs": {
-            635: 2.14e-20,
-            750: 3.5e-25
-        },
-        "sigma_ste": {
-            750: 3.0e-22
-        },
-        "tau": 3.5e-9,
-        "tau_vib": 1e-12,
-        "tau_tri": 0.0000012,
-        "k0": 0,
-        "k1": 1.3e-15,
-        "b": 1.6,
-        "triplet_dynamics_frac": 0},
-    "high" : {
-        "lambda_": 6.9e-7,
-        "qy": 0.65,
-        "sigma_abs": {
-            635: 2.14e-20,
-            750: 3.5e-25
-        },
-        "sigma_ste": {
-            750: 3.0e-22
-        },
-        "tau": 3.5e-9,
-        "tau_vib": 1e-12,
-        "tau_tri": 0.0000012,
-        "k0": 0,
-        "k1": 1.3e-15,
-        "b": 1.62,
-        "triplet_dynamics_frac": 0}
+    # "low" : {
+    #     "lambda_": 6.9e-7,
+    #     "qy": 0.65,
+    #     "sigma_abs": {
+    #         635: 2.14e-20,
+    #         750: 3.5e-25
+    #     },
+    #     "sigma_ste": {
+    #         750: 3.0e-22
+    #     },
+    #     "tau": 3.5e-9,
+    #     "tau_vib": 1e-12,
+    #     "tau_tri": 0.0000012,
+    #     "k0": 0,
+    #     "k1": 1.3e-15,
+    #     "b": 1.58,
+    #     "triplet_dynamics_frac": 0
+    # },
+    "mid" : FLUO,
+    # "high" : {
+    #     "lambda_": 6.9e-7,
+    #     "qy": 0.65,
+    #     "sigma_abs": {
+    #         635: 2.14e-20,
+    #         750: 3.5e-25
+    #     },
+    #     "sigma_ste": {
+    #         750: 3.0e-22
+    #     },
+    #     "tau": 3.5e-9,
+    #     "tau_vib": 1e-12,
+    #     "tau_tri": 0.0000012,
+    #     "k0": 0,
+    #     "k1": 1.3e-15,
+    #     "b": 1.62,
+    #     "triplet_dynamics_frac": 0}
 }
 
 def aggregate(items):
