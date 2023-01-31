@@ -30,24 +30,36 @@ from gym_sted.utils import BleachSampler
 # Defines constants
 PATH = "../../data"
 ROUTINES = {
-    # "low" : {
-    #     "lambda_": 6.9e-7,
-    #     "qy": 0.65,
-    #     "sigma_abs": {
-    #         635: 2.14e-20,
-    #         750: 3.5e-25
-    #     },
-    #     "sigma_ste": {
-    #         750: 3.0e-22
-    #     },
-    #     "tau": 3.5e-9,
-    #     "tau_vib": 1e-12,
-    #     "tau_tri": 0.0000012,
-    #     "k0": 0,
-    #     "k1": 1.3e-15,
-    #     "b": 1.58,
-    #     "triplet_dynamics_frac": 0
-    # },
+    "high" : {
+        # "lambda_": 6.9e-7,
+        # "qy": 0.65,
+        # "sigma_abs": {
+        #     635: 3.23e-21,
+        #     750: 3.5e-25
+        # },
+        # "sigma_ste": {
+        #     750: 3.0e-22
+        # },
+        # "tau": 3.5e-9,
+        # "tau_vib": 1e-12,
+        # "tau_tri": 0.0000012,
+        # "k0": 0,
+        # "k1": 1.22e-14,
+        # "b": 2.61,
+        # "triplet_dynamics_frac": 0
+        "bleach" : {
+            "p_ex" : 10e-6,
+            "p_sted" : 150e-3,
+            "pdt" : 2.0e-6,
+            "target" : 0.5
+        },
+        "signal" : { # Avoids breaking the microscope with saturation of detector
+            "p_ex" : 10.0e-6,
+            "p_sted" : 0.,
+            "pdt" : 10.0e-6,
+            "target" : 200.
+        },
+    },
     "mid" : FLUO,
     # "high" : {
     #     "lambda_": 6.9e-7,
@@ -595,7 +607,11 @@ if __name__ == "__main__":
         env = GymnasiumWrapper(env)
 
         if "fluo" in kwargs:
-            env.update_(bleach_sampler=BleachSampler("constant", kwargs.get("fluo")))
+            fluo = kwargs.get("fluo")
+            if "sigma_abs" in fluo:
+                env.update_(bleach_sampler=BleachSampler("constant", kwargs.get("fluo")))
+            else:
+                env.update_(bleach_sampler=BleachSampler("uniform", criterions=kwargs.get("fluo")))
 
         return env
 
@@ -649,26 +665,28 @@ if __name__ == "__main__":
             env, agent, n_steps=None, n_episodes=args.eval_n_runs,
             recurrent=loaded_args["recurrent"], with_delayed_reward="WithDelayedReward" in loaded_args["env"]
         )
+        # for i in range(len(records[0])):
+        #     print(records[0][i]["action"], records[0][i]["mo_objs"], records[0][i]["f1-score"])
         all_records[key] = records
 
     # Avoids pending with multiprocessing
     if not env.closed:
         env.close()
 
-    # # Saves all runs
-    savename = f"stats_{args.checkpoint}_checkpoint.hdf5" if args.checkpoint else "stats_best.hdf5"
-    with h5py.File(os.path.join(args.savedir, args.model_name, "eval", savename), "w") as file:
-        for routine_name, routine in all_records.items():
-            routine_group = file.create_group(routine_name)
-            for eval_run, record in enumerate(routine):
-                eval_group = routine_group.create_group(str(eval_run))
-                for key, values in aggregate(record).items():
-                    if key == "nanodomains-coords":
-                        step_group = eval_group.create_group(key)
-                        for step, value in enumerate(values):
-                            step_group.create_dataset(str(step), data=value)
-                    else:
-                        data = numpy.array(values)
-                        eval_group.create_dataset(
-                            key, data=numpy.array(values), compression="gzip", compression_opts=5
-                        )
+    # # # Saves all runs
+    # savename = f"stats_{args.checkpoint}_checkpoint.hdf5" if args.checkpoint else "stats_best.hdf5"
+    # with h5py.File(os.path.join(args.savedir, args.model_name, "eval", savename), "w") as file:
+    #     for routine_name, routine in all_records.items():
+    #         routine_group = file.create_group(routine_name)
+    #         for eval_run, record in enumerate(routine):
+    #             eval_group = routine_group.create_group(str(eval_run))
+    #             for key, values in aggregate(record).items():
+    #                 if key == "nanodomains-coords":
+    #                     step_group = eval_group.create_group(key)
+    #                     for step, value in enumerate(values):
+    #                         step_group.create_dataset(str(step), data=value)
+    #                 else:
+    #                     data = numpy.array(values)
+    #                     eval_group.create_dataset(
+    #                         key, data=numpy.array(values), compression="gzip", compression_opts=5
+    #                     )
