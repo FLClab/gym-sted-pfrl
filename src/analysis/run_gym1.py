@@ -30,54 +30,62 @@ from gym_sted.utils import BleachSampler
 # Defines constants
 PATH = "../../data"
 ROUTINES = {
-    "high" : {
-        # "lambda_": 6.9e-7,
-        # "qy": 0.65,
-        # "sigma_abs": {
-        #     635: 3.23e-21,
-        #     750: 3.5e-25
-        # },
-        # "sigma_ste": {
-        #     750: 3.0e-22
-        # },
-        # "tau": 3.5e-9,
-        # "tau_vib": 1e-12,
-        # "tau_tri": 0.0000012,
-        # "k0": 0,
-        # "k1": 1.22e-14,
-        # "b": 2.61,
-        # "triplet_dynamics_frac": 0
+    "high-signal_low-bleach" : {
         "bleach" : {
             "p_ex" : 10e-6,
-            "p_sted" : 200e-3,
-            "pdt" : 1.0e-6,
-            "target" : 0.5
+            "p_sted" : 150e-3,
+            "pdt" : 10.0e-6,
+            "target" : 0.2
         },
-        "signal" : { # Avoids breaking the microscope with saturation of detector
+        "signal" : {
             "p_ex" : 10.0e-6,
             "p_sted" : 0.,
             "pdt" : 10.0e-6,
             "target" : 200.
         },
     },
-    "mid" : FLUO,
-    # "high" : {
-    #     "lambda_": 6.9e-7,
-    #     "qy": 0.65,
-    #     "sigma_abs": {
-    #         635: 2.14e-20,
-    #         750: 3.5e-25
-    #     },
-    #     "sigma_ste": {
-    #         750: 3.0e-22
-    #     },
-    #     "tau": 3.5e-9,
-    #     "tau_vib": 1e-12,
-    #     "tau_tri": 0.0000012,
-    #     "k0": 0,
-    #     "k1": 1.3e-15,
-    #     "b": 1.62,
-    #     "triplet_dynamics_frac": 0}
+    "high-signal_high-bleach" : {
+        "bleach" : {
+            "p_ex" : 10e-6,
+            "p_sted" : 150e-3,
+            "pdt" : 10.0e-6,
+            "target" : 0.50
+        },
+        "signal" : {
+            "p_ex" : 10.0e-6,
+            "p_sted" : 0.,
+            "pdt" : 10.0e-6,
+            "target" : 200.
+        },
+    },
+    "low-signal_low-bleach" : {
+        "bleach" : {
+            "p_ex" : 10e-6,
+            "p_sted" : 150e-3,
+            "pdt" : 10.0e-6,
+            "target" : 0.2
+        },
+        "signal" : {
+            "p_ex" : 10.0e-6,
+            "p_sted" : 0.,
+            "pdt" : 10.0e-6,
+            "target" : 30.
+        },
+    },
+    "low-signal_high-bleach" : {
+        "bleach" : {
+            "p_ex" : 10e-6,
+            "p_sted" : 150e-3,
+            "pdt" : 10.0e-6,
+            "target" : 0.50
+        },
+        "signal" : {
+            "p_ex" : 10.0e-6,
+            "p_sted" : 0.,
+            "pdt" : 10.0e-6,
+            "target" : 30.
+        },
+    }
 }
 
 def aggregate(items):
@@ -651,14 +659,14 @@ if __name__ == "__main__":
         update_interval=loaded_args["update_interval"],
         recurrent=loaded_args["recurrent"]
     )
+    agent.load(os.path.join(args.savedir, args.model_name, "best"))
     if isinstance(args.checkpoint, int):
         agent.load(os.path.join(args.savedir, args.model_name, f"{args.checkpoint}_checkpoint"))
-    else:
-        agent.load(os.path.join(args.savedir, args.model_name, "best"))
 
     # Runs the agent
     all_records = {}
-    for key, fluo in tqdm(ROUTINES.items()):
+    for key, fluo in ROUTINES.items():
+        print(key)
         # Creates the batch envs
         env = make_batch_env(test=True, fluo=fluo)
         scores, lengths, records = batch_run_evaluation_episodes_record_actions(
@@ -667,6 +675,7 @@ if __name__ == "__main__":
         )
         for i in range(len(records[0])):
             print(records[0][i]["action"], records[0][i]["mo_objs"], records[0][i]["f1-score"])
+            print(records[0][i]["conf1"].max(), records[0][i]["sted_image"].max())
         all_records[key] = records
 
     # Avoids pending with multiprocessing
