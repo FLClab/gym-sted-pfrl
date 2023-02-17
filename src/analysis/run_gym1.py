@@ -587,6 +587,8 @@ if __name__ == "__main__":
                         help="Wheter gpu should be used")
     parser.add_argument("--checkpoint", type=int, default=None,
                         help="Wheter gpu should be used")
+    parser.add_argument("--overwrite", action="store_true",
+                        help="(optional) will overwrite a previous checkpoint file if already existing")    
     args = parser.parse_args()
 
     assert os.path.isdir(os.path.join(args.savedir, args.model_name)), f"This is not a valid model name : {args.model_name}"
@@ -661,9 +663,16 @@ if __name__ == "__main__":
     )
     agent.load(os.path.join(args.savedir, args.model_name, "best"))
     if isinstance(args.checkpoint, int):
-        if not os.path.isdir(os.path.join(args.savedir, args.model_name, f"{args.checkpoint}_checkpoint")):
-            exit()
-        agent.load(os.path.join(args.savedir, args.model_name, f"{args.checkpoint}_checkpoint"))
+        checkpoint_path = os.path.join(args.savedir, args.model_name, f"{args.checkpoint}_checkpoint")
+        if not os.path.isdir(checkpoint_path):
+            raise FileNotFoundError(f"Checkpoint : {checkpoint_path} does not exists")
+        agent.load(checkpoint_path)
+        
+    savename = f"stats_{args.checkpoint}_checkpoint.hdf5" if args.checkpoint else "stats_best.hdf5"
+    savepath = os.path.join(args.savedir, args.model_name, "eval", savename)
+    if not args.overwrite and os.path.isfile(savepath):
+        raise FileExistsError(f"Checkpoint : {savepath} already exists. Use option `--overwrite` to overwrite this file")
+    
 
     # Runs the agent
     all_records = {}
@@ -685,8 +694,7 @@ if __name__ == "__main__":
         env.close()
 
     # # Saves all runs
-    savename = f"stats_{args.checkpoint}_checkpoint.hdf5" if args.checkpoint else "stats_best.hdf5"
-    with h5py.File(os.path.join(args.savedir, args.model_name, "eval", savename), "w") as file:
+    with h5py.File(savepath, "w") as file:
         for routine_name, routine in all_records.items():
             routine_group = file.create_group(routine_name)
             for eval_run, record in enumerate(routine):
