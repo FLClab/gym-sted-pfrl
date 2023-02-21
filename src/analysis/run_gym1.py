@@ -34,7 +34,7 @@ ROUTINES = {
         "bleach" : {
             "p_ex" : 10e-6,
             "p_sted" : 150e-3,
-            "pdt" : 10.0e-6,
+            "pdt" : 30.0e-6,
             "target" : 0.2
         },
         "signal" : {
@@ -46,10 +46,10 @@ ROUTINES = {
     },
     "high-signal_high-bleach" : {
         "bleach" : {
-            "p_ex" : 10e-6,
+            "p_ex" : 2e-6,
             "p_sted" : 150e-3,
-            "pdt" : 10.0e-6,
-            "target" : 0.50
+            "pdt" : 25.0e-6,
+            "target" : 0.7
         },
         "signal" : {
             "p_ex" : 10.0e-6,
@@ -62,7 +62,7 @@ ROUTINES = {
         "bleach" : {
             "p_ex" : 10e-6,
             "p_sted" : 150e-3,
-            "pdt" : 10.0e-6,
+            "pdt" : 30.0e-6,
             "target" : 0.2
         },
         "signal" : {
@@ -74,10 +74,10 @@ ROUTINES = {
     },
     "low-signal_high-bleach" : {
         "bleach" : {
-            "p_ex" : 10e-6,
+            "p_ex" : 2e-6,
             "p_sted" : 150e-3,
-            "pdt" : 10.0e-6,
-            "target" : 0.50
+            "pdt" : 25.0e-6,
+            "target" : 0.7
         },
         "signal" : {
             "p_ex" : 10.0e-6,
@@ -673,9 +673,9 @@ if __name__ == "__main__":
             env, agent, n_steps=None, n_episodes=args.eval_n_runs,
             recurrent=loaded_args["recurrent"], with_delayed_reward="WithDelayedReward" in loaded_args["env"]
         )
-        # for i in range(len(records[0])):
-        #     print(records[0][i]["action"], records[0][i]["mo_objs"], records[0][i]["f1-score"])
-        #     print(records[0][i]["conf1"].max(), records[0][i]["sted_image"].max())
+        for i in range(len(records[0])):
+            print(records[0][i]["action"], records[0][i]["mo_objs"], records[0][i]["f1-score"])
+            print(records[0][i]["conf1"].max(), records[0][i]["sted_image"].max())
         all_records[key] = records
 
     # Avoids pending with multiprocessing
