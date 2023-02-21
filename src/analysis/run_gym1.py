@@ -661,6 +661,8 @@ if __name__ == "__main__":
     )
     agent.load(os.path.join(args.savedir, args.model_name, "best"))
     if isinstance(args.checkpoint, int):
+        if not os.path.isdir(os.path.join(args.savedir, args.model_name, f"{args.checkpoint}_checkpoint")):
+            exit()
         agent.load(os.path.join(args.savedir, args.model_name, f"{args.checkpoint}_checkpoint"))
 
     # Runs the agent
