@@ -661,8 +661,6 @@ if __name__ == "__main__":
     )
     agent.load(os.path.join(args.savedir, args.model_name, "best"))
     if isinstance(args.checkpoint, int):
-        if not os.path.isdir(os.path.join(args.savedir, args.model_name, f"{args.checkpoint}_checkpoint")):
-            exit()
         agent.load(os.path.join(args.savedir, args.model_name, f"{args.checkpoint}_checkpoint"))
 
     # Runs the agent
@@ -675,9 +673,9 @@ if __name__ == "__main__":
             env, agent, n_steps=None, n_episodes=args.eval_n_runs,
             recurrent=loaded_args["recurrent"], with_delayed_reward="WithDelayedReward" in loaded_args["env"]
         )
-        for i in range(len(records[0])):
-            print(records[0][i]["action"], records[0][i]["mo_objs"], records[0][i]["f1-score"])
-            print(records[0][i]["conf1"].max(), records[0][i]["sted_image"].max())
+        # for i in range(len(records[0])):
+        #     print(records[0][i]["action"], records[0][i]["mo_objs"], records[0][i]["f1-score"])
+        #     print(records[0][i]["conf1"].max(), records[0][i]["sted_image"].max())
         all_records[key] = records
 
     # Avoids pending with multiprocessing
