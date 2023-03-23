@@ -92,7 +92,7 @@ class Policy2(nn.Module):
         super(Policy2, self).__init__()
 
         self.encoded_signal_shape = encoded_signal_shape   # param d'entrée ?
-        self.img_shape = (self.in_channels, 64, 64)
+        self.img_shape = self.obs_space[0].shape
 
         # RecordingQueue encoder (4 images to 1)
         self.recording_queue_encoder_layers = nn.ModuleList([
@@ -648,7 +648,7 @@ class ValueFunction2(nn.Module):
         super(ValueFunction2, self).__init__()
 
         self.encoded_signal_shape = encoded_signal_shape
-        self.img_shape = (self.in_channels, 64, 64)
+        self.img_shape = self.obs_space[0].shape
 
         # RecordingQueue encoder (4 images to 1)
         self.recording_queue_encoder_layers = nn.ModuleList([

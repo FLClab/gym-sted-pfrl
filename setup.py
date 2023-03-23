@@ -8,7 +8,8 @@ install_requires = [
     'numpy>=1.10.4',
     'pillow',
     'filelock',
-    'tensorboard'
+    'tensorboard',
+    'h5py'
 ]
 
 test_requires = [
