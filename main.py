@@ -60,6 +60,7 @@ def main():
     parser.add_argument("--monitor", action="store_true")
     parser.add_argument("--bleach-sampling", type=str, default="constant")
     parser.add_argument("--recurrent", action="store_true", default=False)
+    parser.add_argument("--model", type=str, default="default")
     parser.add_argument("--gamma", type=float, default=0.99)
     parser.add_argument("--delayed-reward", action="store_true", default=False)
     parser.add_argument("--use-tensorboard", action="store_true", default=False)
@@ -122,8 +123,15 @@ def main():
         vf = models.RecurrentValueFunction(obs_space=obs_space)
         model = pfrl.nn.RecurrentBranched(policy, vf)
     else:
-        policy = models.Policy2(obs_space=obs_space, action_size=action_space.shape[0])
-        vf = models.ValueFunction2(obs_space=obs_space)
+        if args.model == "default":
+            policy = models.Policy2(obs_space=obs_space, action_size=action_space.shape[0])
+            vf = models.ValueFunction2(obs_space=obs_space)            
+        elif args.model == "pooled":
+            policy = models.PooledPolicy(obs_space=obs_space, action_size=action_space.shape[0])
+            vf = models.PooledValueFunction(obs_space=obs_space)
+        else:
+            print(f"Model type `{args.model}` not found... Exiting")
+            exit()
         model = pfrl.nn.Branched(policy, vf)
 
     opt = torch.optim.Adam(model.parameters(), lr=args.lr)

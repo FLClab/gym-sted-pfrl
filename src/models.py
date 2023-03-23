@@ -163,19 +163,14 @@ class PooledPolicy(nn.Module):
         self.action_size = action_size
         self.obs_space = obs_space
         self.activation = activation
-        super(Policy2, self).__init__()
+        super(PooledPolicy, self).__init__()
 
-        self.encoded_signal_shape = encoded_signal_shape   # param d'entrée ?
-        self.img_shape = (self.in_channels, 64, 64)
-
-        # RecordingQueue encoder (4 images to 1)
-        self.recording_queue_encoder_layers = nn.ModuleList([
-            nn.Conv2d(self.obs_space[0].shape[0], self.in_channels, 3, stride=1, padding=1)
-        ])
+        self.encoded_signal_shape = encoded_signal_shape
+        self.img_shape = self.obs_space[0].shape
 
         # Image encoder (1 image to a vector) (This is the LargeAtari architecture)
         self.image_encoder_layers = nn.ModuleList([
-            nn.Conv2d(self.in_channels, 32, 8, stride=4),
+            nn.Conv2d(self.obs_space[0].shape[0], 32, 8, stride=4),
             nn.Conv2d(32, 64, 4, stride=2),
             nn.Conv2d(64, 64, 3, stride=1),
         ])
@@ -202,10 +197,6 @@ class PooledPolicy(nn.Module):
         # Split image and articulation
         if isinstance(self.obs_space, gym.spaces.Tuple):
             x, articulation = x
-
-        # Encode to single channel image
-        for layer in self.recording_queue_encoder_layers:
-            x = self.activation(layer(x))
 
         # Encode image in AtariNetwork
         for layer in self.image_encoder_layers:
@@ -713,19 +704,14 @@ class PooledValueFunction(nn.Module):
         self.action_size = action_size
         self.obs_space = obs_space
         self.activation = activation
-        super(ValueFunction2, self).__init__()
+        super(PooledValueFunction, self).__init__()
 
         self.encoded_signal_shape = encoded_signal_shape
-        self.img_shape = (self.in_channels, 64, 64)
-
-        # RecordingQueue encoder (4 images to 1)
-        self.recording_queue_encoder_layers = nn.ModuleList([
-            nn.Conv2d(self.obs_space[0].shape[0], self.in_channels, 3, stride=1, padding=1)
-        ])
+        self.img_shape = self.obs_space[0].shape
 
         # Image encoder (1 image to a vector) (This is the LargeAtari architecture)
         self.image_encoder_layers = nn.ModuleList([
-            nn.Conv2d(self.in_channels, 32, 8, stride=4),
+            nn.Conv2d(self.obs_space[0].shape[0], 32, 8, stride=4),
             nn.Conv2d(32, 64, 4, stride=2),
             nn.Conv2d(64, 64, 3, stride=1),
         ])
@@ -748,9 +734,6 @@ class PooledValueFunction(nn.Module):
         # si c'est gym 2, x = ([4 imgs], [SNR, Resolution, Bleach, 1hot])
         if isinstance(self.obs_space, gym.spaces.Tuple):
             x, articulation = x
-
-        for layer in self.recording_queue_encoder_layers:
-            x = self.activation(layer(x))
 
         # passer l'image dans le nn standard
         for layer in self.image_encoder_layers:
