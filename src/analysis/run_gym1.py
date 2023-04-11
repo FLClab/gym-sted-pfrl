@@ -646,8 +646,15 @@ if __name__ == "__main__":
         vf = models.RecurrentValueFunction(obs_space=obs_space)
         model = pfrl.nn.RecurrentBranched(policy, vf)
     else:
-        policy = models.Policy2(action_size=action_space.shape[0], obs_space=obs_space)
-        vf = models.ValueFunction2(obs_space=obs_space)
+        if loaded_args["model"] == "default":
+            policy = models.Policy2(obs_space=obs_space, action_size=action_space.shape[0])
+            vf = models.ValueFunction2(obs_space=obs_space)            
+        elif loaded_args["model"] == "pooled":
+            policy = models.PooledPolicy(obs_space=obs_space, action_size=action_space.shape[0])
+            vf = models.PooledValueFunction(obs_space=obs_space)
+        else:
+            print(f"Model type `{loaded_args['model']}` not found... Exiting")
+            exit()
         model = pfrl.nn.Branched(policy, vf)
 
     opt = torch.optim.Adam(model.parameters(), lr=loaded_args["lr"])
@@ -659,7 +666,8 @@ if __name__ == "__main__":
         minibatch_size=loaded_args["batchsize"],
         max_grad_norm=1.0,
         update_interval=loaded_args["update_interval"],
-        recurrent=loaded_args["recurrent"]
+        recurrent=loaded_args["recurrent"],
+        act_deterministically=True
     )
     agent.load(os.path.join(args.savedir, args.model_name, "best"))
     if isinstance(args.checkpoint, int):
@@ -684,7 +692,7 @@ if __name__ == "__main__":
             recurrent=loaded_args["recurrent"], with_delayed_reward="WithDelayedReward" in loaded_args["env"]
         )
         # for i in range(len(records[0])):
-        #     print(records[0][i]["action"], records[0][i]["mo_objs"], records[0][i]["f1-score"])
+        #     print(records[0][i]["action"], records[0][i]["mo_objs"], records[0][i]["reward"])
         #     print(records[0][i]["conf1"].max(), records[0][i]["sted_image"].max())
         all_records[key] = records
 
