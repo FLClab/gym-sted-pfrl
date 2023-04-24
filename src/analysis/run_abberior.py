@@ -12,6 +12,7 @@ import logging
 import functools
 import numpy
 import h5py
+import datetime
 import matplotlib
 matplotlib.use("TkAgg")
 
@@ -29,8 +30,13 @@ from gym_sted.defaults import action_spaces, FLUO
 from gym_sted.envs.sted_env import scales_dict, bounds_dict
 from gym_sted.utils import BleachSampler
 
+import abberior
+
 # Defines constants
-PATH = "../../data"
+PATH = os.path.join(
+    "C:", os.sep, "Users", "abberior", "Desktop", "DATA", "abilodeau",
+    "20230424_STED-RL"
+)
 
 def aggregate(items):
     """
@@ -65,13 +71,10 @@ if __name__ == "__main__":
     parser.add_argument("--checkpoint", type=int, default=None,
                         help="Wheter gpu should be used")
     parser.add_argument("--overwrite", action="store_true",
-                        help="(optional) will overwrite a previous checkpoint file if already existing")    
+                        help="(optional) will overwrite a previous checkpoint file if already existing")
     args = parser.parse_args()
 
     assert os.path.isdir(os.path.join(args.savedir, args.model_name)), f"This is not a valid model name : {args.model_name}"
-
-    os.makedirs(os.path.join(args.savedir, args.model_name, "panels"), exist_ok=True)
-    os.makedirs(os.path.join(args.savedir, args.model_name, "eval"), exist_ok=True)
 
     loaded_args = json.load(open(os.path.join(args.savedir, args.model_name, "args.txt"), "r"))
     if args.env:
@@ -108,7 +111,7 @@ if __name__ == "__main__":
     else:
         if loaded_args["model"] == "default":
             policy = models.Policy2(obs_space=obs_space, action_size=action_space.shape[0])
-            vf = models.ValueFunction2(obs_space=obs_space)            
+            vf = models.ValueFunction2(obs_space=obs_space)
         elif loaded_args["model"] == "pooled":
             policy = models.PooledPolicy(obs_space=obs_space, action_size=action_space.shape[0])
             vf = models.PooledValueFunction(obs_space=obs_space)
@@ -135,10 +138,18 @@ if __name__ == "__main__":
         if not os.path.isdir(checkpoint_path):
             raise FileNotFoundError(f"Checkpoint : {checkpoint_path} does not exists")
         agent.load(checkpoint_path)
-        
+
+    dtime = datetime.datetime.today().strftime("%Y%m%d-%H%M%S")
+    savename = f"{dtime}_stats_{args.checkpoint}_checkpoint.hdf5" if args.checkpoint else f"{dtime}_stats_best.hdf5"
+    savepath = os.path.join(PATH, dtime)
+    os.makedirs(os.path.join(savepath), exist_ok=True)
+
+    # Save template
+    abberior.microscope.measurement.save_as(os.path.join(savepath, "template.msr"))
+
     # Runs the agent
     episode_memory = defaultdict(list)
-        
+
     observation = env.reset(seed=None)
     episode_r, t, episode_len = 0, 0, 0
     max_episode_len = env.spec.max_episode_steps
@@ -148,7 +159,9 @@ if __name__ == "__main__":
     episode_memory["info"].append({})
 
     while True:
-        
+
+        print(f"[----] Timestep: {t}")
+
         action = agent.act(observation)
         observation, reward, done, info = env.step(action)
 
@@ -157,31 +170,51 @@ if __name__ == "__main__":
         episode_len += 1
 
         reset = episode_len == max_episode_len or info.get("needs_reset", False)
-        
+
         agent.observe(observation, reward, done, reset)
 
         episode_memory["action"].append(action)
         episode_memory["observation"].append(observation)
         episode_memory["info"].append(info)
 
+        pickle.dump(episode_memory, open(os.path.join(savepath, "checkpoint.pkl"), "wb"))
+
         if done or reset:
             break
-        
+
+    env_state = env.get_state()
+    env_state["loaded-args"] = loaded_args
+    env_state["model-name"] = args.model_name
+    env_state["model-checkpoint"] = args.checkpoint if args.checkpoint else "best"
+    json.dump(env_state, open(os.path.join(savepath, "env-state.json"), "w"), sort_keys=True, indent=4)
+
     env.close()
 
-    # # Saves all runs
-    # with h5py.File(savepath, "w") as file:
-    #     for routine_name, routine in all_records.items():
-    #         routine_group = file.create_group(routine_name)
-    #         for eval_run, record in enumerate(routine):
-    #             eval_group = routine_group.create_group(str(eval_run))
-    #             for key, values in aggregate(record).items():
-    #                 if key == "nanodomains-coords":
-    #                     step_group = eval_group.create_group(key)
-    #                     for step, value in enumerate(values):
-    #                         step_group.create_dataset(str(step), data=value)
-    #                 else:
-    #                     data = numpy.array(values)
-    #                     eval_group.create_dataset(
-    #                         key, data=numpy.array(values), compression="gzip", compression_opts=5
-    #                     )
+    # Saves all runs
+    with h5py.File(os.path.join(savepath, savename), "w") as file:
+        for key, values in episode_memory.items():
+            group = file.create_group(key)
+            for step, items in enumerate(values):
+                if key == "observation":
+                    step_group = group.create_group(str(step))
+                    obs, history = items
+                    step_group.create_dataset(
+                        "state", data=numpy.array(obs),
+                        compression="gzip", compression_opts=5
+                    )
+                    step_group.create_dataset(
+                        "history", data=numpy.array(history)
+                    )
+                else:
+                    if isinstance(items, dict):
+                        step_group = group.create_group(str(step))
+                        for item_key, item_value in items.items():
+                            data = numpy.array(item_value)
+                            step_group.create_dataset(
+                                str(item_key), data=data
+                            )
+                    else:
+                        data = numpy.array(items)
+                        group.create_dataset(
+                            str(step), data=data
+                        )
