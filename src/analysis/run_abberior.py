@@ -12,6 +12,8 @@ import logging
 import functools
 import numpy
 import h5py
+import matplotlib
+matplotlib.use("TkAgg")
 
 from tqdm.auto import trange, tqdm
 from matplotlib import pyplot
