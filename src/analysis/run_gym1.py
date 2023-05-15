@@ -712,7 +712,10 @@ if __name__ == "__main__":
                         for step, value in enumerate(values):
                             step_group.create_dataset(str(step), data=value)
                     else:
-                        data = numpy.array(values)
+                        if isinstance(values[0], str):
+                            data = numpy.array(values, dtype="S16") # Assumes 16char is enough to encode string
+                        else:
+                            data = numpy.array(values)
                         eval_group.create_dataset(
-                            key, data=numpy.array(values), compression="gzip", compression_opts=5
+                            key, data=data, compression="gzip", compression_opts=5
                         )
