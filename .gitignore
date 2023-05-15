@@ -1,5 +1,6 @@
 # user-defined
 data
+pretrained/
 results/
 panels/
 .microscope_cache.pkl
