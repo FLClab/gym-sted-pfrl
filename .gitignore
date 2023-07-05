@@ -5,6 +5,7 @@ results/
 panels/
 .microscope_cache.pkl
 *DS_Store*
+.idea/
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
