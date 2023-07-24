@@ -37,6 +37,7 @@ PATH = os.path.join(
     "C:", os.sep, "Users", "abberior", "Desktop", "DATA", "abilodeau",
     "20230424_STED-RL"
 )
+PATH = os.path.join(os.getcwd(), "data", "20230705_STED-RL")
 
 def aggregate(items):
     """
@@ -132,7 +133,7 @@ if __name__ == "__main__":
         recurrent=loaded_args["recurrent"],
         act_deterministically=True
     )
-    agent.load(os.path.join(args.savedir, args.model_name, "best"))
+    #agent.load(os.path.join(args.savedir, args.model_name, "best"))
     if isinstance(args.checkpoint, int):
         checkpoint_path = os.path.join(args.savedir, args.model_name, f"{args.checkpoint}_checkpoint")
         if not os.path.isdir(checkpoint_path):
