@@ -711,6 +711,11 @@ if __name__ == "__main__":
                         step_group = eval_group.create_group(key)
                         for step, value in enumerate(values):
                             step_group.create_dataset(str(step), data=value)
+                    elif isinstance(values, list) and isinstance(values[0], dict):
+                        dict_group = eval_group.create_group(key)
+                        data = aggregate(values)
+                        for k, v in data.items():
+                            dict_group.create_dataset(k, data=v)
                     else:
                         if isinstance(values[0], str):
                             data = numpy.array(values, dtype="S16") # Assumes 16char is enough to encode string
