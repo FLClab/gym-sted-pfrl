@@ -28,7 +28,7 @@ To train an agent, the user may use the `main.py` file which is provided in this
 For example, the user may launch a short training using
 
 ```bash
-python main.py --env gym_sted:ContextualMOSTED-easy-v0 --eval-n-runs 2 --steps 10 --eval-interval 5 --gamma 0. --exp-id debug
+python main.py --env gym_sted:ContextualMOSTED-easy-v0 --eval-n-runs 2 --steps 10 --update-interval 4 --log-interval 1 --eval-interval 5 --gamma 0. --exp-id debug
 ```
 
 We also provide the `bash` files that were used to train our models in [bash-files](https://github.com/FLClab/gym-sted-pfrl/blob/main/bash-files).
