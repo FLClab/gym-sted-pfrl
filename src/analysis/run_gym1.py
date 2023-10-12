@@ -569,6 +569,39 @@ def batch_run_evaluation_episodes_record_actions(
                 logger=logger,
             )
 
+def make_batch_env(test, **kwargs):
+    vec_env = pfrl.envs.MultiprocessVectorEnv(
+        [
+            functools.partial(make_env, idx, test, **kwargs)
+            for idx, env in enumerate(range(args.num_envs))
+        ]
+    )
+    # vec_env = pfrl.wrappers.VectorFrameStack(vec_env, 4)
+    return vec_env
+
+def make_env(idx, test, **kwargs):
+    # Use different random seeds for train and test envs
+    process_seed = int(kwargs.get("process_seeds")[idx])
+    env_seed = 2 ** 32 - 1 - process_seed if test else process_seed
+    env = gym.make(kwargs.get("loaded_args")["env"], disable_env_checker=True)
+    # Normalize the action space
+    env = pfrl.wrappers.NormalizeActionSpace(env)
+    # Use different random seeds for train and test envs
+    env.reset(seed=env_seed)
+    # Converts the openAI Gym to PyTorch tensor shape
+    env = WrapPyTorch(env)
+    # Converts the new gymnasium implementation to old gym implementation
+    env = GymnasiumWrapper(env)
+
+    if "fluo" in kwargs:
+        fluo = kwargs.get("fluo")
+        if "sigma_abs" in fluo:
+            env.update_(bleach_sampler=BleachSampler("constant", kwargs.get("fluo")))
+        else:
+            env.update_(bleach_sampler=BleachSampler("uniform", criterions=kwargs.get("fluo")))
+
+    return env
+
 if __name__ == "__main__":
 
     import argparse
@@ -602,40 +635,7 @@ if __name__ == "__main__":
 
     process_seeds = numpy.arange(args.num_envs) + 42
 
-    def make_env(idx, test, **kwargs):
-        # Use different random seeds for train and test envs
-        process_seed = int(process_seeds[idx])
-        env_seed = 2 ** 32 - 1 - process_seed if test else process_seed
-        env = gym.make(loaded_args["env"], disable_env_checker=True)
-        # Normalize the action space
-        env = pfrl.wrappers.NormalizeActionSpace(env)
-        # Use different random seeds for train and test envs
-        env.reset(seed=env_seed)
-        # Converts the openAI Gym to PyTorch tensor shape
-        env = WrapPyTorch(env)
-        # Converts the new gymnasium implementation to old gym implementation
-        env = GymnasiumWrapper(env)
-
-        if "fluo" in kwargs:
-            fluo = kwargs.get("fluo")
-            if "sigma_abs" in fluo:
-                env.update_(bleach_sampler=BleachSampler("constant", kwargs.get("fluo")))
-            else:
-                env.update_(bleach_sampler=BleachSampler("uniform", criterions=kwargs.get("fluo")))
-
-        return env
-
-    def make_batch_env(test, **kwargs):
-        vec_env = pfrl.envs.MultiprocessVectorEnv(
-            [
-                functools.partial(make_env, idx, test, **kwargs)
-                for idx, env in enumerate(range(args.num_envs))
-            ]
-        )
-        # vec_env = pfrl.wrappers.VectorFrameStack(vec_env, 4)
-        return vec_env
-
-    env = make_env(0, True)
+    env = make_env(0, True, process_seeds=process_seeds, loaded_args=loaded_args)
     timestep_limit = env.spec.max_episode_steps
     obs_space = env.observation_space
     action_space = env.action_space
@@ -674,7 +674,7 @@ if __name__ == "__main__":
     for key, fluo in ROUTINES.items():
         print(key)
         # Creates the batch envs
-        env = make_batch_env(test=True, fluo=fluo)
+        env = make_batch_env(test=True, fluo=fluo, process_seeds=process_seeds, loaded_args=loaded_args)
         scores, lengths, records = batch_run_evaluation_episodes_record_actions(
             env, agent, n_steps=None, n_episodes=args.eval_n_runs,
             recurrent=loaded_args["recurrent"], with_delayed_reward="WithDelayedReward" in loaded_args["env"]
