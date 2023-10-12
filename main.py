@@ -4,6 +4,7 @@ import datetime
 import functools
 import uuid
 import os
+import time
 
 import gym
 import gym.spaces
@@ -14,7 +15,8 @@ import pfrl
 from pfrl import experiments, utils
 from pfrl.policies import GaussianHeadWithFixedCovariance, SoftmaxCategoricalHead
 
-from src import models, WrapPyTorch
+from src import models, WrapPyTorch, GymnasiumWrapper
+from src.hooks import ProgressStepHook
 
 TIMEFMT = "%Y%m%d-%H%M%S"
 
@@ -22,7 +24,7 @@ def main():
     import logging
 
     parser = argparse.ArgumentParser()
-    parser.add_argument("--env", type=str, default="gym_sted:ContextualMOSTED-easy-v0")
+    parser.add_argument("--env", type=str, default="gym_sted:STEDsum-v0")
     parser.add_argument("--num-envs", type=int, default=1)
     parser.add_argument("--seed", type=int, default=0, help="Random seed [0, 2 ** 32)")
     parser.add_argument("--gpu", type=int, default=None)
@@ -54,10 +56,14 @@ def main():
     parser.add_argument("--load", type=str, default="")
     parser.add_argument("--load-ckpt", type=int, default=0)
     parser.add_argument("--log-level", type=int, default=logging.INFO)
+    parser.add_argument("--log-interval", type=int, default=256)
     parser.add_argument("--monitor", action="store_true")
     parser.add_argument("--bleach-sampling", type=str, default="constant")
     parser.add_argument("--recurrent", action="store_true", default=False)
+    parser.add_argument("--model", type=str, default="default")
     parser.add_argument("--gamma", type=float, default=0.99)
+    parser.add_argument("--delayed-reward", action="store_true", default=False)
+    parser.add_argument("--use-tensorboard", action="store_true", default=False)
     args = parser.parse_args()
 
     logging.basicConfig(level=args.log_level)
@@ -70,20 +76,19 @@ def main():
     if args.load:
         args.outdir = experiments.prepare_output_dir(args, args.outdir, exp_id=args.load)
     else:
-        exp_id = "{}_{}".format(args.exp_id, str(uuid.uuid4())[:8]) if args.exp_id != "debug" else args.exp_id
-        args.outdir = experiments.prepare_output_dir(args, args.outdir, exp_id=exp_id)
+        args.outdir = experiments.prepare_output_dir(args, args.outdir, exp_id="{}_{}".format(args.exp_id, str(uuid.uuid4())[:8]) if args.exp_id != "debug" else args.exp_id)
 
     def make_env(idx, test):
         # Use different random seeds for train and test envs
         process_seed = int(process_seeds[idx])
         env_seed = 2 ** 32 - 1 - process_seed if test else process_seed
-        env = gym.make(args.env)
-        # Use different random seeds for train and test envs
-        env.seed(env_seed)
-        # Converts the openAI Gym to PyTorch tensor shape
-        env = WrapPyTorch(env)
+        env = gym.make(args.env, disable_env_checker=True)
         # Normalize the action space
         env = pfrl.wrappers.NormalizeActionSpace(env)
+        # Use different random seeds for train and test envs
+        env.reset(seed=env_seed)
+        # Converts the openAI Gym to PyTorch tensor shape
+        env = WrapPyTorch(env)
         if args.monitor:
             env = pfrl.wrappers.Monitor(env, args.outdir)
         if not test:
@@ -92,6 +97,10 @@ def main():
             env = pfrl.wrappers.ScaleReward(env, args.reward_scale_factor)
         if args.render and not test:
             env = pfrl.wrappers.Render(env)
+
+        # Converts the new gymnasium implementation to old gym implementation
+        env = GymnasiumWrapper(env)
+
         return env
 
     def make_batch_env(test):
@@ -101,6 +110,7 @@ def main():
                 for idx, env in enumerate(range(args.num_envs))
             ]
         )
+        # vec_env = pfrl.wrappers.VectorFrameStack(vec_env, 4)
         return vec_env
 
     sample_env = make_env(0, test=False)
@@ -109,7 +119,7 @@ def main():
     action_space = sample_env.action_space
 
     policy = models.Policy(obs_space=obs_space, action_size=action_space.shape[0])
-    vf = models.ValueFunction(obs_space=obs_space)
+    vf = models.ValueFunction(obs_space=obs_space)            
     model = pfrl.nn.Branched(policy, vf)
 
     opt = torch.optim.Adam(model.parameters(), lr=args.lr)
@@ -121,6 +131,7 @@ def main():
         minibatch_size=args.batchsize,
         max_grad_norm=1.0,
         update_interval=args.update_interval,
+        recurrent=args.recurrent,
         gamma=args.gamma
     )
     if args.load:
@@ -155,7 +166,9 @@ def main():
                 eval_n_steps=None,
                 eval_n_episodes=args.eval_n_runs,
                 eval_interval=args.eval_interval,
-                checkpoint_freq=args.checkpoint_freq
+                checkpoint_freq=args.checkpoint_freq,
+                log_interval=args.log_interval,
+                use_tensorboard=args.use_tensorboard
             )
         else:
             experiments.train_agent_with_evaluation(
@@ -168,10 +181,14 @@ def main():
                 eval_n_steps=None,
                 eval_n_episodes=args.eval_n_runs,
                 eval_interval=args.eval_interval,
-                checkpoint_freq=args.checkpoint_freq
+                checkpoint_freq=args.checkpoint_freq,
+                step_hooks=(ProgressStepHook(args.log_interval),),
+                use_tensorboard=args.use_tensorboard
             )
 
 
 if __name__ == "__main__":
 
+    # Run the following line of code
+    # python main.py --env gym_sted:STED-v0 --batchsize=16 --gpu=None --reward-scale-factor=1.0 --eval-interval=100 --eval-n-runs=5
     main()

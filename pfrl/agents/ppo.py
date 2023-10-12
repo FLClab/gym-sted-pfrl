@@ -92,7 +92,7 @@ def _add_log_prob_and_value_to_episodes_recurrent(
         (_, flat_next_vs), _ = pack_and_forward(model, seqs_next_states, next_rs)
 
         flat_actions = torch.tensor(
-            [b["action"] for b in flat_transitions], device=device
+            np.array([b["action"] for b in flat_transitions]), device=device
         )
         flat_log_probs = flat_distribs.log_prob(flat_actions).cpu().numpy()
         flat_vs = flat_vs.cpu().numpy()
@@ -125,12 +125,12 @@ def _add_log_prob_and_value_to_episodes(
     if obs_normalizer:
         states = obs_normalizer(states, update=False)
         next_states = obs_normalizer(next_states, update=False)
-
+    
     with torch.no_grad(), pfrl.utils.evaluating(model):
         distribs, vs_pred = model(states)
         _, next_vs_pred = model(next_states)
 
-        actions = torch.tensor([b["action"] for b in dataset], device=device)
+        actions = torch.tensor(np.array([b["action"] for b in dataset]), device=device)
         log_probs = distribs.log_prob(actions).cpu().numpy()
         vs_pred = vs_pred.cpu().numpy().ravel()
         next_vs_pred = next_vs_pred.cpu().numpy().ravel()
@@ -475,7 +475,7 @@ class PPO(agent.AttributeSavingMixin, agent.BatchAgent):
         assert "v_teacher" in dataset[0]
 
         if self.standardize_advantages:
-            all_advs = torch.tensor([b["adv"] for b in dataset], device=device)
+            all_advs = torch.tensor(np.array([b["adv"] for b in dataset]), device=device)
             std_advs, mean_advs = torch.std_mean(all_advs, unbiased=False)
 
         for batch in _yield_minibatches(
@@ -486,27 +486,27 @@ class PPO(agent.AttributeSavingMixin, agent.BatchAgent):
             )
             if self.obs_normalizer:
                 states = self.obs_normalizer(states, update=False)
-            actions = torch.tensor([b["action"] for b in batch], device=device)
+            actions = torch.tensor(np.array([b["action"] for b in batch]), device=device)
             distribs, vs_pred = self.model(states)
 
             advs = torch.tensor(
-                [b["adv"] for b in batch], dtype=torch.float32, device=device
+                np.array([b["adv"] for b in batch]), dtype=torch.float32, device=device
             )
             if self.standardize_advantages:
                 advs = (advs - mean_advs) / (std_advs + 1e-8)
 
             log_probs_old = torch.tensor(
-                [b["log_prob"] for b in batch],
+                np.array([b["log_prob"] for b in batch]),
                 dtype=torch.float,
                 device=device,
             )
             vs_pred_old = torch.tensor(
-                [b["v_pred"] for b in batch],
+                np.array([b["v_pred"] for b in batch]),
                 dtype=torch.float,
                 device=device,
             )
             vs_teacher = torch.tensor(
-                [b["v_teacher"] for b in batch],
+                np.array([b["v_teacher"] for b in batch]),
                 dtype=torch.float,
                 device=device,
             )
@@ -556,28 +556,28 @@ class PPO(agent.AttributeSavingMixin, agent.BatchAgent):
             seqs_states.append(states)
 
         flat_actions = torch.tensor(
-            [transition["action"] for transition in flat_transitions],
+            np.array([transition["action"] for transition in flat_transitions]),
             device=device,
         )
         flat_advs = torch.tensor(
-            [transition["adv"] for transition in flat_transitions],
+            np.array([transition["adv"] for transition in flat_transitions]),
             dtype=torch.float,
             device=device,
         )
         if self.standardize_advantages:
             flat_advs = (flat_advs - mean_advs) / (std_advs + 1e-8)
         flat_log_probs_old = torch.tensor(
-            [transition["log_prob"] for transition in flat_transitions],
+            np.array([transition["log_prob"] for transition in flat_transitions]),
             dtype=torch.float,
             device=device,
         )
         flat_vs_pred_old = torch.tensor(
-            [[transition["v_pred"]] for transition in flat_transitions],
+            np.array([[transition["v_pred"]] for transition in flat_transitions]),
             dtype=torch.float,
             device=device,
         )
         flat_vs_teacher = torch.tensor(
-            [[transition["v_teacher"]] for transition in flat_transitions],
+            np.array([[transition["v_teacher"]] for transition in flat_transitions]),
             dtype=torch.float,
             device=device,
         )
@@ -620,7 +620,7 @@ class PPO(agent.AttributeSavingMixin, agent.BatchAgent):
         assert "v_teacher" in flat_dataset[0]
 
         if self.standardize_advantages:
-            all_advs = torch.tensor([b["adv"] for b in flat_dataset], device=device)
+            all_advs = torch.tensor(np.array([b["adv"] for b in flat_dataset]), device=device)
             std_advs, mean_advs = torch.std_mean(all_advs, unbiased=False)
         else:
             mean_advs = None
