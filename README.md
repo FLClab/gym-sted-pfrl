@@ -8,7 +8,7 @@ This repository relies heavily on the [PFRL](https://github.com/pfnet/pfrl) deep
 
 ## Installation
 
-We recommend that the user installs this version of the library. To perform the installation follow the next steps. The installation was tested with Python 3.7.
+We recommend that the user installs this version of the library. To perform the installation follow the next steps. The installation was tested with Python 3.10.
 
 ```bash
 git clone https://github.com/FLClab/gym-sted-pfrl
