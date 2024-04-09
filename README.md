@@ -15,7 +15,7 @@ git clone https://github.com/FLClab/gym-sted-pfrl
 pip install -e gym-sted-pfrl
 ```
 
-The current library also relies on the installation of `gym-sted` and `pysted`. Please refer, to their specific repository for more information.
+The current library also relies on the installation of `gym-sted` and `pysted`. Please refer, to their specific repository for more information. It is assumed that `gym-sted` and `pysted` are already installed.
 
 ## Usage
 
@@ -59,6 +59,7 @@ python human.py
 ## Citation
 
 If you use the experiment files provided please cite us
+
 ```bibtex
 @misc{turcotte2021pysted,
   title = {pySTED : A STED Microscopy Simulation Tool for Machine Learning Training},

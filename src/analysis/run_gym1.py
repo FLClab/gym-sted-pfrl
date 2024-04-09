@@ -30,6 +30,20 @@ from gym_sted.utils import BleachSampler
 # Defines constants
 PATH = "../../data"
 ROUTINES = {
+    "high-signal+_low-bleach" : {
+        "bleach" : {
+            "p_ex" : 10e-6,
+            "p_sted" : 150e-3,
+            "pdt" : 30.0e-6,
+            "target" : 0.2
+        },
+        "signal" : {
+            "p_ex" : 1.0e-6,
+            "p_sted" : 0.,
+            "pdt" : 10.0e-6,
+            "target" : 200.
+        },
+    },        
     "high-signal_low-bleach" : {
         "bleach" : {
             "p_ex" : 10e-6,
@@ -569,39 +583,6 @@ def batch_run_evaluation_episodes_record_actions(
                 logger=logger,
             )
 
-def make_batch_env(test, **kwargs):
-    vec_env = pfrl.envs.MultiprocessVectorEnv(
-        [
-            functools.partial(make_env, idx, test, **kwargs)
-            for idx, env in enumerate(range(args.num_envs))
-        ]
-    )
-    # vec_env = pfrl.wrappers.VectorFrameStack(vec_env, 4)
-    return vec_env
-
-def make_env(idx, test, **kwargs):
-    # Use different random seeds for train and test envs
-    process_seed = int(kwargs.get("process_seeds")[idx])
-    env_seed = 2 ** 32 - 1 - process_seed if test else process_seed
-    env = gym.make(kwargs.get("loaded_args")["env"], disable_env_checker=True)
-    # Normalize the action space
-    env = pfrl.wrappers.NormalizeActionSpace(env)
-    # Use different random seeds for train and test envs
-    env.reset(seed=env_seed)
-    # Converts the openAI Gym to PyTorch tensor shape
-    env = WrapPyTorch(env)
-    # Converts the new gymnasium implementation to old gym implementation
-    env = GymnasiumWrapper(env)
-
-    if "fluo" in kwargs:
-        fluo = kwargs.get("fluo")
-        if "sigma_abs" in fluo:
-            env.update_(bleach_sampler=BleachSampler("constant", kwargs.get("fluo")))
-        else:
-            env.update_(bleach_sampler=BleachSampler("uniform", criterions=kwargs.get("fluo")))
-
-    return env
-
 if __name__ == "__main__":
 
     import argparse
@@ -635,14 +616,54 @@ if __name__ == "__main__":
 
     process_seeds = numpy.arange(args.num_envs) + 42
 
-    env = make_env(0, True, process_seeds=process_seeds, loaded_args=loaded_args)
+    def make_env(idx, test, **kwargs):
+        # Use different random seeds for train and test envs
+        process_seed = int(process_seeds[idx])
+        env_seed = 2 ** 32 - 1 - process_seed if test else process_seed
+        env = gym.make(loaded_args["env"], disable_env_checker=True)
+        # Normalize the action space
+        env = pfrl.wrappers.NormalizeActionSpace(env)
+        # Use different random seeds for train and test envs
+        env.reset(seed=env_seed)
+        # Converts the openAI Gym to PyTorch tensor shape
+        env = WrapPyTorch(env)
+        # Converts the new gymnasium implementation to old gym implementation
+        env = GymnasiumWrapper(env)
+
+        if "fluo" in kwargs:
+            fluo = kwargs.get("fluo")
+            if "sigma_abs" in fluo:
+                env.update_(bleach_sampler=BleachSampler("constant", kwargs.get("fluo")))
+            else:
+                env.update_(bleach_sampler=BleachSampler("uniform", criterions=kwargs.get("fluo")))
+
+        return env
+
+    def make_batch_env(test, **kwargs):
+        vec_env = pfrl.envs.MultiprocessVectorEnv(
+            [
+                functools.partial(make_env, idx, test, **kwargs)
+                for idx, env in enumerate(range(args.num_envs))
+            ]
+        )
+        # vec_env = pfrl.wrappers.VectorFrameStack(vec_env, 4)
+        return vec_env
+
+    env = make_env(0, True)
     timestep_limit = env.spec.max_episode_steps
     obs_space = env.observation_space
     action_space = env.action_space
 
     # Creates the agent
-    policy = models.Policy(obs_space=obs_space, action_size=action_space.shape[0])
-    vf = models.ValueFunction(obs_space=obs_space)            
+    if loaded_args["model"] == "default":
+        policy = models.Policy(obs_space=obs_space, action_size=action_space.shape[0])
+        vf = models.ValueFunction(obs_space=obs_space)            
+    elif loaded_args["model"] == "pooled":
+        policy = models.PooledPolicy(obs_space=obs_space, action_size=action_space.shape[0])
+        vf = models.PooledValueFunction(obs_space=obs_space)
+    else:
+        print(f"Model type `{loaded_args['model']}` not found... Exiting")
+        exit()
     model = pfrl.nn.Branched(policy, vf)
 
     opt = torch.optim.Adam(model.parameters(), lr=loaded_args["lr"])
@@ -674,7 +695,7 @@ if __name__ == "__main__":
     for key, fluo in ROUTINES.items():
         print(key)
         # Creates the batch envs
-        env = make_batch_env(test=True, fluo=fluo, process_seeds=process_seeds, loaded_args=loaded_args)
+        env = make_batch_env(test=True, fluo=fluo)
         scores, lengths, records = batch_run_evaluation_episodes_record_actions(
             env, agent, n_steps=None, n_episodes=args.eval_n_runs,
             recurrent=loaded_args["recurrent"], with_delayed_reward="WithDelayedReward" in loaded_args["env"]
