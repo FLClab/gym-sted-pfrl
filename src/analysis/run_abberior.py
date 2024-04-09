@@ -33,11 +33,11 @@ from gym_sted.utils import BleachSampler
 import abberior
 
 # Defines constants
-PATH = os.path.join(
-    "C:", os.sep, "Users", "abberior", "Desktop", "DATA", "abilodeau",
-    "20230424_STED-RL"
-)
-PATH = os.path.join(os.getcwd(), "data", "20230705_STED-RL")
+# PATH = os.path.join(
+#     "C:", os.sep, "Users", "abberior", "Desktop", "DATA", "abilodeau",
+#     "20230424_STED-RL"
+# )
+PATH = os.path.join(os.getcwd(), "data", "20230409_STED-RL")
 
 def aggregate(items):
     """
@@ -142,6 +142,11 @@ if __name__ == "__main__":
 
     # Save template
     abberior.microscope.measurement.save_as(os.path.join(savepath, "template.msr"))
+    env_state = env.get_state()
+    env_state["loaded-args"] = loaded_args
+    env_state["model-name"] = args.model_name
+    env_state["model-checkpoint"] = args.checkpoint if args.checkpoint else "best"
+    json.dump(env_state, open(os.path.join(savepath, "env-state.json"), "w"), sort_keys=True, indent=4)
 
     # Runs the agent
     episode_memory = defaultdict(list)
@@ -154,36 +159,33 @@ if __name__ == "__main__":
     episode_memory["observation"].append(observation)
     episode_memory["info"].append({})
 
-    while True:
+    try:
+        while True:
 
-        print(f"[----] Timestep: {t}")
+            print(f"[----] Timestep: {t}")
 
-        action = agent.act(observation)
-        observation, reward, done, info = env.step(action)
+            action = agent.act(observation)
+            observation, reward, done, info = env.step(action)
 
-        t += 1
-        episode_r += reward
-        episode_len += 1
+            t += 1
+            episode_r += reward
+            episode_len += 1
 
-        reset = episode_len == max_episode_len or info.get("needs_reset", False)
+            reset = episode_len == max_episode_len or info.get("needs_reset", False)
 
-        agent.observe(observation, reward, done, reset)
+            agent.observe(observation, reward, done, reset)
 
-        episode_memory["action"].append(action)
-        episode_memory["observation"].append(observation)
-        episode_memory["info"].append(info)
+            episode_memory["action"].append(action)
+            episode_memory["observation"].append(observation)
+            episode_memory["info"].append(info)
 
-        pickle.dump(episode_memory, open(os.path.join(savepath, "checkpoint.pkl"), "wb"))
+            pickle.dump(episode_memory, open(os.path.join(savepath, "checkpoint.pkl"), "wb"))
 
-        if done or reset:
-            break
-
-    env_state = env.get_state()
-    env_state["loaded-args"] = loaded_args
-    env_state["model-name"] = args.model_name
-    env_state["model-checkpoint"] = args.checkpoint if args.checkpoint else "best"
-    json.dump(env_state, open(os.path.join(savepath, "env-state.json"), "w"), sort_keys=True, indent=4)
-
+            if done or reset:
+                break
+    except KeyboardInterrupt:
+        pass
+    
     env.close()
 
     # Saves all runs
