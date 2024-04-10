@@ -56,15 +56,27 @@ To test the manual interaction, the user may launch the following
 python human.py
 ```
 
+### Real microscope
+
+To evaluate an agent on a real microscope, the user should follow the steps provided [here](https://github.com/FLClab/gym-sted-pfrl/blob/main/src/analysis/README.md). We also provide a video tutorial on how to install the libraries and run an experiment. 
+
 ## Citation
 
 If you use the experiment files provided please cite us
 
 ```bibtex
-@misc{turcotte2021pysted,
-  title = {pySTED : A STED Microscopy Simulation Tool for Machine Learning Training},
-  author = {Turcotte, Benoit and Bilodeau, Anthony and Lavoie-Cardinal, Flavie and Durand, Audrey},
-  year = {2021},
-  note = {Accepted to AAAI 2021}
+@article{bilodeau2024development,
+  title={Development of AI-assisted microscopy frameworks through realistic simulation in pySTED},
+  author={Bilodeau, Anthony and Michaud-Gagnon, Albert and Chabbert, Julia and Turcotte, Benoit and Heine, J{\"o}rn and Durand, Audrey and Lavoie-Cardinal, Flavie},
+  journal={bioRxiv},
+  pages={2024--03},
+  year={2024},
+  publisher={Cold Spring Harbor Laboratory}
+}
+@inproceedings{turcotte2022pysted,
+  title={pySTED: a STED microscopy simulation tool for machine learning training},
+  author={Turcotte, Benoit and Bilodeau, Anthony and Lavoie-Cardinal, Flavie and Durand, Audrey},
+  booktitle={AAAI Workshop on AI to Accel. Sci. and Eng.(AI2ASE)},
+  year={2022}
 }
 ```
