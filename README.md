@@ -66,12 +66,14 @@ If you use the experiment files provided please cite us
 
 ```bibtex
 @article{bilodeau2024development,
-  title={Development of AI-assisted microscopy frameworks through realistic simulation in pySTED},
+  title={Development of AI-assisted microscopy frameworks through realistic simulation with pySTED},
   author={Bilodeau, Anthony and Michaud-Gagnon, Albert and Chabbert, Julia and Turcotte, Benoit and Heine, J{\"o}rn and Durand, Audrey and Lavoie-Cardinal, Flavie},
-  journal={bioRxiv},
-  pages={2024--03},
+  journal={Nature Machine Intelligence},
+  volume={6},
+  number={10},
+  pages={1197--1215},
   year={2024},
-  publisher={Cold Spring Harbor Laboratory}
+  publisher={Nature Publishing Group UK London}
 }
 @inproceedings{turcotte2022pysted,
   title={pySTED: a STED microscopy simulation tool for machine learning training},
